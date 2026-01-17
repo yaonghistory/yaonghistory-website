@@ -8,33 +8,33 @@
 
   <!-- 나눔스퀘어라운드 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquareround.min.css">
-  <link rel="stylesheet" href="./style.css?v=120" />
+
+  <!-- 캐시 방지: 적용 안 되면 숫자 올리기 -->
+  <link rel="stylesheet" href="./style.css?v=301" />
 </head>
 
 <body>
-
-  <!-- ✅ 상단 하이퍼링크 메뉴 제거: 로고/타이틀만 자연스럽게 -->
+  <!-- Header: 상단 하이퍼링크 메뉴 없음 -->
   <header class="header" id="top">
     <div class="container header__inner">
       <div class="brand" aria-label="야옹 역사">
         <span class="brand__mark" aria-hidden="true">
           <img src="./yaong-cat.png" alt="">
         </span>
+
         <span class="brand__text">
           <span class="brand__name">야옹 역사</span>
           <span class="brand__tag">초등 현장 한국사 수업</span>
         </span>
       </div>
 
-      <!-- 작은 ‘문의’ 버튼만 유지 (하이퍼링크 메뉴 없음) -->
       <a class="miniCta" href="#contact" aria-label="수업 문의로 이동">문의</a>
     </div>
   </header>
 
   <main>
-
-    <!-- 1) HOME -->
-    <section class="hero">
+    <!-- HOME -->
+    <section class="hero reveal">
       <div class="container hero__grid">
         <div class="hero__copy">
           <span class="badge">🐾 현장형 · 소수정예 · 120분</span>
@@ -54,7 +54,6 @@
             <div class="hero__bullet hero__bullet--note">아이들이 스스로 발견하는 역사</div>
           </div>
 
-          <!-- 버튼 3개 유지 -->
           <div class="hero__cta">
             <a class="btn" href="#about">수업 소개 보기</a>
             <a class="btn btn--soft" href="#curriculum">커리큘럼 보기</a>
@@ -73,18 +72,20 @@
           <p class="card__lead">
             ‘외우는 역사’가 아니라, <strong>관찰하고 질문하는 역사</strong>로 바뀝니다.
           </p>
+
           <ul class="checklist">
             <li>초등 눈높이 현장 체험형 수업</li>
             <li>관찰 → 질문 → 기록 → 토론</li>
             <li>주제/장소는 학년·관심사에 맞춤</li>
           </ul>
+
           <div class="card__note">※ 일정·장소는 협의 후 조율 가능</div>
         </aside>
       </div>
     </section>
 
-    <!-- 2) ABOUT -->
-    <section id="about" class="section blob blob--sky">
+    <!-- ABOUT -->
+    <section id="about" class="section blob blob--sky reveal">
       <div class="container">
         <div class="section__head">
           <h2>야옹 역사는 이런 수업이에요</h2>
@@ -116,8 +117,8 @@
       </div>
     </section>
 
-    <!-- 3) CLASS STYLE -->
-    <section id="style" class="section blob blob--mint">
+    <!-- CLASS STYLE -->
+    <section id="style" class="section blob blob--mint reveal">
       <div class="container">
         <div class="section__head">
           <h2>수업은 이렇게 진행돼요</h2>
@@ -149,8 +150,8 @@
       </div>
     </section>
 
-    <!-- 4) LOCATIONS -->
-    <section id="locations" class="section blob blob--lemon">
+    <!-- LOCATIONS -->
+    <section id="locations" class="section blob blob--lemon reveal">
       <div class="container">
         <div class="section__head">
           <h2>역사가 있는 모든 곳이 교실입니다</h2>
@@ -167,8 +168,8 @@
       </div>
     </section>
 
-    <!-- 5) CURRICULUM -->
-    <section id="curriculum" class="section blob blob--sky2">
+    <!-- CURRICULUM -->
+    <section id="curriculum" class="section blob blob--sky2 reveal">
       <div class="container">
         <div class="section__head">
           <h2>시대별로 나누어 배우는 한국사</h2>
@@ -198,8 +199,8 @@
       </div>
     </section>
 
-    <!-- 6) INSTRUCTOR -->
-    <section id="instructor" class="section blob blob--mint2">
+    <!-- INSTRUCTOR -->
+    <section id="instructor" class="section blob blob--mint2 reveal">
       <div class="container">
         <div class="section__head">
           <h2>강사 이력</h2>
@@ -228,8 +229,8 @@
       </div>
     </section>
 
-    <!-- 7) CLASS INFO -->
-    <section id="info" class="section blob blob--lemon2">
+    <!-- INFO -->
+    <section id="info" class="section blob blob--lemon2 reveal">
       <div class="container">
         <div class="section__head">
           <h2>수업 안내</h2>
@@ -255,8 +256,8 @@
       </div>
     </section>
 
-    <!-- 8) REVIEWS (유지) -->
-    <section id="reviews" class="section">
+    <!-- REVIEWS -->
+    <section id="reviews" class="section reveal">
       <div class="container">
         <div class="section__head">
           <h2>생생한 후기</h2>
@@ -268,8 +269,8 @@
       </div>
     </section>
 
-    <!-- 9) PHOTOS (유지) -->
-    <section id="photos" class="section section--plainAlt">
+    <!-- PHOTOS -->
+    <section id="photos" class="section section--plainAlt reveal">
       <div class="container">
         <div class="section__head">
           <h2>활동사진</h2>
@@ -285,8 +286,8 @@
       </div>
     </section>
 
-    <!-- 10) CONTACT (양식 포함) -->
-    <section id="contact" class="section blob blob--contact">
+    <!-- CONTACT -->
+    <section id="contact" class="section blob blob--contact reveal">
       <div class="container">
         <div class="section__head">
           <h2>수업 문의</h2>
@@ -330,9 +331,9 @@
               </label>
 
               <div class="contact__actions">
-                <button type="submit" class="btn">메일로 문의하기</button>
+                <button type="submit" class="btn btn--mail">메일로 문의하기</button>
 
-                <a class="insta-contact__btn" href="https://instagram.com/yaong_history" target="_blank" aria-label="야옹 역사 인스타그램">
+                <a class="insta-contact__btn" href="https://instagram.com/yaong_history" target="_blank" rel="noopener" aria-label="야옹 역사 인스타그램">
                   <img src="./instagram.png" alt="Instagram">
                   <span>@yaong_history</span>
                 </a>
@@ -345,40 +346,7 @@
           </div>
         </div>
       </div>
-
-      <script>
-        (function () {
-          const form = document.getElementById('contactForm');
-          if (!form) return;
-
-          form.addEventListener('submit', function (e) {
-            e.preventDefault();
-
-            const data = new FormData(form);
-            const parentName = (data.get('parentName') || '').toString().trim();
-            const phone = (data.get('phone') || '').toString().trim();
-            const count = (data.get('count') || '').toString().trim();
-            const whenWhere = (data.get('whenWhere') || '').toString().trim();
-            const message = (data.get('message') || '').toString().trim();
-
-            const subject = `[야옹 역사] 수업 문의 (${parentName || '보호자'})`;
-            const bodyLines = [
-              `보호자 이름: ${parentName}`,
-              `휴대폰 번호: ${phone}`,
-              `인원: ${count || '-'}`,
-              `희망 장소/일정: ${whenWhere || '-'}`,
-              ``,
-              `문의 내용:`,
-              `${message}`
-            ];
-
-            const mailto = `mailto:yaonghistory@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
-            window.location.href = mailto;
-          });
-        })();
-      </script>
     </section>
-
   </main>
 
   <footer class="footer">
@@ -391,5 +359,67 @@
     </div>
   </footer>
 
+  <!-- ✅ 애니메이션 + 웹뷰 초보정 + 메일 문의 -->
+  <script>
+    (function () {
+      const reveals = document.querySelectorAll(".reveal");
+      const activateAll = () => reveals.forEach(el => el.classList.add("active"));
+
+      // WebView 감지 (카카오/네이버/다음 등)
+      const ua = navigator.userAgent || "";
+      const isWebView = /KAKAOTALK|NAVER|Daum|Kakao/i.test(ua);
+
+      // Reveal: WebView는 안전모드(즉시 표시), Safari/브라우저는 자연스럽게
+      if (!reveals.length) {
+        // nothing
+      } else if (isWebView) {
+        activateAll();
+      } else if (!("IntersectionObserver" in window)) {
+        activateAll();
+      } else {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("active");
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12, rootMargin: "0px 0px -5% 0px" });
+
+        reveals.forEach(el => observer.observe(el));
+      }
+
+      // 문의 폼: mailto 자동 채움
+      const form = document.getElementById('contactForm');
+      if (form) {
+        form.addEventListener('submit', function (e) {
+          e.preventDefault();
+
+          const data = new FormData(form);
+          const parentName = (data.get('parentName') || '').toString().trim();
+          const phone = (data.get('phone') || '').toString().trim();
+          const count = (data.get('count') || '').toString().trim();
+          const whenWhere = (data.get('whenWhere') || '').toString().trim();
+          const message = (data.get('message') || '').toString().trim();
+
+          const subject = `[야옹 역사] 수업 문의 (${parentName || '보호자'})`;
+          const bodyLines = [
+            `보호자 이름: ${parentName}`,
+            `휴대폰 번호: ${phone}`,
+            `인원: ${count || '-'}`,
+            `희망 장소/일정: ${whenWhere || '-'}`,
+            ``,
+            `문의 내용:`,
+            `${message}`
+          ];
+
+          const mailto =
+            `mailto:yaonghistory@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
+
+          window.location.href = mailto;
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
