@@ -1,223 +1,135 @@
-<!-- index.html -->
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>야옹 역사 | 초등 한국사 수업</title>
-  <meta name="description" content="박물관·궁궐·역사 현장에서 직접 보고, 묻고, 배우는 재미있는 초등 한국사 수업" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
-
-  <!-- 적용 안 바뀌면 v 숫자만 올리기 -->
-  <link rel="stylesheet" href="./style.css?v=50" />
+  <link rel="stylesheet" href="style.css?v=999">
 </head>
-
 <body>
-  <header class="header">
-    <div class="container header__inner">
-      <!-- 헤더: yaong-cat.png -->
-      <a class="brand" href="#top" aria-label="야옹 역사 홈">
-        <span class="brand__mark" aria-hidden="true">
-          <img src="./yaong-cat.png" alt="" loading="eager">
-        </span>
-        <span class="brand__text">
-          <span class="brand__name">야옹 역사</span>
-          <span class="brand__tag">초등 한국사 수업</span>
-        </span>
+
+<header class="header">
+  <div class="container header__inner">
+    <a class="brand" href="#top">
+      <div class="brand__mark">
+        <img src="yaong-cat.png" alt="야옹 역사 로고">
+      </div>
+      <div class="brand__text">
+        <div class="brand__name">야옹 역사</div>
+        <div class="brand__tag">초등 한국사 수업</div>
+      </div>
+    </a>
+
+    <nav class="nav">
+      <a href="#program">수업 안내</a>
+      <a href="#teacher">강사 이력</a>
+      <a href="#reviews">생생한 후기</a>
+      <a href="#photos">활동사진</a>
+      <a class="nav__cta" href="#apply">문의</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero">
+  <div class="container hero__grid">
+    <div>
+      <span class="pill">현장형 · 소규모 · 120분</span>
+      <h1>박물관, 궁궐, 역사 현장에서<br>직접 보고, 묻고, 배우는 역사 수업</h1>
+      <p class="lead">
+        아이들이 직접 보고 경험한 내용을 바탕으로  
+        스스로 생각하고 이해하는 역사 수업입니다.
+      </p>
+
+      <ul class="stats">
+        <li><strong>120분</strong><span>1회 수업</span></li>
+        <li><strong>4–6명</strong><span>소규모 정원</span></li>
+        <li><strong>현장+이론</strong><span>유물·전시 병행</span></li>
+      </ul>
+    </div>
+
+    <aside class="card">
+      <h3>수업 특징</h3>
+      <ul>
+        <li>국립중앙박물관, 경복궁, 덕수궁 등 다양한 장소</li>
+        <li>현장 설명 + 이론 학습 병행</li>
+        <li>유물·전시 관람 중심 수업</li>
+        <li>소규모 맞춤형 수업</li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<section id="teacher" class="section">
+  <div class="container">
+    <h2>강사 이력</h2>
+
+    <div class="teacher">
+      <div class="teacher__logo">
+        <img src="yaong-logo.png" alt="야옹 역사 로고">
+      </div>
+      <div class="teacher__body">
+        <ul>
+          <li>10년 이상의 경력</li>
+          <li>한국사능력검정 1급</li>
+          <li>전) 궁궐문화원 선임연구원</li>
+          <li>전) 라이브 뮤지엄 출강</li>
+          <li>현) 꿈꾸는 해치 강사</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="reviews" class="section section--alt">
+  <div class="container">
+    <h2>생생한 후기</h2>
+    <div class="review-wrap">
+      <img src="review.jpg" class="review-img">
+    </div>
+  </div>
+</section>
+
+<section id="photos" class="section">
+  <div class="container">
+    <h2>활동사진</h2>
+    <div class="gallery">
+      <img src="photo1.jpg">
+      <img src="photo2.jpg">
+      <img src="photo3.jpg">
+      <img src="photo4.jpg">
+      <img src="photo5.jpg">
+    </div>
+  </div>
+</section>
+
+<section id="apply" class="section section--alt">
+  <div class="container">
+    <h2>문의하기</h2>
+
+    <div class="form__actions">
+      <a class="btn" href="mailto:yaonghistory@gmail.com">
+        📧 메일로 문의하기
       </a>
 
-      <nav class="nav" aria-label="주요 메뉴">
-        <a href="#program">수업 안내</a>
-        <a href="#teacher">강사 이력</a>
-        <a href="#reviews">생생한 후기</a>
-        <a href="#photos">활동사진</a>
-        <a class="nav__cta" href="#apply">문의</a>
-      </nav>
+      <a class="insta-contact__btn" href="https://instagram.com/yaong_history" target="_blank">
+        <img src="instagram.png" alt="Instagram">
+        <span>@yaong_history</span>
+      </a>
     </div>
-  </header>
+  </div>
+</section>
 
-  <main id="top">
-    <section class="hero">
-      <div class="container hero__grid">
-        <div class="hero__copy">
-          <span class="pill">현장형 · 소규모 · 120분</span>
-          <h1>박물관, 궁궐, 역사 현장에서<br>직접 보고, 묻고, 배우는 역사 수업</h1>
-          <p class="lead">
-            아이들이 “직접 본 것”을 바탕으로 스스로 질문하고, 정리하고, 기억하게 되는 수업입니다.
-          </p>
+</main>
 
-          <ul class="stats" aria-label="수업 핵심 정보">
-            <li><strong>120분</strong><span>1회 수업</span></li>
-            <li><strong>4–6명</strong><span>소규모 정원</span></li>
-            <li><strong>현장+이론</strong><span>유물·전시 병행</span></li>
-          </ul>
-        </div>
+<footer class="footer">
+  <div class="container footer__inner">
+    © 야옹 역사
+  </div>
+</footer>
 
-        <aside class="card">
-          <h3 class="card__title">수업 특징</h3>
-          <ul class="bullets">
-            <li>국립중앙박물관, 경복궁, 덕수궁, 창경궁 등 다양한 장소 운영</li>
-            <li>현장 설명 + 이론 학습으로 “이해”까지 연결</li>
-            <li>유물·전시 관람 병행 (관찰 → 질문 → 정리)</li>
-            <li>소규모 팀 수업 및 개별 신청 가능</li>
-          </ul>
-          <div class="divider"></div>
-          <p class="tiny muted">※ 장소·주제는 학년/관심사에 맞춰 조정할 수 있어요.</p>
-        </aside>
-      </div>
-    </section>
-
-    <section id="program" class="section section--alt">
-      <div class="container">
-        <div class="section__head">
-          <h2>수업 안내</h2>
-          <p>역사 현장 중심 수업으로 “재미”와 “이해”를 함께 잡아요.</p>
-        </div>
-
-        <div class="grid3">
-          <article class="feature">
-            <h3>현장 중심</h3>
-            <p>박물관·궁궐·유적지에서 실제 자료를 보고 배우는 수업</p>
-          </article>
-          <article class="feature">
-            <h3>유물·전시 병행</h3>
-            <p>전시 관람과 설명을 함께 진행해 “맥락”을 만들어줍니다</p>
-          </article>
-          <article class="feature">
-            <h3>120분 구성</h3>
-            <p>현장 설명 + 활동 + 정리까지 한 번에 이어지는 수업</p>
-          </article>
-        </div>
-
-        <div class="grid2">
-          <article class="panel">
-            <h3>국립중앙박물관 수업 예시</h3>
-            <ul class="bullets">
-              <li>선사시대 · 삼국시대 · 고려시대 · 조선시대</li>
-              <li>시대별 주제 수업 운영</li>
-            </ul>
-          </article>
-
-          <article class="panel">
-            <h3>운영 방식</h3>
-            <ul class="bullets">
-              <li>소규모 팀 수업 및 개별 신청 가능</li>
-              <li>정원 4–6명</li>
-              <li>장소는 상황에 따라 조정 가능</li>
-            </ul>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section id="teacher" class="section">
-      <div class="container">
-        <div class="section__head">
-          <h2>강사 이력</h2>
-          <p>현장 수업 경험을 바탕으로 아이 눈높이에 맞춰 진행합니다.</p>
-        </div>
-
-        <div class="teacher">
-          <!-- 강사 이력: yaong-logo.png -->
-          <div class="teacher__logo" aria-hidden="true">
-            <img src="./yaong-logo.png" alt="">
-          </div>
-
-          <div class="teacher__body">
-            <h3>강사 이력</h3>
-            <ul class="bullets">
-              <li>10년 이상의 경력</li>
-              <li>한국사능력검정 1급</li>
-              <li>전) 궁궐문화원 선임연구원</li>
-              <li>전) 라이브 뮤지엄 출강</li>
-              <li>현) 꿈꾸는 해치 강사</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="reviews" class="section section--alt">
-      <div class="container">
-        <div class="section__head">
-          <h2>생생한 후기</h2>
-        </div>
-
-        <div class="review-wrap">
-          <img class="review-img" src="./review.jpg" alt="야옹 역사 수업 후기 이미지">
-        </div>
-      </div>
-    </section>
-
-    <section id="photos" class="section">
-      <div class="container">
-        <div class="section__head">
-          <h2>활동사진</h2>
-          <p>현장에서 직접 보고 배우는 순간들 📸</p>
-        </div>
-
-        <div class="gallery" aria-label="활동사진 갤러리">
-          <figure class="shot"><img src="./photo1.jpg" alt="야옹 역사 활동사진 1" loading="lazy"></figure>
-          <figure class="shot"><img src="./photo2.jpg" alt="야옹 역사 활동사진 2" loading="lazy"></figure>
-          <figure class="shot"><img src="./photo3.jpg" alt="야옹 역사 활동사진 3" loading="lazy"></figure>
-          <figure class="shot"><img src="./photo4.jpg" alt="야옹 역사 활동사진 4" loading="lazy"></figure>
-          <figure class="shot"><img src="./photo5.jpg" alt="야옹 역사 활동사진 5" loading="lazy"></figure>
-        </div>
-      </div>
-    </section>
-
-    <section id="apply" class="section section--alt">
-      <div class="container">
-        <div class="section__head">
-          <h2>문의하기</h2>
-          <p>원하시는 장소/학년/인원에 맞춰 안내드릴게요.</p>
-        </div>
-
-        <form class="form" onsubmit="return false" aria-label="문의 폼">
-          <div class="form__row">
-            <label>보호자 성함
-              <input type="text" placeholder="예) 홍길동">
-            </label>
-            <label>연락처
-              <input type="tel" placeholder="예) 010-1234-5678">
-            </label>
-          </div>
-
-          <div class="form__row">
-            <label>학년/인원
-              <input type="text" placeholder="예) 4학년 / 5명">
-            </label>
-            <label>희망 장소
-              <input type="text" placeholder="예) 국립중앙박물관">
-            </label>
-          </div>
-
-          <label>문의 내용
-            <textarea rows="5" placeholder="희망 일정, 관심 주제(궁궐/박물관/선사 등)를 적어주세요."></textarea>
-          </label>
-
-          <div class="form__actions">
-            <a class="btn" href="mailto:yaonghistory@gmail.com?subject=%5B%EC%95%BC%EC%98%B9%20%EC%97%AD%EC%82%AC%5D%20%EB%AC%B8%EC%9D%98%ED%95%A9%EB%8B%88%EB%8B%A4">메일로 문의하기</a>
-
-            <!-- 문의 섹션 하단 인스타 버튼 -->
-            <a class="insta-contact__btn" href="https://instagram.com/yaong_history" target="_blank" aria-label="야옹 역사 인스타그램">
-              <img src="./instagram.png" alt="Instagram">
-              <span>@yaong_history</span>
-            </a>
-          </div>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container footer__inner">
-      <span>© 야옹 역사</span>
-      <span class="tiny">박물관·궁궐·역사 현장 수업</span>
-    </div>
-  </footer>
 </body>
 </html>
