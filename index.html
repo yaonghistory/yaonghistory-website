@@ -6,11 +6,11 @@
   <title>야옹 역사 | 초등 현장 한국사 수업</title>
   <meta name="description" content="교과서 밖에서 직접 보고, 묻고, 배우는 살아있는 초등 현장 한국사 수업 ‘야옹 역사’" />
 
-  <!-- 나눔스퀘어라운드 -->
+  <!-- NanumSquareRound (둥글둥글한 고딕) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquareround.min.css">
 
-  <!-- 캐시 방지: 적용 안 되면 숫자만 올리기 -->
-  <link rel="stylesheet" href="./style.css?v=501" />
+  <!-- ✅ 캐시 방지용 v 숫자: 바뀐 게 바로 안 보이면 숫자만 +1 -->
+  <link rel="stylesheet" href="./style.css?v=801" />
 </head>
 
 <body>
@@ -31,6 +31,7 @@
   </header>
 
   <main>
+    <!-- HERO -->
     <section class="hero reveal">
       <div class="container hero__grid">
         <div class="hero__copy">
@@ -81,6 +82,7 @@
       </div>
     </section>
 
+    <!-- ABOUT -->
     <section id="about" class="section blob blob--sky reveal">
       <div class="container">
         <div class="section__head">
@@ -113,6 +115,7 @@
       </div>
     </section>
 
+    <!-- CLASS STYLE -->
     <section id="style" class="section blob blob--mint reveal">
       <div class="container">
         <div class="section__head">
@@ -145,6 +148,7 @@
       </div>
     </section>
 
+    <!-- LOCATIONS -->
     <section id="locations" class="section blob blob--lemon reveal">
       <div class="container">
         <div class="section__head">
@@ -162,6 +166,7 @@
       </div>
     </section>
 
+    <!-- CURRICULUM -->
     <section id="curriculum" class="section blob blob--sky2 reveal">
       <div class="container">
         <div class="section__head">
@@ -192,6 +197,7 @@
       </div>
     </section>
 
+    <!-- INSTRUCTOR -->
     <section id="instructor" class="section blob blob--mint2 reveal">
       <div class="container">
         <div class="section__head">
@@ -212,15 +218,12 @@
               <li>전) 라이브 뮤지엄 출강 강사</li>
               <li>현) 꿈꾸는 해치 한국사 강사</li>
             </ul>
-
-            <div class="teacher__note">
-              아이들의 눈높이에 맞춰, 어렵지 않고 재미있게 역사를 전달합니다.
-            </div>
           </div>
         </div>
       </div>
     </section>
 
+    <!-- CLASS INFO -->
     <section id="info" class="section blob blob--lemon2 reveal">
       <div class="container">
         <div class="section__head">
@@ -247,6 +250,7 @@
       </div>
     </section>
 
+    <!-- REVIEWS -->
     <section id="reviews" class="section reveal">
       <div class="container">
         <div class="section__head">
@@ -254,11 +258,12 @@
         </div>
 
         <div class="review-wrap">
-          <img class="review-img" src="./review.jpg" alt="야옹 역사 수업 후기">
+          <img class="review-img zoomable" src="./review.jpg" alt="야옹 역사 수업 후기">
         </div>
       </div>
     </section>
 
+    <!-- PHOTOS -->
     <section id="photos" class="section section--plainAlt reveal">
       <div class="container">
         <div class="section__head">
@@ -266,15 +271,16 @@
         </div>
 
         <div class="gallery" aria-label="활동사진 갤러리">
-          <figure class="shot"><img src="./photo1.jpg" alt="활동사진 1" loading="lazy"></figure>
-          <figure class="shot"><img src="./photo2.jpg" alt="활동사진 2" loading="lazy"></figure>
-          <figure class="shot"><img src="./photo3.jpg" alt="활동사진 3" loading="lazy"></figure>
-          <figure class="shot"><img src="./photo4.jpg" alt="활동사진 4" loading="lazy"></figure>
-          <figure class="shot"><img src="./photo5.jpg" alt="활동사진 5" loading="lazy"></figure>
+          <figure class="shot"><img class="zoomable" src="./photo1.jpg" alt="활동사진 1" loading="lazy"></figure>
+          <figure class="shot"><img class="zoomable" src="./photo2.jpg" alt="활동사진 2" loading="lazy"></figure>
+          <figure class="shot"><img class="zoomable" src="./photo3.jpg" alt="활동사진 3" loading="lazy"></figure>
+          <figure class="shot"><img class="zoomable" src="./photo4.jpg" alt="활동사진 4" loading="lazy"></figure>
+          <figure class="shot"><img class="zoomable" src="./photo5.jpg" alt="활동사진 5" loading="lazy"></figure>
         </div>
       </div>
     </section>
 
+    <!-- CONTACT -->
     <section id="contact" class="section blob blob--contact reveal">
       <div class="container">
         <div class="section__head">
@@ -285,7 +291,7 @@
         <div class="contact">
           <div class="contact__box">
             <div class="contact__lines">
-              <div class="contact__line">📩 메일: yaonghistory@gmail.com</div>
+              <div class="contact__line email">📩 메일: yaonghistory@gmail.com</div>
               <div class="contact__line">📸 인스타그램: @yaong_history</div>
               <div class="contact__line muted">DM 문의 가능 · 예약 및 일정 조율 가능</div>
             </div>
@@ -347,23 +353,33 @@
     </div>
   </footer>
 
+  <!-- ✅ 라이트박스(사진 확대 + 좌우 넘김 + 1/6 + 썸네일) -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox__close" type="button" aria-label="닫기">×</button>
+    <button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="이전 사진">‹</button>
+
+    <div class="lightbox__count" id="lightboxCount">1/1</div>
+
+    <img class="lightbox__img" id="lightboxImg" alt="">
+
+    <button class="lightbox__nav lightbox__nav--next" type="button" aria-label="다음 사진">›</button>
+
+    <div class="lightbox__thumbs" id="lightboxThumbs" aria-label="썸네일 목록"></div>
+  </div>
+
   <script>
     (function () {
       const ua = navigator.userAgent || "";
       const isWebView = /KAKAOTALK|NAVER|Daum|Kakao/i.test(ua);
       if (isWebView) document.body.classList.add("webview");
 
-      // ===== 폰트 로딩 실패/지연 감지 → body에 class 추가 =====
-      // 나눔스퀘어라운드가 로딩되지 않으면 .font-fallback 붙임
-      // (카카오톡에서 CDN 차단/지연이 가끔 있음)
+      // ===== 폰트 로딩 보정 =====
       const checkFont = () => {
         try{
-          // 지원되는 브라우저에서만(대부분 iOS 15+ OK)
           if (document.fonts && document.fonts.check) {
             const ok = document.fonts.check('16px "NanumSquareRound"');
             if (!ok) document.body.classList.add("font-fallback");
           } else {
-            // fonts API 없으면 그냥 fallback 모드 (안정 우선)
             document.body.classList.add("font-fallback");
           }
         }catch(e){
@@ -450,6 +466,144 @@
 
           window.location.href = mailto;
         });
+      }
+
+      // ===== ✅ Lightbox (Zoom + Swipe + Count + Thumbs) =====
+      const lb = document.getElementById("lightbox");
+      const lbImg = document.getElementById("lightboxImg");
+      const lbCount = document.getElementById("lightboxCount");
+      const lbThumbs = document.getElementById("lightboxThumbs");
+
+      const btnClose = lb ? lb.querySelector(".lightbox__close") : null;
+      const btnPrev = lb ? lb.querySelector(".lightbox__nav--prev") : null;
+      const btnNext = lb ? lb.querySelector(".lightbox__nav--next") : null;
+
+      const zoomables = Array.from(document.querySelectorAll("img.zoomable"));
+      const items = zoomables.map(img => ({
+        src: img.getAttribute("src"),
+        alt: img.getAttribute("alt") || ""
+      }));
+
+      let current = 0;
+
+      const renderThumbs = () => {
+        if (!lbThumbs) return;
+        lbThumbs.innerHTML = "";
+        items.forEach((it, idx) => {
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = "lightbox__thumb" + (idx === current ? " active" : "");
+          b.setAttribute("aria-label", `썸네일 ${idx+1}`);
+          const im = document.createElement("img");
+          im.src = it.src;
+          im.alt = "";
+          b.appendChild(im);
+          b.addEventListener("click", () => openLB(idx, true));
+          lbThumbs.appendChild(b);
+        });
+      };
+
+      const syncUI = () => {
+        if (lbCount) lbCount.textContent = `${current + 1}/${items.length}`;
+        if (lbThumbs) {
+          const thumbs = Array.from(lbThumbs.querySelectorAll(".lightbox__thumb"));
+          thumbs.forEach((t, i) => t.classList.toggle("active", i === current));
+
+          const active = thumbs[current];
+          if (active) {
+            const r = active.getBoundingClientRect();
+            const pr = lbThumbs.getBoundingClientRect();
+            if (r.left < pr.left || r.right > pr.right) {
+              active.scrollIntoView({ behavior:"smooth", inline:"center", block:"nearest" });
+            }
+          }
+        }
+      };
+
+      const openLB = (index, keepOpen) => {
+        if (!lb || !lbImg || !items.length) return;
+        current = (index + items.length) % items.length;
+        lbImg.src = items[current].src;
+        lbImg.alt = items[current].alt;
+
+        if (!lb.classList.contains("open")) {
+          lb.classList.add("open");
+          lb.setAttribute("aria-hidden", "false");
+          document.body.classList.add("modal-open");
+          renderThumbs();
+        }
+        syncUI();
+      };
+
+      const closeLB = () => {
+        if (!lb || !lbImg) return;
+        lb.classList.remove("open");
+        lb.setAttribute("aria-hidden", "true");
+        lbImg.src = "";
+        document.body.classList.remove("modal-open");
+      };
+
+      const showPrev = () => openLB(current - 1, true);
+      const showNext = () => openLB(current + 1, true);
+
+      zoomables.forEach((img, idx) => {
+        img.addEventListener("click", () => openLB(idx));
+      });
+
+      if (btnClose) btnClose.addEventListener("click", closeLB);
+      if (btnPrev) btnPrev.addEventListener("click", showPrev);
+      if (btnNext) btnNext.addEventListener("click", showNext);
+
+      if (lb) {
+        lb.addEventListener("click", (e) => {
+          if (e.target === lb) closeLB();
+        });
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (!lb || !lb.classList.contains("open")) return;
+        if (e.key === "Escape") closeLB();
+        if (e.key === "ArrowLeft") showPrev();
+        if (e.key === "ArrowRight") showNext();
+      });
+
+      // 스와이프
+      let startX = 0;
+      let startY = 0;
+      let tracking = false;
+
+      const onTouchStart = (e) => {
+        if (!lb || !lb.classList.contains("open")) return;
+        const t = e.touches[0];
+        startX = t.clientX;
+        startY = t.clientY;
+        tracking = true;
+      };
+
+      const onTouchMove = (e) => {
+        if (!tracking) return;
+        const t = e.touches[0];
+        const dx = t.clientX - startX;
+        const dy = t.clientY - startY;
+        if (Math.abs(dy) > Math.abs(dx) + 10) tracking = false;
+      };
+
+      const onTouchEnd = (e) => {
+        if (!tracking) return;
+        tracking = false;
+        const t = (e.changedTouches && e.changedTouches[0]) || null;
+        if (!t) return;
+
+        const dx = t.clientX - startX;
+        const threshold = 50;
+        if (dx > threshold) showPrev();
+        else if (dx < -threshold) showNext();
+      };
+
+      if (lb) {
+        lb.addEventListener("touchstart", onTouchStart, { passive:true });
+        lb.addEventListener("touchmove", onTouchMove, { passive:true });
+        lb.addEventListener("touchend", onTouchEnd, { passive:true });
       }
     })();
   </script>
