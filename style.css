@@ -1,4 +1,8 @@
-/* style.css */
+/* style.css – 최종 통합 버전 */
+
+/* =====================
+   COLOR & BASIC SET
+===================== */
 :root{
   --mint:#dff3ef;
   --paper:#f6f2df;
@@ -18,6 +22,7 @@ html{
   -webkit-text-size-adjust:100%;
   text-size-adjust:100%;
 }
+
 *{box-sizing:border-box}
 html,body{margin:0;padding:0}
 
@@ -28,7 +33,7 @@ body{
   line-height:1.75;
   background:
     linear-gradient(180deg, var(--mint), var(--paper)),
-    repeating-linear-gradient(0deg, rgba(0,0,0,.010) 0 1px, transparent 1px 7px),
+    repeating-linear-gradient(0deg, rgba(0,0,0,.01) 0 1px, transparent 1px 7px),
     repeating-linear-gradient(90deg, rgba(0,0,0,.008) 0 1px, transparent 1px 9px);
 }
 
@@ -38,21 +43,25 @@ img{max-width:100%;height:auto;display:block}
 .container{
   width:min(1100px,92vw);
   margin:0 auto;
-  padding-left:14px;
-  padding-right:14px;
+  padding:0 14px;
 }
 
 .tiny{font-size:12px}
 .muted{color:var(--muted)}
 .divider{height:1px;background:var(--line);margin:14px 0}
 
-/* Header */
+/* =====================
+   HEADER
+===================== */
 .header{
-  position:sticky;top:0;z-index:50;
+  position:sticky;
+  top:0;
+  z-index:50;
   background:rgba(255,255,245,.95);
   backdrop-filter: blur(8px);
   border-bottom:4px solid var(--gold);
 }
+
 .header__inner{
   display:flex;
   align-items:center;
@@ -60,59 +69,62 @@ img{max-width:100%;height:auto;display:block}
   padding:14px 0;
   gap:14px;
 }
+
+/* 브랜드 영역 */
 .brand{
   display:flex;
   align-items:center;
   gap:14px;
-  min-width:0;
 }
+
+/* 🔥 금색 테두리 제거 + 브랜드 이미지 자체 크게 */
 .brand__mark{
-  width:76px;
-  height:76px;
-  border-radius:24px;
-  background:#fff;
-  border:3px solid var(--gold);
-  box-shadow:0 6px 14px rgba(0,0,0,.12);
+  width:86px;
+  height:86px;
+  background:transparent;
+  border:none;
+  box-shadow:none;
   overflow:hidden;
   flex:0 0 auto;
 }
+
 .brand__mark img{
   width:100%;
   height:100%;
   object-fit:contain;
-  padding:8px;
+  padding:0;
 }
-.brand__text{display:flex;flex-direction:column;min-width:0}
+
+.brand__text{
+  display:flex;
+  flex-direction:column;
+}
+
 .brand__name{
   font-weight:900;
-  color:var(--brown);
-  letter-spacing:-.4px;
-  line-height:1.1;
   font-size:20px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+  color:var(--brown);
+  line-height:1.1;
 }
+
 .brand__tag{
   font-size:14px;
   color:#7b5b2e;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
 }
 
-/* Nav */
+/* NAV */
 .nav{
   display:flex;
-  align-items:center;
   gap:14px;
-  flex-wrap:wrap;
+  align-items:center;
 }
+
 .nav a{
-  color:var(--muted);
   font-weight:900;
+  color:var(--muted);
   font-size:14px;
 }
+
 .nav__cta{
   padding:10px 14px;
   border-radius:999px;
@@ -121,57 +133,51 @@ img{max-width:100%;height:auto;display:block}
   color:var(--brown);
 }
 
-/* Button */
-.btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:14px 24px;
-  border-radius:999px;
-  background:linear-gradient(180deg,#ffe9a8,#f3c86a);
-  border:3px solid var(--gold2);
-  color:var(--brown);
-  font-weight:900;
-  box-shadow:0 6px 14px rgba(0,0,0,.15);
-}
-
-/* Hero */
+/* =====================
+   HERO
+===================== */
 .hero{padding:56px 0 46px}
+
 .hero__grid{
   display:grid;
   grid-template-columns:1.2fr .8fr;
   gap:20px;
-  align-items:start;
 }
+
 .pill{
   display:inline-block;
   padding:6px 12px;
   background:#fff8dc;
   border:2px dashed var(--gold);
   border-radius:999px;
-  color:#6b4b1f;
-  margin-bottom:12px;
   font-weight:900;
+  color:#6b4b1f;
   font-size:14px;
+  margin-bottom:12px;
 }
+
 h1{
   font-size:clamp(28px,3.6vw,46px);
   line-height:1.25;
   margin:0 0 14px;
   color:var(--brown);
-  letter-spacing:-.7px;
 }
-.lead{color:var(--muted);margin:0 0 18px;font-size:16px}
+
+.lead{
+  color:var(--muted);
+  font-size:16px;
+  margin-bottom:18px;
+}
 
 /* Stats */
 .stats{
   list-style:none;
   padding:0;
-  margin:18px 0 0;
   display:flex;
   gap:12px;
   flex-wrap:wrap;
 }
+
 .stats li{
   background:rgba(255,255,255,.72);
   border:2px solid rgba(228,193,90,.55);
@@ -179,10 +185,16 @@ h1{
   padding:10px 12px;
   min-width:120px;
 }
-.stats strong{display:block;font-size:18px;color:var(--brown);line-height:1.1}
-.stats span{color:var(--muted);font-size:13px}
 
-/* Cards */
+.stats strong{
+  display:block;
+  font-size:18px;
+  color:var(--brown);
+}
+
+/* =====================
+   CARD
+===================== */
 .card{
   background:var(--panel);
   border:4px solid var(--gold);
@@ -190,38 +202,65 @@ h1{
   padding:22px;
   box-shadow:var(--shadow);
 }
-.card__title{margin:0 0 10px;color:var(--brown)}
 
-/* Sections */
+.card__title{
+  margin:0 0 10px;
+  color:var(--brown);
+}
+
+/* =====================
+   SECTIONS
+===================== */
 .section{padding:60px 0}
+
 .section--alt{
   background:rgba(255,255,255,.35);
   border-top:2px solid rgba(228,193,90,.35);
   border-bottom:2px solid rgba(228,193,90,.35);
 }
-.section__head h2{
-  margin:0 0 10px;
-  font-size:28px;
-  color:var(--brown);
-  line-height:1.25;
-}
-.section__head p{margin:0;color:var(--muted);font-size:16px}
 
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
-.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:18px}
+.section__head h2{
+  font-size:28px;
+  margin:0 0 10px;
+  color:var(--brown);
+}
+
+.section__head p{
+  color:var(--muted);
+  font-size:16px;
+}
+
+/* GRID */
+.grid3{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  margin-top:18px;
+}
+
+.grid2{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
+  margin-top:18px;
+}
 
 .feature,.panel{
   background:#fffef7;
   border:3px solid #f1d37a;
   border-radius:24px;
   padding:18px;
-  box-shadow:0 6px 14px rgba(0,0,0,.10);
-  min-width:0;
+  box-shadow:0 6px 14px rgba(0,0,0,.1);
 }
-.feature h3,.panel h3{margin:0 0 10px;color:var(--brown)}
-.feature p{margin:0;color:var(--muted)}
 
-/* Teacher */
+.feature h3,.panel h3{
+  margin:0 0 10px;
+  color:var(--brown);
+}
+
+/* =====================
+   TEACHER (강사 이력)
+===================== */
 .teacher{
   display:flex;
   flex-wrap:wrap;
@@ -230,47 +269,39 @@ h1{
   border:4px solid #f1d37a;
   border-radius:26px;
   padding:20px;
-  align-items:flex-start;
 }
+
+/* 🔥 금색 테두리 제거 + 로고 크게 */
 .teacher__logo{
-  width:94px;
-  height:94px;
-  border-radius:28px;
-  background:#fff;
-  border:3px solid var(--gold);
-  box-shadow:0 6px 14px rgba(0,0,0,.10);
+  width:140px;
+  height:140px;
+  background:transparent;
+  border:none;
+  box-shadow:none;
   overflow:hidden;
   flex:0 0 auto;
 }
+
 .teacher__logo img{
   width:100%;
   height:100%;
   object-fit:contain;
-  padding:10px;
+  padding:0;
 }
+
 .teacher__body{
   flex:1 1 320px;
-  min-width:260px;
 }
-.teacher__body h3{margin:0 0 10px;color:var(--brown)}
 
-/* Text safety */
-p, li, a, input, textarea{
-  line-height:1.8;
-  overflow-wrap:anywhere;
-  word-break:keep-all;
-}
-ul{margin:10px 0 0;padding-left:22px}
-li{margin:6px 0}
-.bullets{padding-left:22px}
-.bullets li{margin:8px 0;color:var(--muted)}
-
-/* Reviews */
+/* =====================
+   REVIEWS
+===================== */
 .review-wrap{
-  margin-top:18px;
   display:flex;
   justify-content:center;
+  margin-top:18px;
 }
+
 .review-img{
   width:min(900px,100%);
   border-radius:24px;
@@ -278,53 +309,60 @@ li{margin:6px 0}
   box-shadow:0 8px 18px rgba(0,0,0,.14);
 }
 
-/* Photos (5장) */
+/* =====================
+   PHOTOS
+===================== */
 .gallery{
-  margin-top:18px;
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:14px;
+  margin-top:18px;
 }
+
 .shot{
-  margin:0;
   background:#fff;
   border:3px solid #f1d37a;
   border-radius:20px;
   overflow:hidden;
-  box-shadow:0 6px 14px rgba(0,0,0,.10);
+  box-shadow:0 6px 14px rgba(0,0,0,.1);
 }
+
 .shot img{
   width:100%;
   aspect-ratio:4/3;
   object-fit:cover;
 }
 
-/* Form */
+/* =====================
+   FORM
+===================== */
 .form{
   background:#fffef7;
   border:4px solid #f1d37a;
   border-radius:26px;
   padding:20px;
-  margin-top:18px;
-  box-shadow:0 6px 14px rgba(0,0,0,.08);
 }
+
 .form__row{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:12px;
   margin-bottom:12px;
 }
-label{display:grid;gap:8px;font-weight:900;color:var(--brown)}
+
+label{
+  font-weight:900;
+  color:var(--brown);
+}
+
 input,textarea{
   padding:12px;
   border-radius:12px;
   border:2px solid rgba(228,193,90,.85);
-  background:#fff;
   font-family:inherit;
-  color:var(--ink);
 }
 
-/* 문의 섹션 버튼 정렬 + 인스타 버튼 */
+/* 문의 버튼 영역 */
 .form__actions{
   margin-top:14px;
   display:flex;
@@ -333,12 +371,14 @@ input,textarea{
   align-items:center;
 }
 
-/* 하단 인스타그램 버튼 */
+/* =====================
+   INSTAGRAM BUTTON
+===================== */
 .insta-contact__btn{
   display:flex;
   align-items:center;
-  gap:10px;
-  padding:10px 18px;
+  gap:8px;
+  padding:8px 14px;
   border-radius:999px;
   background:#fff;
   border:2px solid var(--gold2);
@@ -347,40 +387,47 @@ input,textarea{
   box-shadow:0 4px 10px rgba(0,0,0,.12);
   transition:.2s ease;
 }
+
+/* 🔥 글자보다 살짝만 크게 */
 .insta-contact__btn img{
-  width:22px;
-  height:22px;
-  object-fit:contain;
+  width:18px;
+  height:18px;
 }
+
 .insta-contact__btn span{
-  font-size:15px;
+  font-size:14px;
+  letter-spacing:.2px;
 }
+
 .insta-contact__btn:hover{
   transform:translateY(-2px);
   box-shadow:0 6px 14px rgba(0,0,0,.2);
 }
 
-/* Footer */
+/* =====================
+   FOOTER
+===================== */
 .footer{
   border-top:4px solid var(--gold);
   padding:22px 0;
   background:#fffdf0;
 }
+
 .footer__inner{
   display:flex;
   justify-content:space-between;
-  gap:10px;
   flex-wrap:wrap;
   color:#6b4b1f;
 }
 
-/* Responsive */
+/* =====================
+   RESPONSIVE
+===================== */
 @media(max-width:900px){
   .nav{display:none}
   .hero__grid{grid-template-columns:1fr}
   .grid3,.grid2{grid-template-columns:1fr}
   .form__row{grid-template-columns:1fr}
   .gallery{grid-template-columns:repeat(2,1fr)}
-  .brand__mark{width:70px;height:70px}
-  .brand__name{font-size:19px}
+  .brand__mark{width:72px;height:72px}
 }
