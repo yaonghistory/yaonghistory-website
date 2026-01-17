@@ -6,11 +6,33 @@
   <title>야옹 역사 | 초등 현장 한국사 수업</title>
   <meta name="description" content="교과서 밖에서 직접 보고, 묻고, 배우는 살아있는 초등 현장 한국사 수업 ‘야옹 역사’" />
 
-  <!-- NanumSquareRound (둥글둥글한 고딕) -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquareround.min.css">
+  <!-- ✅ 꼭! v 숫자 올리기: 적용 안 되면 999 처럼 크게 바꿔도 됨 -->
+  <link rel="stylesheet" href="./style.css?v=999" />
 
-  <!-- ✅ 캐시 방지용 v 숫자: 바뀐 게 바로 안 보이면 숫자만 +1 -->
-  <link rel="stylesheet" href="./style.css?v=801" />
+  <!-- ✅ “CSS가 안 먹어도” 라이트박스가 페이지 하단에 주루룩 노출되는 걸 막는 최소 안전장치 -->
+  <style>
+    /* 줄바꿈/단어쪼개짐 최소 안전장치(혹시 style.css 캐시가 꼬여도) */
+    body, p, h1, h2, h3, h4, li, a, button, span, div{
+      word-break: keep-all;
+      overflow-wrap: break-word;
+      line-break: strict;
+    }
+
+    /* 라이트박스 요소가 페이지 하단에 보이는 현상 방지 */
+    .lightbox{display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,.68); align-items:center; justify-content:center; padding:18px;}
+    .lightbox.open{display:flex;}
+    .lightbox__img{width:min(980px, 96vw); max-height:78vh; object-fit:contain; background:#111; border-radius:18px;}
+    .lightbox__close{position:absolute; top:14px; right:14px; width:44px; height:44px; border-radius:999px; border:1px solid rgba(255,255,255,.25); background:rgba(0,0,0,.35); color:#fff; font-size:28px; cursor:pointer;}
+    .lightbox__nav{position:absolute; top:50%; transform:translateY(-50%); width:46px; height:46px; border-radius:999px; border:1px solid rgba(255,255,255,.22); background:rgba(0,0,0,.30); color:#fff; font-size:26px; display:grid; place-items:center; cursor:pointer;}
+    .lightbox__nav--prev{left:12px;} .lightbox__nav--next{right:12px;}
+    .lightbox__count{position:absolute; left:50%; top:14px; transform:translateX(-50%); padding:8px 12px; border-radius:999px; background:rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.18); color:#fff; font-weight:900; font-size:13px;}
+    .lightbox__thumbs{position:absolute; left:50%; bottom:14px; transform:translateX(-50%); display:flex; gap:8px; padding:10px 12px; border-radius:999px; background:rgba(0,0,0,.30); border:1px solid rgba(255,255,255,.18); max-width:92vw; overflow:auto; -webkit-overflow-scrolling:touch;}
+    .lightbox__thumb{width:44px; height:44px; border-radius:12px; overflow:hidden; border:2px solid rgba(255,255,255,.18); opacity:.78; cursor:pointer; background:#222;}
+    .lightbox__thumb img{width:100%; height:100%; object-fit:cover;}
+    .lightbox__thumb.active{opacity:1; border-color:rgba(255,255,255,.70);}
+    body.modal-open{overflow:hidden;}
+  </style>
 </head>
 
 <body>
@@ -25,13 +47,11 @@
           <span class="brand__tag">초등 현장 한국사 수업</span>
         </span>
       </div>
-
       <a class="miniCta" href="#contact" aria-label="수업 문의로 이동">문의</a>
     </div>
   </header>
 
   <main>
-    <!-- HERO -->
     <section class="hero reveal">
       <div class="container hero__grid">
         <div class="hero__copy">
@@ -82,7 +102,6 @@
       </div>
     </section>
 
-    <!-- ABOUT -->
     <section id="about" class="section blob blob--sky reveal">
       <div class="container">
         <div class="section__head">
@@ -115,7 +134,6 @@
       </div>
     </section>
 
-    <!-- CLASS STYLE -->
     <section id="style" class="section blob blob--mint reveal">
       <div class="container">
         <div class="section__head">
@@ -148,7 +166,6 @@
       </div>
     </section>
 
-    <!-- LOCATIONS -->
     <section id="locations" class="section blob blob--lemon reveal">
       <div class="container">
         <div class="section__head">
@@ -166,7 +183,6 @@
       </div>
     </section>
 
-    <!-- CURRICULUM -->
     <section id="curriculum" class="section blob blob--sky2 reveal">
       <div class="container">
         <div class="section__head">
@@ -175,101 +191,29 @@
         </div>
 
         <div class="grid grid--4">
-          <article class="cardMini">
-            <h3>선사시대</h3>
-            <p>“사람들은 어떻게 살았을까?”</p>
-          </article>
-          <article class="cardMini">
-            <h3>삼국시대</h3>
-            <p>“나라는 왜 생겼을까?”</p>
-          </article>
-          <article class="cardMini">
-            <h3>고려시대</h3>
-            <p>“불교와 나라는 어떤 관계였을까?”</p>
-          </article>
-          <article class="cardMini">
-            <h3>조선시대</h3>
-            <p>“왕은 어떻게 나라를 다스렸을까?”</p>
-          </article>
+          <article class="cardMini"><h3>선사시대</h3><p>“사람들은 어떻게 살았을까?”</p></article>
+          <article class="cardMini"><h3>삼국시대</h3><p>“나라는 왜 생겼을까?”</p></article>
+          <article class="cardMini"><h3>고려시대</h3><p>“불교와 나라는 어떤 관계였을까?”</p></article>
+          <article class="cardMini"><h3>조선시대</h3><p>“왕은 어떻게 나라를 다스렸을까?”</p></article>
         </div>
 
         <div class="section__note">한 번으로 끝나지 않는, 이어지는 역사 수업</div>
       </div>
     </section>
 
-    <!-- INSTRUCTOR -->
-    <section id="instructor" class="section blob blob--mint2 reveal">
-      <div class="container">
-        <div class="section__head">
-          <h2>강사 이력</h2>
-          <p>아이들의 눈높이에 맞춰, 어렵지 않고 재미있게 역사를 전달합니다.</p>
-        </div>
-
-        <div class="teacher">
-          <div class="teacher__logo" aria-hidden="true">
-            <img src="./yaong-logo.png" alt="">
-          </div>
-
-          <div class="teacher__body">
-            <ul class="list list--bold">
-              <li>역사 교육 경력 10년 이상</li>
-              <li>한국사능력검정시험 1급</li>
-              <li>전) 궁궐문화원 선임연구원</li>
-              <li>전) 라이브 뮤지엄 출강 강사</li>
-              <li>현) 꿈꾸는 해치 한국사 강사</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CLASS INFO -->
-    <section id="info" class="section blob blob--lemon2 reveal">
-      <div class="container">
-        <div class="section__head">
-          <h2>수업 안내</h2>
-        </div>
-
-        <div class="grid grid--3">
-          <div class="infoCard">
-            <div class="infoCard__icon">⏱️</div>
-            <div class="infoCard__title">수업 시간</div>
-            <div class="infoCard__desc">1회 120분 (2시간)</div>
-          </div>
-          <div class="infoCard">
-            <div class="infoCard__icon">👧👦</div>
-            <div class="infoCard__title">수업 정원</div>
-            <div class="infoCard__desc">3~4명 소수 정예</div>
-          </div>
-          <div class="infoCard">
-            <div class="infoCard__icon">🎒</div>
-            <div class="infoCard__title">대상</div>
-            <div class="infoCard__desc">초등학생 (학년별 난이도 조절)</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- REVIEWS -->
     <section id="reviews" class="section reveal">
       <div class="container">
-        <div class="section__head">
-          <h2>생생한 후기</h2>
-        </div>
-
+        <div class="section__head"><h2>생생한 후기</h2></div>
         <div class="review-wrap">
+          <!-- ✅ 확대 대상은 반드시 zoomable 클래스 -->
           <img class="review-img zoomable" src="./review.jpg" alt="야옹 역사 수업 후기">
         </div>
       </div>
     </section>
 
-    <!-- PHOTOS -->
     <section id="photos" class="section section--plainAlt reveal">
       <div class="container">
-        <div class="section__head">
-          <h2>활동사진</h2>
-        </div>
-
+        <div class="section__head"><h2>활동사진</h2></div>
         <div class="gallery" aria-label="활동사진 갤러리">
           <figure class="shot"><img class="zoomable" src="./photo1.jpg" alt="활동사진 1" loading="lazy"></figure>
           <figure class="shot"><img class="zoomable" src="./photo2.jpg" alt="활동사진 2" loading="lazy"></figure>
@@ -280,7 +224,6 @@
       </div>
     </section>
 
-    <!-- CONTACT -->
     <section id="contact" class="section blob blob--contact reveal">
       <div class="container">
         <div class="section__head">
@@ -288,57 +231,47 @@
           <p>궁금한 점이 있다면 언제든 편하게 문의 주세요.</p>
         </div>
 
-        <div class="contact">
-          <div class="contact__box">
-            <div class="contact__lines">
-              <div class="contact__line email">📩 메일: yaonghistory@gmail.com</div>
-              <div class="contact__line">📸 인스타그램: @yaong_history</div>
-              <div class="contact__line muted">DM 문의 가능 · 예약 및 일정 조율 가능</div>
+        <div class="contact__box">
+          <form class="contactForm" id="contactForm" aria-label="수업 문의 양식">
+            <div class="contactForm__row">
+              <label class="field">
+                <span class="field__label">보호자 이름</span>
+                <input class="field__input" type="text" name="parentName" placeholder="예) 홍길동" required>
+              </label>
+              <label class="field">
+                <span class="field__label">휴대폰 번호</span>
+                <input class="field__input" type="tel" name="phone" placeholder="예) 010-1234-5678" required>
+              </label>
             </div>
 
-            <form class="contactForm" id="contactForm" aria-label="수업 문의 양식">
-              <div class="contactForm__row">
-                <label class="field">
-                  <span class="field__label">보호자 이름</span>
-                  <input class="field__input" type="text" name="parentName" placeholder="예) 홍길동" required>
-                </label>
-                <label class="field">
-                  <span class="field__label">휴대폰 번호</span>
-                  <input class="field__input" type="tel" name="phone" placeholder="예) 010-1234-5678" required>
-                </label>
-              </div>
-
-              <div class="contactForm__row">
-                <label class="field">
-                  <span class="field__label">인원</span>
-                  <input class="field__input" type="text" name="count" placeholder="예) 3명 (3~4명)">
-                </label>
-                <label class="field">
-                  <span class="field__label">희망 장소/일정</span>
-                  <input class="field__input" type="text" name="whenWhere" placeholder="예) 중앙박물관 / 2월 주말">
-                </label>
-              </div>
-
+            <div class="contactForm__row">
               <label class="field">
-                <span class="field__label">문의 내용</span>
-                <textarea class="field__textarea" name="message" rows="5" placeholder="학년, 관심 주제(궁궐/박물관/선사 등), 궁금한 점을 적어주세요." required></textarea>
+                <span class="field__label">인원</span>
+                <input class="field__input" type="text" name="count" placeholder="예) 3명 (3~4명)">
               </label>
+              <label class="field">
+                <span class="field__label">희망 장소/일정</span>
+                <input class="field__input" type="text" name="whenWhere" placeholder="예) 중앙박물관 / 2월 주말">
+              </label>
+            </div>
 
-              <div class="contact__actions">
-                <button type="submit" class="btn btn--mail">메일로 문의하기</button>
+            <label class="field">
+              <span class="field__label">문의 내용</span>
+              <textarea class="field__textarea" name="message" rows="5" placeholder="학년, 관심 주제, 궁금한 점을 적어주세요." required></textarea>
+            </label>
 
-                <a class="insta-contact__btn" href="https://instagram.com/yaong_history" target="_blank" rel="noopener" aria-label="야옹 역사 인스타그램">
-                  <img src="./instagram.png" alt="Instagram">
-                  <span>@yaong_history</span>
-                </a>
-              </div>
-            </form>
-          </div>
+            <div class="contact__actions">
+              <button type="submit" class="btn btn--mail">메일로 문의하기</button>
 
-          <div class="contact__note">
-            ※ 장소/학년/인원에 맞춰 커리큘럼을 조정할 수 있어요.
-          </div>
+              <a class="insta-contact__btn" href="https://instagram.com/yaong_history" target="_blank" rel="noopener">
+                <img src="./instagram.png" alt="Instagram">
+                <span>@yaong_history</span>
+              </a>
+            </div>
+          </form>
         </div>
+
+        <div class="contact__note">※ 장소/학년/인원에 맞춰 커리큘럼을 조정할 수 있어요.</div>
       </div>
     </section>
   </main>
@@ -353,91 +286,38 @@
     </div>
   </footer>
 
-  <!-- ✅ 라이트박스(사진 확대 + 좌우 넘김 + 1/6 + 썸네일) -->
+  <!-- ✅ 라이트박스 -->
   <div class="lightbox" id="lightbox" aria-hidden="true">
     <button class="lightbox__close" type="button" aria-label="닫기">×</button>
     <button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="이전 사진">‹</button>
-
     <div class="lightbox__count" id="lightboxCount">1/1</div>
-
     <img class="lightbox__img" id="lightboxImg" alt="">
-
     <button class="lightbox__nav lightbox__nav--next" type="button" aria-label="다음 사진">›</button>
-
     <div class="lightbox__thumbs" id="lightboxThumbs" aria-label="썸네일 목록"></div>
   </div>
 
   <script>
     (function () {
-      const ua = navigator.userAgent || "";
-      const isWebView = /KAKAOTALK|NAVER|Daum|Kakao/i.test(ua);
-      if (isWebView) document.body.classList.add("webview");
+      // ✅ 고정 헤더 때문에 앵커 이동 시 제목이 가려지는 문제 100% 해결
+      const header = document.querySelector(".header");
+      const getOffset = () => (header ? header.getBoundingClientRect().height : 0) + 14;
 
-      // ===== 폰트 로딩 보정 =====
-      const checkFont = () => {
-        try{
-          if (document.fonts && document.fonts.check) {
-            const ok = document.fonts.check('16px "NanumSquareRound"');
-            if (!ok) document.body.classList.add("font-fallback");
-          } else {
-            document.body.classList.add("font-fallback");
-          }
-        }catch(e){
-          document.body.classList.add("font-fallback");
-        }
-      };
-      checkFont();
-      setTimeout(checkFont, 300);
-      setTimeout(checkFont, 1200);
+      document.addEventListener("click", (e) => {
+        const a = e.target.closest('a[href^="#"]');
+        if (!a) return;
+        const id = a.getAttribute("href");
+        if (!id || id === "#") return;
 
-      // ===== Reveal Engine (IO + Scroll Fallback) =====
-      const reveals = Array.from(document.querySelectorAll(".reveal"));
-      if (reveals.length) {
-        let ticking = false;
+        const target = document.querySelector(id);
+        if (!target) return;
 
-        const inView = (el) => {
-          const r = el.getBoundingClientRect();
-          const vh = window.innerHeight || document.documentElement.clientHeight;
-          return r.top <= vh * 0.88;
-        };
+        e.preventDefault();
+        const top = target.getBoundingClientRect().top + window.pageYOffset - getOffset();
+        window.scrollTo({ top, behavior: "smooth" });
+        history.replaceState(null, "", id);
+      });
 
-        const revealCheck = () => {
-          for (const el of reveals) {
-            if (!el.classList.contains("active") && inView(el)) {
-              el.classList.add("active");
-            }
-          }
-        };
-
-        const onScroll = () => {
-          if (ticking) return;
-          ticking = true;
-          requestAnimationFrame(() => {
-            revealCheck();
-            ticking = false;
-          });
-        };
-
-        if ("IntersectionObserver" in window) {
-          const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting) entry.target.classList.add("active");
-            });
-          }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
-
-          reveals.forEach(el => observer.observe(el));
-        }
-
-        window.addEventListener("scroll", onScroll, { passive: true });
-        window.addEventListener("resize", onScroll);
-        window.addEventListener("orientationchange", onScroll);
-
-        revealCheck();
-        setTimeout(revealCheck, 120);
-        setTimeout(revealCheck, 420);
-      }
-
-      // ===== 문의 폼: mailto 자동 채움 =====
+      // ===== 문의 폼 mailto =====
       const form = document.getElementById('contactForm');
       if (form) {
         form.addEventListener('submit', function (e) {
@@ -463,40 +343,32 @@
 
           const mailto =
             `mailto:yaonghistory@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
-
           window.location.href = mailto;
         });
       }
 
-      // ===== ✅ Lightbox (Zoom + Swipe + Count + Thumbs) =====
+      // ===== ✅ 라이트박스(확대 + 스와이프 + 썸네일) =====
       const lb = document.getElementById("lightbox");
       const lbImg = document.getElementById("lightboxImg");
       const lbCount = document.getElementById("lightboxCount");
       const lbThumbs = document.getElementById("lightboxThumbs");
 
-      const btnClose = lb ? lb.querySelector(".lightbox__close") : null;
-      const btnPrev = lb ? lb.querySelector(".lightbox__nav--prev") : null;
-      const btnNext = lb ? lb.querySelector(".lightbox__nav--next") : null;
+      const btnClose = lb.querySelector(".lightbox__close");
+      const btnPrev  = lb.querySelector(".lightbox__nav--prev");
+      const btnNext  = lb.querySelector(".lightbox__nav--next");
 
       const zoomables = Array.from(document.querySelectorAll("img.zoomable"));
-      const items = zoomables.map(img => ({
-        src: img.getAttribute("src"),
-        alt: img.getAttribute("alt") || ""
-      }));
-
+      const items = zoomables.map(img => ({ src: img.getAttribute("src"), alt: img.getAttribute("alt") || "" }));
       let current = 0;
 
       const renderThumbs = () => {
-        if (!lbThumbs) return;
         lbThumbs.innerHTML = "";
         items.forEach((it, idx) => {
           const b = document.createElement("button");
           b.type = "button";
           b.className = "lightbox__thumb" + (idx === current ? " active" : "");
-          b.setAttribute("aria-label", `썸네일 ${idx+1}`);
           const im = document.createElement("img");
-          im.src = it.src;
-          im.alt = "";
+          im.src = it.src; im.alt = "";
           b.appendChild(im);
           b.addEventListener("click", () => openLB(idx, true));
           lbThumbs.appendChild(b);
@@ -504,24 +376,15 @@
       };
 
       const syncUI = () => {
-        if (lbCount) lbCount.textContent = `${current + 1}/${items.length}`;
-        if (lbThumbs) {
-          const thumbs = Array.from(lbThumbs.querySelectorAll(".lightbox__thumb"));
-          thumbs.forEach((t, i) => t.classList.toggle("active", i === current));
-
-          const active = thumbs[current];
-          if (active) {
-            const r = active.getBoundingClientRect();
-            const pr = lbThumbs.getBoundingClientRect();
-            if (r.left < pr.left || r.right > pr.right) {
-              active.scrollIntoView({ behavior:"smooth", inline:"center", block:"nearest" });
-            }
-          }
-        }
+        lbCount.textContent = `${current + 1}/${items.length}`;
+        const thumbs = Array.from(lbThumbs.querySelectorAll(".lightbox__thumb"));
+        thumbs.forEach((t, i) => t.classList.toggle("active", i === current));
+        const active = thumbs[current];
+        if (active) active.scrollIntoView({ behavior:"smooth", inline:"center", block:"nearest" });
       };
 
       const openLB = (index, keepOpen) => {
-        if (!lb || !lbImg || !items.length) return;
+        if (!items.length) return;
         current = (index + items.length) % items.length;
         lbImg.src = items[current].src;
         lbImg.alt = items[current].alt;
@@ -536,7 +399,6 @@
       };
 
       const closeLB = () => {
-        if (!lb || !lbImg) return;
         lb.classList.remove("open");
         lb.setAttribute("aria-hidden", "true");
         lbImg.src = "";
@@ -546,65 +408,62 @@
       const showPrev = () => openLB(current - 1, true);
       const showNext = () => openLB(current + 1, true);
 
-      zoomables.forEach((img, idx) => {
-        img.addEventListener("click", () => openLB(idx));
-      });
+      zoomables.forEach((img, idx) => img.addEventListener("click", () => openLB(idx)));
+      btnClose.addEventListener("click", closeLB);
+      btnPrev.addEventListener("click", showPrev);
+      btnNext.addEventListener("click", showNext);
 
-      if (btnClose) btnClose.addEventListener("click", closeLB);
-      if (btnPrev) btnPrev.addEventListener("click", showPrev);
-      if (btnNext) btnNext.addEventListener("click", showNext);
-
-      if (lb) {
-        lb.addEventListener("click", (e) => {
-          if (e.target === lb) closeLB();
-        });
-      }
+      lb.addEventListener("click", (e) => { if (e.target === lb) closeLB(); });
 
       document.addEventListener("keydown", (e) => {
-        if (!lb || !lb.classList.contains("open")) return;
+        if (!lb.classList.contains("open")) return;
         if (e.key === "Escape") closeLB();
         if (e.key === "ArrowLeft") showPrev();
         if (e.key === "ArrowRight") showNext();
       });
 
       // 스와이프
-      let startX = 0;
-      let startY = 0;
-      let tracking = false;
+      let startX = 0, startY = 0, tracking = false;
 
-      const onTouchStart = (e) => {
-        if (!lb || !lb.classList.contains("open")) return;
+      lb.addEventListener("touchstart", (e) => {
+        if (!lb.classList.contains("open")) return;
         const t = e.touches[0];
-        startX = t.clientX;
-        startY = t.clientY;
+        startX = t.clientX; startY = t.clientY;
         tracking = true;
-      };
+      }, { passive:true });
 
-      const onTouchMove = (e) => {
+      lb.addEventListener("touchmove", (e) => {
         if (!tracking) return;
         const t = e.touches[0];
         const dx = t.clientX - startX;
         const dy = t.clientY - startY;
         if (Math.abs(dy) > Math.abs(dx) + 10) tracking = false;
-      };
+      }, { passive:true });
 
-      const onTouchEnd = (e) => {
+      lb.addEventListener("touchend", (e) => {
         if (!tracking) return;
         tracking = false;
-        const t = (e.changedTouches && e.changedTouches[0]) || null;
-        if (!t) return;
-
+        const t = e.changedTouches[0];
         const dx = t.clientX - startX;
         const threshold = 50;
         if (dx > threshold) showPrev();
         else if (dx < -threshold) showNext();
-      };
+      }, { passive:true });
 
-      if (lb) {
-        lb.addEventListener("touchstart", onTouchStart, { passive:true });
-        lb.addEventListener("touchmove", onTouchMove, { passive:true });
-        lb.addEventListener("touchend", onTouchEnd, { passive:true });
-      }
+      // reveal은 CSS로만 처리해도 되지만, 카카오/네이버에서 IO가 흔들리면 이게 더 안정적
+      const reveals = Array.from(document.querySelectorAll(".reveal"));
+      const revealCheck = () => {
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+        reveals.forEach(el => {
+          if (el.classList.contains("active")) return;
+          const r = el.getBoundingClientRect();
+          if (r.top <= vh * 0.88) el.classList.add("active");
+        });
+      };
+      window.addEventListener("scroll", () => requestAnimationFrame(revealCheck), { passive:true });
+      window.addEventListener("resize", revealCheck);
+      revealCheck();
+      setTimeout(revealCheck, 200);
     })();
   </script>
 </body>
