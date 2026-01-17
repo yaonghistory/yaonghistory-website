@@ -9,19 +9,17 @@
   <!-- 나눔스퀘어라운드 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquareround.min.css">
 
-  <!-- 캐시 방지: 적용 안 되면 숫자 올리기 -->
-  <link rel="stylesheet" href="./style.css?v=301" />
+  <!-- 캐시 방지: 적용 안 되면 숫자만 올리기 -->
+  <link rel="stylesheet" href="./style.css?v=501" />
 </head>
 
 <body>
-  <!-- Header: 상단 하이퍼링크 메뉴 없음 -->
   <header class="header" id="top">
     <div class="container header__inner">
       <div class="brand" aria-label="야옹 역사">
         <span class="brand__mark" aria-hidden="true">
           <img src="./yaong-cat.png" alt="">
         </span>
-
         <span class="brand__text">
           <span class="brand__name">야옹 역사</span>
           <span class="brand__tag">초등 현장 한국사 수업</span>
@@ -33,7 +31,6 @@
   </header>
 
   <main>
-    <!-- HOME -->
     <section class="hero reveal">
       <div class="container hero__grid">
         <div class="hero__copy">
@@ -84,7 +81,6 @@
       </div>
     </section>
 
-    <!-- ABOUT -->
     <section id="about" class="section blob blob--sky reveal">
       <div class="container">
         <div class="section__head">
@@ -117,7 +113,6 @@
       </div>
     </section>
 
-    <!-- CLASS STYLE -->
     <section id="style" class="section blob blob--mint reveal">
       <div class="container">
         <div class="section__head">
@@ -150,7 +145,6 @@
       </div>
     </section>
 
-    <!-- LOCATIONS -->
     <section id="locations" class="section blob blob--lemon reveal">
       <div class="container">
         <div class="section__head">
@@ -168,7 +162,6 @@
       </div>
     </section>
 
-    <!-- CURRICULUM -->
     <section id="curriculum" class="section blob blob--sky2 reveal">
       <div class="container">
         <div class="section__head">
@@ -199,7 +192,6 @@
       </div>
     </section>
 
-    <!-- INSTRUCTOR -->
     <section id="instructor" class="section blob blob--mint2 reveal">
       <div class="container">
         <div class="section__head">
@@ -229,7 +221,6 @@
       </div>
     </section>
 
-    <!-- INFO -->
     <section id="info" class="section blob blob--lemon2 reveal">
       <div class="container">
         <div class="section__head">
@@ -256,7 +247,6 @@
       </div>
     </section>
 
-    <!-- REVIEWS -->
     <section id="reviews" class="section reveal">
       <div class="container">
         <div class="section__head">
@@ -269,7 +259,6 @@
       </div>
     </section>
 
-    <!-- PHOTOS -->
     <section id="photos" class="section section--plainAlt reveal">
       <div class="container">
         <div class="section__head">
@@ -286,7 +275,6 @@
       </div>
     </section>
 
-    <!-- CONTACT -->
     <section id="contact" class="section blob blob--contact reveal">
       <div class="container">
         <div class="section__head">
@@ -359,37 +347,81 @@
     </div>
   </footer>
 
-  <!-- ✅ 애니메이션 + 웹뷰 초보정 + 메일 문의 -->
   <script>
     (function () {
-      const reveals = document.querySelectorAll(".reveal");
-      const activateAll = () => reveals.forEach(el => el.classList.add("active"));
-
-      // WebView 감지 (카카오/네이버/다음 등)
       const ua = navigator.userAgent || "";
       const isWebView = /KAKAOTALK|NAVER|Daum|Kakao/i.test(ua);
+      if (isWebView) document.body.classList.add("webview");
 
-      // Reveal: WebView는 안전모드(즉시 표시), Safari/브라우저는 자연스럽게
-      if (!reveals.length) {
-        // nothing
-      } else if (isWebView) {
-        activateAll();
-      } else if (!("IntersectionObserver" in window)) {
-        activateAll();
-      } else {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("active");
-              observer.unobserve(entry.target);
+      // ===== 폰트 로딩 실패/지연 감지 → body에 class 추가 =====
+      // 나눔스퀘어라운드가 로딩되지 않으면 .font-fallback 붙임
+      // (카카오톡에서 CDN 차단/지연이 가끔 있음)
+      const checkFont = () => {
+        try{
+          // 지원되는 브라우저에서만(대부분 iOS 15+ OK)
+          if (document.fonts && document.fonts.check) {
+            const ok = document.fonts.check('16px "NanumSquareRound"');
+            if (!ok) document.body.classList.add("font-fallback");
+          } else {
+            // fonts API 없으면 그냥 fallback 모드 (안정 우선)
+            document.body.classList.add("font-fallback");
+          }
+        }catch(e){
+          document.body.classList.add("font-fallback");
+        }
+      };
+      checkFont();
+      setTimeout(checkFont, 300);
+      setTimeout(checkFont, 1200);
+
+      // ===== Reveal Engine (IO + Scroll Fallback) =====
+      const reveals = Array.from(document.querySelectorAll(".reveal"));
+      if (reveals.length) {
+        let ticking = false;
+
+        const inView = (el) => {
+          const r = el.getBoundingClientRect();
+          const vh = window.innerHeight || document.documentElement.clientHeight;
+          return r.top <= vh * 0.88;
+        };
+
+        const revealCheck = () => {
+          for (const el of reveals) {
+            if (!el.classList.contains("active") && inView(el)) {
+              el.classList.add("active");
             }
-          });
-        }, { threshold: 0.12, rootMargin: "0px 0px -5% 0px" });
+          }
+        };
 
-        reveals.forEach(el => observer.observe(el));
+        const onScroll = () => {
+          if (ticking) return;
+          ticking = true;
+          requestAnimationFrame(() => {
+            revealCheck();
+            ticking = false;
+          });
+        };
+
+        if ("IntersectionObserver" in window) {
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) entry.target.classList.add("active");
+            });
+          }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+
+          reveals.forEach(el => observer.observe(el));
+        }
+
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", onScroll);
+        window.addEventListener("orientationchange", onScroll);
+
+        revealCheck();
+        setTimeout(revealCheck, 120);
+        setTimeout(revealCheck, 420);
       }
 
-      // 문의 폼: mailto 자동 채움
+      // ===== 문의 폼: mailto 자동 채움 =====
       const form = document.getElementById('contactForm');
       if (form) {
         form.addEventListener('submit', function (e) {
