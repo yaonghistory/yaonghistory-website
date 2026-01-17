@@ -1,4 +1,4 @@
-<!-- index.html (그대로 복사/교체) -->
+<!-- index.html -->
 <!doctype html>
 <html lang="ko">
 <head>
@@ -11,16 +11,17 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
 
-  <!-- 캐시 갱신 필요하면 숫자만 올리기 -->
-  <link rel="stylesheet" href="./style.css?v=10" />
+  <!-- 적용 안 바뀌면 v 숫자만 올리기 -->
+  <link rel="stylesheet" href="./style.css?v=50" />
 </head>
 
 <body>
   <header class="header">
     <div class="container header__inner">
+      <!-- 헤더: yaong-cat.png -->
       <a class="brand" href="#top" aria-label="야옹 역사 홈">
         <span class="brand__mark" aria-hidden="true">
-          <img src="./yaong-logo.png" alt="" loading="eager">
+          <img src="./yaong-cat.png" alt="" loading="eager">
         </span>
         <span class="brand__text">
           <span class="brand__name">야옹 역사</span>
@@ -48,11 +49,6 @@
             아이들이 “직접 본 것”을 바탕으로 스스로 질문하고, 정리하고, 기억하게 되는 수업입니다.
           </p>
 
-          <div class="hero__cta">
-            <a class="btn" href="#apply">문의하기</a>
-            <a class="btn btn--ghost" href="#program">수업 안내 보기</a>
-          </div>
-
           <ul class="stats" aria-label="수업 핵심 정보">
             <li><strong>120분</strong><span>1회 수업</span></li>
             <li><strong>4–6명</strong><span>소규모 정원</span></li>
@@ -71,11 +67,6 @@
           <div class="divider"></div>
           <p class="tiny muted">※ 장소·주제는 학년/관심사에 맞춰 조정할 수 있어요.</p>
         </aside>
-      </div>
-
-      <!-- 고양이 캐릭터(스티커) -->
-      <div class="hero__sticker" aria-hidden="true">
-        <img src="./yaong-cat.png" alt="">
       </div>
     </section>
 
@@ -130,6 +121,7 @@
         </div>
 
         <div class="teacher">
+          <!-- 강사 이력: yaong-logo.png -->
           <div class="teacher__logo" aria-hidden="true">
             <img src="./yaong-logo.png" alt="">
           </div>
@@ -152,7 +144,6 @@
       <div class="container">
         <div class="section__head">
           <h2>생생한 후기</h2>
-          <p>후기 이미지 모음입니다.</p>
         </div>
 
         <div class="review-wrap">
@@ -209,8 +200,13 @@
           </label>
 
           <div class="form__actions">
-            <a class="btn" href="mailto:you@example.com?subject=%5B%EC%95%BC%EC%98%B9%20%EC%97%AD%EC%82%AC%5D%20%EB%AC%B8%EC%9D%98%ED%95%A9%EB%8B%88%EB%8B%A4">메일로 문의하기</a>
-            <span class="tiny muted">※ you@example.com을 본인 이메일로 바꿔주세요.</span>
+            <a class="btn" href="mailto:yaonghistory@gmail.com?subject=%5B%EC%95%BC%EC%98%B9%20%EC%97%AD%EC%82%AC%5D%20%EB%AC%B8%EC%9D%98%ED%95%A9%EB%8B%88%EB%8B%A4">메일로 문의하기</a>
+
+            <!-- 문의 섹션 하단 인스타 버튼 -->
+            <a class="insta-contact__btn" href="https://instagram.com/yaong_history" target="_blank" aria-label="야옹 역사 인스타그램">
+              <img src="./instagram.png" alt="Instagram">
+              <span>@yaong_history</span>
+            </a>
           </div>
         </form>
       </div>
