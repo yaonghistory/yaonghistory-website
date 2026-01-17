@@ -6,20 +6,21 @@
   <title>야옹 역사 | 초등 현장 한국사 수업</title>
   <meta name="description" content="교과서 밖에서 직접 보고, 묻고, 배우는 살아있는 초등 현장 한국사 수업 ‘야옹 역사’" />
 
+  <!-- NanumSquareRound -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquareround.min.css">
-  <!-- ✅ 꼭! v 숫자 올리기: 적용 안 되면 999 처럼 크게 바꿔도 됨 -->
-  <link rel="stylesheet" href="./style.css?v=999" />
 
-  <!-- ✅ “CSS가 안 먹어도” 라이트박스가 페이지 하단에 주루룩 노출되는 걸 막는 최소 안전장치 -->
+  <!-- ✅ 캐시가 끈질기면 v 숫자만 올려주세요 -->
+  <link rel="stylesheet" href="./style.css?v=1201" />
+
+  <!-- ✅ style.css가 캐시로 안 먹어도, 단어쪼개짐/라이트박스 “주루룩” 방지 -->
   <style>
-    /* 줄바꿈/단어쪼개짐 최소 안전장치(혹시 style.css 캐시가 꼬여도) */
     body, p, h1, h2, h3, h4, li, a, button, span, div{
       word-break: keep-all;
       overflow-wrap: break-word;
       line-break: strict;
     }
 
-    /* 라이트박스 요소가 페이지 하단에 보이는 현상 방지 */
+    /* 라이트박스가 페이지 하단에 노출되는 현상 방지 */
     .lightbox{display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,.68); align-items:center; justify-content:center; padding:18px;}
     .lightbox.open{display:flex;}
     .lightbox__img{width:min(980px, 96vw); max-height:78vh; object-fit:contain; background:#111; border-radius:18px;}
@@ -47,11 +48,13 @@
           <span class="brand__tag">초등 현장 한국사 수업</span>
         </span>
       </div>
+
       <a class="miniCta" href="#contact" aria-label="수업 문의로 이동">문의</a>
     </div>
   </header>
 
   <main>
+    <!-- HERO -->
     <section class="hero reveal">
       <div class="container hero__grid">
         <div class="hero__copy">
@@ -102,6 +105,7 @@
       </div>
     </section>
 
+    <!-- ABOUT -->
     <section id="about" class="section blob blob--sky reveal">
       <div class="container">
         <div class="section__head">
@@ -134,6 +138,7 @@
       </div>
     </section>
 
+    <!-- CLASS STYLE -->
     <section id="style" class="section blob blob--mint reveal">
       <div class="container">
         <div class="section__head">
@@ -166,6 +171,7 @@
       </div>
     </section>
 
+    <!-- LOCATIONS -->
     <section id="locations" class="section blob blob--lemon reveal">
       <div class="container">
         <div class="section__head">
@@ -183,6 +189,7 @@
       </div>
     </section>
 
+    <!-- CURRICULUM -->
     <section id="curriculum" class="section blob blob--sky2 reveal">
       <div class="container">
         <div class="section__head">
@@ -201,16 +208,70 @@
       </div>
     </section>
 
+    <!-- INSTRUCTOR -->
+    <section id="instructor" class="section blob blob--mint2 reveal">
+      <div class="container">
+        <div class="section__head">
+          <h2>강사 이력</h2>
+          <p>아이들의 눈높이에 맞춰, 어렵지 않고 재미있게 역사를 전달합니다.</p>
+        </div>
+
+        <div class="teacher">
+          <div class="teacher__logo" aria-hidden="true">
+            <img src="./yaong-logo.png" alt="">
+          </div>
+
+          <div class="teacher__body">
+            <ul class="list list--bold">
+              <li>역사 교육 경력 10년 이상</li>
+              <li>한국사능력검정시험 1급</li>
+              <li>전) 궁궐문화원 선임연구원</li>
+              <li>전) 라이브 뮤지엄 출강 강사</li>
+              <li>현) 꿈꾸는 해치 한국사 강사</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CLASS INFO -->
+    <section id="info" class="section blob blob--lemon2 reveal">
+      <div class="container">
+        <div class="section__head">
+          <h2>수업 안내</h2>
+        </div>
+
+        <div class="grid grid--3">
+          <div class="infoCard">
+            <div class="infoCard__icon">⏱️</div>
+            <div class="infoCard__title">수업 시간</div>
+            <div class="infoCard__desc">1회 120분 (2시간)</div>
+          </div>
+          <div class="infoCard">
+            <div class="infoCard__icon">👧👦</div>
+            <div class="infoCard__title">수업 정원</div>
+            <div class="infoCard__desc">3~4명 소수 정예</div>
+          </div>
+          <div class="infoCard">
+            <div class="infoCard__icon">🎒</div>
+            <div class="infoCard__title">대상</div>
+            <div class="infoCard__desc">초등학생 (학년별 난이도 조절)</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REVIEWS -->
     <section id="reviews" class="section reveal">
       <div class="container">
         <div class="section__head"><h2>생생한 후기</h2></div>
         <div class="review-wrap">
-          <!-- ✅ 확대 대상은 반드시 zoomable 클래스 -->
           <img class="review-img zoomable" src="./review.jpg" alt="야옹 역사 수업 후기">
         </div>
       </div>
     </section>
 
+    <!-- PHOTOS -->
     <section id="photos" class="section section--plainAlt reveal">
       <div class="container">
         <div class="section__head"><h2>활동사진</h2></div>
@@ -224,6 +285,7 @@
       </div>
     </section>
 
+    <!-- CONTACT -->
     <section id="contact" class="section blob blob--contact reveal">
       <div class="container">
         <div class="section__head">
@@ -263,7 +325,7 @@
             <div class="contact__actions">
               <button type="submit" class="btn btn--mail">메일로 문의하기</button>
 
-              <a class="insta-contact__btn" href="https://instagram.com/yaong_history" target="_blank" rel="noopener">
+              <a class="insta-contact__btn" href="https://instagram.com/yaong_history" target="_blank" rel="noopener" aria-label="야옹 역사 인스타그램">
                 <img src="./instagram.png" alt="Instagram">
                 <span>@yaong_history</span>
               </a>
@@ -286,7 +348,7 @@
     </div>
   </footer>
 
-  <!-- ✅ 라이트박스 -->
+  <!-- ✅ Lightbox -->
   <div class="lightbox" id="lightbox" aria-hidden="true">
     <button class="lightbox__close" type="button" aria-label="닫기">×</button>
     <button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="이전 사진">‹</button>
@@ -298,7 +360,11 @@
 
   <script>
     (function () {
-      // ✅ 고정 헤더 때문에 앵커 이동 시 제목이 가려지는 문제 100% 해결
+      const ua = navigator.userAgent || "";
+      const isWebView = /KAKAOTALK|NAVER|Daum|Kakao/i.test(ua);
+      if (isWebView) document.body.classList.add("webview");
+
+      // ✅ 고정 헤더 때문에 앵커 이동 시 제목이 가려지는 문제 해결 (JS 보정)
       const header = document.querySelector(".header");
       const getOffset = () => (header ? header.getBoundingClientRect().height : 0) + 14;
 
@@ -347,7 +413,22 @@
         });
       }
 
-      // ===== ✅ 라이트박스(확대 + 스와이프 + 썸네일) =====
+      // ===== Reveal (스크롤 기반) =====
+      const reveals = Array.from(document.querySelectorAll(".reveal"));
+      const revealCheck = () => {
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+        reveals.forEach(el => {
+          if (el.classList.contains("active")) return;
+          const r = el.getBoundingClientRect();
+          if (r.top <= vh * 0.88) el.classList.add("active");
+        });
+      };
+      window.addEventListener("scroll", () => requestAnimationFrame(revealCheck), { passive:true });
+      window.addEventListener("resize", revealCheck);
+      revealCheck();
+      setTimeout(revealCheck, 200);
+
+      // ===== ✅ Lightbox (후기/활동 분리 + 스와이프) =====
       const lb = document.getElementById("lightbox");
       const lbImg = document.getElementById("lightboxImg");
       const lbCount = document.getElementById("lightboxCount");
@@ -357,35 +438,61 @@
       const btnPrev  = lb.querySelector(".lightbox__nav--prev");
       const btnNext  = lb.querySelector(".lightbox__nav--next");
 
-      const zoomables = Array.from(document.querySelectorAll("img.zoomable"));
-      const items = zoomables.map(img => ({ src: img.getAttribute("src"), alt: img.getAttribute("alt") || "" }));
+      const reviewImgs = Array.from(document.querySelectorAll("#reviews img.zoomable"));
+      const photoImgs  = Array.from(document.querySelectorAll("#photos img.zoomable"));
+
+      const groups = {
+        reviews: reviewImgs.map(img => ({ src: img.getAttribute("src"), alt: img.getAttribute("alt") || "" })),
+        photos:  photoImgs.map(img  => ({ src: img.getAttribute("src"), alt: img.getAttribute("alt") || "" }))
+      };
+
+      let currentGroup = "photos";
       let current = 0;
+      const getItems = () => groups[currentGroup] || [];
 
       const renderThumbs = () => {
+        const items = getItems();
         lbThumbs.innerHTML = "";
+
         items.forEach((it, idx) => {
           const b = document.createElement("button");
           b.type = "button";
           b.className = "lightbox__thumb" + (idx === current ? " active" : "");
+
           const im = document.createElement("img");
-          im.src = it.src; im.alt = "";
+          im.src = it.src;
+          im.alt = "";
           b.appendChild(im);
-          b.addEventListener("click", () => openLB(idx, true));
+
+          b.addEventListener("click", () => openLB(currentGroup, idx, true));
           lbThumbs.appendChild(b);
         });
+
+        lbThumbs.style.display = (items.length <= 1) ? "none" : "flex";
       };
 
       const syncUI = () => {
+        const items = getItems();
         lbCount.textContent = `${current + 1}/${items.length}`;
+
+        const multi = items.length > 1;
+        btnPrev.style.display = multi ? "" : "none";
+        btnNext.style.display = multi ? "" : "none";
+
         const thumbs = Array.from(lbThumbs.querySelectorAll(".lightbox__thumb"));
         thumbs.forEach((t, i) => t.classList.toggle("active", i === current));
+
         const active = thumbs[current];
         if (active) active.scrollIntoView({ behavior:"smooth", inline:"center", block:"nearest" });
       };
 
-      const openLB = (index, keepOpen) => {
+      const openLB = (groupName, index, keepOpen) => {
+        const items = groups[groupName] || [];
         if (!items.length) return;
+
+        currentGroup = groupName;
         current = (index + items.length) % items.length;
+
         lbImg.src = items[current].src;
         lbImg.alt = items[current].alt;
 
@@ -393,8 +500,9 @@
           lb.classList.add("open");
           lb.setAttribute("aria-hidden", "false");
           document.body.classList.add("modal-open");
-          renderThumbs();
         }
+
+        renderThumbs();
         syncUI();
       };
 
@@ -405,10 +513,12 @@
         document.body.classList.remove("modal-open");
       };
 
-      const showPrev = () => openLB(current - 1, true);
-      const showNext = () => openLB(current + 1, true);
+      const showPrev = () => openLB(currentGroup, current - 1, true);
+      const showNext = () => openLB(currentGroup, current + 1, true);
 
-      zoomables.forEach((img, idx) => img.addEventListener("click", () => openLB(idx)));
+      reviewImgs.forEach((img, idx) => img.addEventListener("click", () => openLB("reviews", idx)));
+      photoImgs.forEach((img, idx) => img.addEventListener("click", () => openLB("photos", idx)));
+
       btnClose.addEventListener("click", closeLB);
       btnPrev.addEventListener("click", showPrev);
       btnNext.addEventListener("click", showNext);
@@ -422,7 +532,6 @@
         if (e.key === "ArrowRight") showNext();
       });
 
-      // 스와이프
       let startX = 0, startY = 0, tracking = false;
 
       lb.addEventListener("touchstart", (e) => {
@@ -446,24 +555,13 @@
         const t = e.changedTouches[0];
         const dx = t.clientX - startX;
         const threshold = 50;
+
+        const items = getItems();
+        if (items.length <= 1) return;
+
         if (dx > threshold) showPrev();
         else if (dx < -threshold) showNext();
       }, { passive:true });
-
-      // reveal은 CSS로만 처리해도 되지만, 카카오/네이버에서 IO가 흔들리면 이게 더 안정적
-      const reveals = Array.from(document.querySelectorAll(".reveal"));
-      const revealCheck = () => {
-        const vh = window.innerHeight || document.documentElement.clientHeight;
-        reveals.forEach(el => {
-          if (el.classList.contains("active")) return;
-          const r = el.getBoundingClientRect();
-          if (r.top <= vh * 0.88) el.classList.add("active");
-        });
-      };
-      window.addEventListener("scroll", () => requestAnimationFrame(revealCheck), { passive:true });
-      window.addEventListener("resize", revealCheck);
-      revealCheck();
-      setTimeout(revealCheck, 200);
     })();
   </script>
 </body>
