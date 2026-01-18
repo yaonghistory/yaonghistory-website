@@ -4,25 +4,55 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="format-detection" content="telephone=no" />
+  <meta name="color-scheme" content="light" />
   <title>야옹 역사 | 초등 현장 한국사 수업</title>
 
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquareround.css">
 
-  <!-- Your CSS -->
-  <link rel="stylesheet" href="./style.css?v=5302" />
+  <link rel="stylesheet" href="./style.css?v=6001" />
+
+  <!-- Critical: 3플랫폼 동일 강제(1열 + 버튼 입체감 + 볼드 과함 완화) -->
+  <style>
+    html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+    body{
+      font-family:"NanumSquareRound","Noto Sans KR",system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+      font-weight:600;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    h1,h2,h3{font-weight:800}
+    .hero__grid,
+    .grid--2,.grid--3,.grid--4,
+    .gallery,
+    .contactForm__row{grid-template-columns:1fr !important}
+    .hero__cta{display:flex;gap:10px;flex-wrap:nowrap !important}
+    .hero__cta .btn{flex:1 1 0;min-width:0}
+    @media (max-width:520px){
+      .hero__cta{flex-wrap:wrap !important}
+      .hero__cta .btn{flex:1 1 calc(33.33% - 8px)}
+    }
+    .btn,.miniCta,.insta-contact__btn{
+      box-shadow: 0 12px 26px rgba(0,0,0,.14), inset 0 1px 0 rgba(255,255,255,.85);
+      transform: translateZ(0);
+      -webkit-transform: translateZ(0);
+      backface-visibility:hidden;
+      -webkit-backface-visibility:hidden;
+    }
+    .btn:active{transform:translateY(1px) translateZ(0)}
+    section[id]{scroll-margin-top:110px}
+  </style>
 
   <style>
-    /* Lightbox inline: 인앱브라우저 캐시/로드 이슈 대비 */
+    /* Lightbox(확대): 인앱 캐시/로드 변동 대비로 index 안에 포함 */
     .lb{position:fixed;inset:0;z-index:9999;background:rgba(10,12,14,.70);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
     .lb[aria-hidden="true"]{display:none}
     .lb__backdrop{position:absolute;inset:0}
     .lb__top{position:absolute;left:0;right:0;top:env(safe-area-inset-top);display:flex;align-items:center;justify-content:space-between;padding:14px 14px;pointer-events:none}
-    .lb__count{pointer-events:auto;background:rgba(0,0,0,.45);color:#fff;padding:8px 12px;border-radius:999px;font-weight:900}
-    .lb__x{pointer-events:auto;width:44px;height:44px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.45);color:#fff;font-size:18px;font-weight:900}
+    .lb__count{pointer-events:auto;background:rgba(0,0,0,.45);color:#fff;padding:8px 12px;border-radius:999px;font-weight:800}
+    .lb__x{pointer-events:auto;width:44px;height:44px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.45);color:#fff;font-size:18px;font-weight:800}
     .lb__stage{position:absolute;inset:0;display:grid;place-items:center;padding:80px 16px 110px;touch-action:none}
     .lb__stage img{max-width:min(92vw,860px);max-height:70vh;border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.35);touch-action:none;user-select:none;-webkit-user-drag:none;transform-origin:center center}
     .lb__nav{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.45);color:#fff;font-size:34px;line-height:0;display:grid;place-items:center}
@@ -52,13 +82,11 @@
           <span class="brand__tag">초등 현장 한국사 수업</span>
         </span>
       </div>
-
-      <a class="miniCta" href="#contact" data-jump aria-label="문의로 이동">문의</a>
+      <a class="miniCta" href="#contact" data-jump>문의</a>
     </div>
   </header>
 
   <main>
-    <!-- HERO -->
     <section class="hero blob blob--sky">
       <div class="container hero__grid">
         <div>
@@ -70,8 +98,7 @@
             살아있는 한국사 수업
           </p>
 
-          <!-- 3개 버튼: 한 줄 통일 -->
-          <div class="hero__cta hero__cta--row3">
+          <div class="hero__cta">
             <a class="btn" href="#about" data-jump>수업 소개 보기</a>
             <a class="btn btn--soft" href="#curriculum" data-jump>커리큘럼 보기</a>
             <a class="btn btn--outline" href="#contact" data-jump>문의하기</a>
@@ -97,7 +124,6 @@
       </div>
     </section>
 
-    <!-- ABOUT -->
     <section id="about" class="section blob blob--mint reveal">
       <div class="container">
         <header class="section__head">
@@ -130,7 +156,6 @@
       </div>
     </section>
 
-    <!-- CLASS STYLE -->
     <section id="style" class="section blob blob--lemon reveal">
       <div class="container">
         <header class="section__head">
@@ -163,7 +188,6 @@
       </div>
     </section>
 
-    <!-- LOCATIONS -->
     <section id="locations" class="section blob blob--sky2 reveal">
       <div class="container">
         <header class="section__head">
@@ -171,7 +195,6 @@
           <p>교실을 벗어나, 역사를 직접 만나는 수업</p>
         </header>
 
-        <!-- 1열 통일 -->
         <div class="locations">
           <div class="locations__item">국립중앙박물관 (시대별)</div>
           <div class="locations__item">경복궁 · 덕수궁 · 창경궁</div>
@@ -182,7 +205,6 @@
       </div>
     </section>
 
-    <!-- CURRICULUM -->
     <section id="curriculum" class="section blob blob--mint2 reveal">
       <div class="container">
         <header class="section__head">
@@ -213,7 +235,6 @@
       </div>
     </section>
 
-    <!-- INSTRUCTOR -->
     <section id="instructor" class="section blob blob--lemon2 reveal">
       <div class="container">
         <header class="section__head">
@@ -238,7 +259,6 @@
       </div>
     </section>
 
-    <!-- CLASS INFO -->
     <section id="info" class="section section--plainAlt reveal">
       <div class="container">
         <header class="section__head">
@@ -266,7 +286,6 @@
       </div>
     </section>
 
-    <!-- REVIEWS (1 image only) -->
     <section id="reviews" class="section blob blob--sky reveal">
       <div class="container">
         <header class="section__head">
@@ -275,16 +294,11 @@
         </header>
 
         <div class="review-wrap">
-          <img class="review-img zoomable"
-               src="./review.jpg"
-               alt="후기 이미지"
-               data-group="reviews"
-               data-index="0">
+          <img class="review-img zoomable" src="./review.jpg" alt="후기 이미지" data-group="reviews" data-index="0">
         </div>
       </div>
     </section>
 
-    <!-- PHOTOS (photo1~photo5) -->
     <section id="photos" class="section blob blob--mint reveal">
       <div class="container">
         <header class="section__head">
@@ -302,7 +316,6 @@
       </div>
     </section>
 
-    <!-- CONTACT -->
     <section id="contact" class="section blob blob--contact reveal">
       <div class="container">
         <header class="section__head">
@@ -341,7 +354,6 @@
 
             <div class="contact__actions">
               <button type="button" id="mailBtn" class="btn btn--mail">메일로 문의하기</button>
-
               <a class="insta-contact__btn" href="https://instagram.com/yaong_history" target="_blank" rel="noopener">
                 <img src="./instagram.png" alt="Instagram">
                 <span>@yaong_history</span>
@@ -365,45 +377,41 @@
     </footer>
   </main>
 
-  <!-- Lightbox -->
   <div id="lightbox" class="lb" aria-hidden="true">
     <div class="lb__backdrop" id="lbClose"></div>
-
     <div class="lb__top">
       <div class="lb__count" id="lbCount">1/1</div>
       <button class="lb__x" id="lbX" aria-label="닫기">✕</button>
     </div>
-
     <button class="lb__nav lb__prev" id="lbPrev" aria-label="이전">‹</button>
     <button class="lb__nav lb__next" id="lbNext" aria-label="다음">›</button>
-
-    <div class="lb__stage" id="lbStage">
-      <img id="lbImg" alt="">
-    </div>
-
+    <div class="lb__stage" id="lbStage"><img id="lbImg" alt=""></div>
     <div class="lb__thumbs" id="lbThumbs"></div>
   </div>
 
   <script>
   (function(){
-    // reveal
-    const reveals = document.querySelectorAll('.reveal');
-    const io = ('IntersectionObserver' in window) ? new IntersectionObserver((entries)=>{
-      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
-    }, {threshold: 0.12}) : null;
-    if(io){ reveals.forEach(el => io.observe(el)); }
-    else{ reveals.forEach(el => el.classList.add('active')); }
-
-    // jump (헤더 아래로 딱 맞게)
     const header = document.querySelector('.header');
-    const getOffset = () => Math.round((header?.getBoundingClientRect().height || 0) + 6);
+
+    function headerOffset(){
+      const h = header ? header.getBoundingClientRect().height : 0;
+      return Math.round(h + 6);
+    }
+
+    function hardScrollTo(y){
+      window.scrollTo(0, y);
+      requestAnimationFrame(()=> window.scrollTo(0, y));
+      setTimeout(()=> window.scrollTo(0, y), 30);
+      setTimeout(()=> window.scrollTo(0, y), 90);
+      setTimeout(()=> window.scrollTo(0, y), 180);
+      setTimeout(()=> window.scrollTo(0, y), 360);
+    }
 
     function jumpTo(hash){
       const el = document.querySelector(hash);
       if(!el) return;
-      const y = el.getBoundingClientRect().top + window.pageYOffset - getOffset();
-      window.scrollTo(0, y);
-      requestAnimationFrame(()=> window.scrollTo({top:y, behavior:'smooth'}));
+      const y = el.getBoundingClientRect().top + window.pageYOffset - headerOffset();
+      hardScrollTo(y);
     }
 
     document.querySelectorAll('a[data-jump]').forEach(a=>{
@@ -416,7 +424,17 @@
       });
     });
 
+    window.addEventListener('hashchange', ()=>{ if(location.hash) jumpTo(location.hash); });
+    window.addEventListener('pageshow', ()=>{ if(location.hash) jumpTo(location.hash); });
     window.addEventListener('load', ()=>{ if(location.hash) jumpTo(location.hash); });
+
+    // reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const io = ('IntersectionObserver' in window) ? new IntersectionObserver((entries)=>{
+      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
+    }, {threshold: 0.12}) : null;
+    if(io){ reveals.forEach(el => io.observe(el)); }
+    else{ reveals.forEach(el => el.classList.add('active')); }
 
     // mailto
     const mailBtn = document.getElementById('mailBtn');
@@ -428,24 +446,22 @@
       const people = (fd.get('people')||'').toString().trim();
       const schedule = (fd.get('schedule')||'').toString().trim();
       const message = (fd.get('message')||'').toString().trim();
-
       if(!guardian || !phone || !message){
         alert('보호자 이름, 휴대폰 번호, 문의 내용을 입력해주세요.');
         return;
       }
-
       const subject = encodeURIComponent('[야옹 역사] 수업 문의');
       const body = encodeURIComponent(
-        `보호자 이름: ${guardian}\n` +
-        `휴대폰 번호: ${phone}\n` +
-        `인원: ${people || '미정'}\n` +
-        `희망 장소/일정: ${schedule || '미정'}\n\n` +
+        `보호자 이름: ${guardian}\n`+
+        `휴대폰 번호: ${phone}\n`+
+        `인원: ${people || '미정'}\n`+
+        `희망 장소/일정: ${schedule || '미정'}\n\n`+
         `문의 내용:\n${message}`
       );
       location.href = `mailto:yaonghistory@gmail.com?subject=${subject}&body=${body}`;
     });
 
-    // Lightbox (그룹 분리: reviews / photos)
+    // Lightbox
     const lb = document.getElementById('lightbox');
     const lbImg = document.getElementById('lbImg');
     const lbThumbs = document.getElementById('lbThumbs');
@@ -459,33 +475,32 @@
     let items = [];
     let idx = 0;
 
-    // zoom state
     let scale = 1, tx = 0, ty = 0;
     let pointers = new Map();
     let startDist = 0, startScale = 1;
-    let startMid = null;
-    let startTx = 0, startTy = 0;
+    let startMid = null, startTx = 0, startTy = 0;
 
-    const clamp = (v,min,max)=>Math.min(max, Math.max(min, v));
-    const apply = ()=>{ lbImg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`; };
-    const reset = ()=>{ scale=1; tx=0; ty=0; apply(); };
-    const updateCount = ()=>{ lbCount.textContent = `${idx+1}/${items.length}`; };
+    const clamp=(v,min,max)=>Math.min(max, Math.max(min, v));
+    const apply=()=>{ lbImg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`; };
+    const reset=()=>{ scale=1; tx=0; ty=0; apply(); };
+    const updateCount=()=>{ lbCount.textContent = `${idx+1}/${items.length}`; };
 
     function buildThumbs(){
       lbThumbs.innerHTML = '';
-      items.forEach((el, i)=>{
-        const b = document.createElement('button');
-        b.type = 'button';
-        b.className = 'lb__thumb' + (i===idx ? ' is-active' : '');
-        const im = document.createElement('img');
-        im.src = el.getAttribute('src');
-        im.alt = el.getAttribute('alt') || '';
+      items.forEach((el,i)=>{
+        const b=document.createElement('button');
+        b.type='button';
+        b.className='lb__thumb'+(i===idx?' is-active':'');
+        const im=document.createElement('img');
+        im.src=el.getAttribute('src');
+        im.alt=el.getAttribute('alt')||'';
         b.appendChild(im);
         b.addEventListener('click', ()=>show(i));
         lbThumbs.appendChild(b);
       });
-      // 1장만 있으면 썸네일 영역 숨김 느낌
-      lbThumbs.style.display = (items.length <= 1) ? 'none' : 'flex';
+      lbThumbs.style.display = (items.length<=1) ? 'none' : 'flex';
+      lbPrev.style.display = (items.length<=1) ? 'none' : '';
+      lbNext.style.display = (items.length<=1) ? 'none' : '';
     }
 
     function show(i){
@@ -495,36 +510,31 @@
       updateCount();
       buildThumbs();
       reset();
-      lbPrev.style.display = (items.length <= 1) ? 'none' : '';
-      lbNext.style.display = (items.length <= 1) ? 'none' : '';
     }
 
     function open(group, startIndex){
       items = Array.from(document.querySelectorAll(`.zoomable[data-group="${group}"]`))
         .sort((a,b)=>Number(a.dataset.index||0)-Number(b.dataset.index||0));
       if(!items.length) return;
-
       lb.setAttribute('aria-hidden','false');
-      document.documentElement.style.overflow = 'hidden';
-      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow='hidden';
+      document.body.style.overflow='hidden';
       show(startIndex);
     }
 
     function close(){
       lb.setAttribute('aria-hidden','true');
-      document.documentElement.style.overflow = '';
-      document.body.style.overflow = '';
+      document.documentElement.style.overflow='';
+      document.body.style.overflow='';
       pointers.clear();
       reset();
     }
 
-    const prev = ()=>show(idx-1);
-    const next = ()=>show(idx+1);
+    const prev=()=>show(idx-1);
+    const next=()=>show(idx+1);
 
     document.querySelectorAll('.zoomable').forEach(el=>{
-      el.addEventListener('click', ()=>{
-        open(el.dataset.group || 'photos', Number(el.dataset.index||0));
-      });
+      el.addEventListener('click', ()=> open(el.dataset.group||'photos', Number(el.dataset.index||0)));
     });
 
     lbPrev.addEventListener('click', prev);
@@ -533,93 +543,83 @@
     lbX.addEventListener('click', close);
 
     document.addEventListener('keydown', (e)=>{
-      if(lb.getAttribute('aria-hidden') === 'true') return;
-      if(e.key === 'Escape') close();
-      if(e.key === 'ArrowLeft') prev();
-      if(e.key === 'ArrowRight') next();
+      if(lb.getAttribute('aria-hidden')==='true') return;
+      if(e.key==='Escape') close();
+      if(e.key==='ArrowLeft') prev();
+      if(e.key==='ArrowRight') next();
     });
 
-    // swipe (stage)
+    // swipe
     let sx=0, sy=0, sw=false;
     stage.addEventListener('touchstart', (e)=>{
-      if(e.touches.length !== 1) return;
+      if(e.touches.length!==1) return;
       sw=true; sx=e.touches[0].clientX; sy=e.touches[0].clientY;
     }, {passive:true});
     stage.addEventListener('touchend', (e)=>{
       if(!sw) return; sw=false;
-      const t = e.changedTouches && e.changedTouches[0];
+      if(items.length<=1) return;
+      const t=e.changedTouches && e.changedTouches[0];
       if(!t) return;
       const dx=t.clientX-sx, dy=t.clientY-sy;
-      if(items.length <= 1) return;
       if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)){
         if(dx<0) next(); else prev();
       }
     }, {passive:true});
 
-    // pinch zoom (pointer events)
-    stage.style.touchAction = 'none';
-
+    // pinch zoom
+    stage.style.touchAction='none';
     stage.addEventListener('pointerdown', (e)=>{
-      if(lb.getAttribute('aria-hidden') === 'true') return;
+      if(lb.getAttribute('aria-hidden')==='true') return;
       stage.setPointerCapture(e.pointerId);
       pointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
-
-      if(pointers.size === 1){ startTx = tx; startTy = ty; }
-      if(pointers.size === 2){
-        const pts = Array.from(pointers.values());
-        const dx = pts[0].x-pts[1].x, dy = pts[0].y-pts[1].y;
-        startDist = Math.hypot(dx,dy) || 1;
-        startScale = scale;
-        startMid = {x:(pts[0].x+pts[1].x)/2, y:(pts[0].y+pts[1].y)/2};
-        startTx = tx; startTy = ty;
+      if(pointers.size===1){ startTx=tx; startTy=ty; }
+      if(pointers.size===2){
+        const pts=Array.from(pointers.values());
+        const dx=pts[0].x-pts[1].x, dy=pts[0].y-pts[1].y;
+        startDist=Math.hypot(dx,dy)||1;
+        startScale=scale;
+        startMid={x:(pts[0].x+pts[1].x)/2, y:(pts[0].y+pts[1].y)/2};
+        startTx=tx; startTy=ty;
       }
     });
 
     stage.addEventListener('pointermove', (e)=>{
       if(!pointers.has(e.pointerId)) return;
       pointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
-
-      if(pointers.size === 2){
-        const pts = Array.from(pointers.values());
-        const dx = pts[0].x-pts[1].x, dy = pts[0].y-pts[1].y;
-        const dist = Math.hypot(dx,dy) || 1;
-        const nextScale = clamp(startScale * (dist / startDist), 1, 4);
-
-        const mid = {x:(pts[0].x+pts[1].x)/2, y:(pts[0].y+pts[1].y)/2};
-        const mdx = mid.x - (startMid ? startMid.x : mid.x);
-        const mdy = mid.y - (startMid ? startMid.y : mid.y);
-
-        scale = nextScale;
-        tx = startTx + mdx;
-        ty = startTy + mdy;
+      if(pointers.size===2){
+        const pts=Array.from(pointers.values());
+        const dx=pts[0].x-pts[1].x, dy=pts[0].y-pts[1].y;
+        const dist=Math.hypot(dx,dy)||1;
+        const nextScale=clamp(startScale*(dist/startDist), 1, 4);
+        const mid={x:(pts[0].x+pts[1].x)/2, y:(pts[0].y+pts[1].y)/2};
+        const mdx=mid.x-(startMid?startMid.x:mid.x);
+        const mdy=mid.y-(startMid?startMid.y:mid.y);
+        scale=nextScale; tx=startTx+mdx; ty=startTy+mdy;
         apply();
       }
     });
 
     stage.addEventListener('pointerup', (e)=>{
       pointers.delete(e.pointerId);
-      if(scale < 1.02) reset();
-      if(pointers.size < 2){
-        startDist = 0;
-        startMid = null;
-        startScale = scale;
-        startTx = tx; startTy = ty;
+      if(scale<1.02) reset();
+      if(pointers.size<2){
+        startDist=0; startMid=null; startScale=scale; startTx=tx; startTy=ty;
       }
     });
     stage.addEventListener('pointercancel', (e)=>{
       pointers.delete(e.pointerId);
-      if(pointers.size === 0) reset();
+      if(pointers.size===0) reset();
     });
 
-    // double tap zoom
-    let lastTap = 0;
+    // double tap
+    let lastTap=0;
     stage.addEventListener('touchend', ()=>{
-      const now = Date.now();
-      if(now - lastTap < 280){
-        if(scale <= 1.01){ scale = 2; tx = 0; ty = 0; apply(); }
+      const now=Date.now();
+      if(now-lastTap<280){
+        if(scale<=1.01){ scale=2; tx=0; ty=0; apply(); }
         else reset();
       }
-      lastTap = now;
+      lastTap=now;
     }, {passive:true});
   })();
   </script>
