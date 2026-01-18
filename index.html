@@ -3,21 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="format-detection" content="telephone=no" />
-  <meta name="color-scheme" content="light" />
+  <meta name="format-detection" content="telephone=no,date=no,address=no,email=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <title>야옹 역사 | 초등 현장 한국사 수업</title>
-
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="stylesheet" href="style.css" />
-
-  <!-- NanumSquareRound (noonnu via jsDelivr) -->
-  <link rel="preload" as="style" href="https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_10@1.0/NanumSquareRound.woff2" />
 </head>
 
 <body>
-  <a class="skip" href="#home">본문으로</a>
+  <a class="skip" href="#main">본문 바로가기</a>
 
-  <!-- Header -->
   <header class="site-header" id="top">
     <div class="wrap header-inner">
       <div class="brand">
@@ -28,34 +23,26 @@
         </div>
       </div>
 
-      <a class="chip chip--cta" href="#contact" data-scroll>문의</a>
+      <a class="chip" href="#contact" data-scroll>문의</a>
     </div>
   </header>
 
-  <main id="home">
-    <!-- Hero -->
-    <section class="hero section" aria-label="메인">
+  <main id="main">
+    <section class="section hero">
       <div class="wrap">
-        <div class="pill">
-          <span class="pill-dot">🐾</span>
-          <span>현장형 · 소수정예 · 120분</span>
-        </div>
+        <div class="pill"><span class="pill-dot">🐾</span>현장형 · 소수정예 · 120분</div>
 
         <h1 class="hero-title">야옹 역사</h1>
-        <p class="hero-sub">초등 현장 한국사 수업</p>
+        <div class="hero-sub">초등 현장 한국사 수업</div>
+        <p class="hero-copy">교과서 밖에서 직접 보고, 묻고, 배우는<br>살아있는 한국사 수업</p>
 
-        <p class="hero-copy">
-          교과서 밖에서 직접 보고, 묻고, 배우는<br />
-          살아있는 한국사 수업
-        </p>
-
-        <div class="btn-row" role="navigation" aria-label="바로가기">
-          <a class="btn" href="#about" data-scroll>수업 소개 보기</a>
-          <a class="btn btn--accent" href="#curriculum" data-scroll>커리큘럼 보기</a>
-          <a class="btn btn--mint" href="#contact" data-scroll>문의하기</a>
+        <div class="btn-row">
+          <a class="btn btn--wide" href="#about" data-scroll>수업 소개 보기</a>
+          <a class="btn btn--wide btn--accent" href="#curriculum" data-scroll>커리큘럼 보기</a>
+          <a class="btn btn--wide btn--mint" href="#contact" data-scroll>문의하기</a>
         </div>
 
-        <ul class="stat-list" aria-label="핵심 정보">
+        <ul class="stat-list">
           <li class="stat">
             <div class="stat-top">120분</div>
             <div class="stat-bottom">1회 수업</div>
@@ -83,13 +70,13 @@
       </div>
     </section>
 
-    <!-- About -->
-    <section class="section" id="about" aria-label="야옹 역사 소개">
+    <section class="section" id="about">
       <div class="wrap">
         <div class="sec-head">
           <div class="sec-icon">🐾</div>
           <h2 class="sec-title">야옹 역사는 이런 수업이에요</h2>
         </div>
+        <p class="sec-sub">따뜻하고 친근하지만, 내용은 탄탄하게. 아이와 부모 모두 안심하는 현장 수업.</p>
 
         <div class="panel">
           <h3 class="panel-title">수업 핵심</h3>
@@ -109,121 +96,110 @@
             <span class="tag">#질문하는아이</span>
             <span class="tag">#소수정예</span>
           </div>
-          <div class="quote">
-            “아이들이 스스로 발견한 역사는 오래 기억됩니다.”
-          </div>
+          <div class="quote">“아이들이 스스로 발견한 역사는 오래 기억됩니다.”</div>
         </div>
       </div>
     </section>
 
-    <!-- Class Style -->
-    <section class="section" id="style" aria-label="수업 방식">
+    <section class="section" id="style">
       <div class="wrap">
         <div class="sec-head">
-          <div class="sec-icon">🔎</div>
+          <div class="sec-icon">🐾</div>
           <h2 class="sec-title">수업은 이렇게 진행돼요</h2>
         </div>
 
         <ol class="steps">
           <li class="step">
             <div class="step-num">1</div>
-            <div class="step-body">
+            <div>
               <div class="step-title">현장 설명 + 이론 학습</div>
-              <div class="step-desc">눈으로 보고, 연결해서 이해해요.</div>
+              <div class="step-desc">현장에서 바로 이해하고 연결해요.</div>
             </div>
           </li>
           <li class="step">
             <div class="step-num">2</div>
-            <div class="step-body">
+            <div>
               <div class="step-title">유물·전시 관람 병행</div>
-              <div class="step-desc">전시를 ‘관찰’하며 근거를 찾아요.</div>
+              <div class="step-desc">실물을 보며 역사 감각을 키워요.</div>
             </div>
           </li>
           <li class="step">
             <div class="step-num">3</div>
-            <div class="step-body">
+            <div>
               <div class="step-title">관찰하기 · 질문하기 · 기록하기</div>
-              <div class="step-desc">돋보기(관찰) · 말풍선(질문) · 노트(기록)</div>
+              <div class="step-desc">‘왜?’를 스스로 만들어가는 수업.</div>
             </div>
           </li>
           <li class="step">
             <div class="step-num">4</div>
-            <div class="step-body">
+            <div>
               <div class="step-title">활동지 및 토론</div>
-              <div class="step-desc">생각을 정리하고 말로 표현해요.</div>
+              <div class="step-desc">정리하고 말로 표현하며 오래 기억해요.</div>
             </div>
           </li>
         </ol>
       </div>
     </section>
 
-    <!-- Locations -->
-    <section class="section" id="locations" aria-label="수업 장소">
+    <section class="section" id="locations">
       <div class="wrap">
         <div class="sec-head">
-          <div class="sec-icon">🏯</div>
+          <div class="sec-icon">🐾</div>
           <h2 class="sec-title">역사가 있는 모든 곳이 교실입니다</h2>
         </div>
 
-        <div class="panel">
-          <ul class="place-list">
-            <li>국립중앙박물관 (시대별)</li>
-            <li>경복궁 · 덕수궁 · 창경궁</li>
-            <li>서대문형무소 · 전쟁기념관</li>
-            <li>고궁박물관 · 화폐박물관</li>
-            <li>그리스·로마관 · 선정릉</li>
-          </ul>
-          <div class="place-note">교실을 벗어나, 역사를 직접 만나는 수업</div>
-        </div>
+        <ul class="place-list">
+          <li>국립중앙박물관 (시대별)</li>
+          <li>경복궁 · 덕수궁 · 창경궁</li>
+          <li>서대문형무소 · 전쟁기념관</li>
+          <li>고궁박물관 · 화폐박물관</li>
+          <li>그리스·로마관 · 선정릉</li>
+        </ul>
+
+        <div class="place-note">교실을 벗어나, 역사를 직접 만나는 수업</div>
       </div>
     </section>
 
-    <!-- Curriculum -->
-    <section class="section" id="curriculum" aria-label="커리큘럼">
+    <section class="section" id="curriculum">
       <div class="wrap">
         <div class="sec-head">
-          <div class="sec-icon">📚</div>
+          <div class="sec-icon">🐾</div>
           <h2 class="sec-title">시대별로 나누어 배우는 한국사</h2>
         </div>
-
         <p class="sec-sub">중앙박물관 커리큘럼 예시</p>
 
-        <div class="curr-list" aria-label="커리큘럼 카드 목록">
-          <article class="curr">
+        <div class="curr-list">
+          <div class="curr">
             <h3 class="curr-title">선사시대</h3>
             <p class="curr-q">“사람들은 어떻게 살았을까?”</p>
-          </article>
-
-          <article class="curr">
+          </div>
+          <div class="curr">
             <h3 class="curr-title">삼국시대</h3>
             <p class="curr-q">“한강을 차지하라!”</p>
-          </article>
-
-          <article class="curr">
+          </div>
+          <div class="curr">
             <h3 class="curr-title">고려시대</h3>
             <p class="curr-q">“최고의 외교술, 금속활자, 코리아(Korea)!”</p>
-          </article>
-
-          <article class="curr">
+          </div>
+          <div class="curr">
             <h3 class="curr-title">조선시대</h3>
             <p class="curr-q">“유교의 나라, 백성을 사랑한 임금님, 우리들의 이순신!”</p>
-          </article>
+          </div>
         </div>
 
         <div class="wide-note">한 번으로 끝나지 않는, 이어지는 역사 수업</div>
       </div>
     </section>
 
-    <!-- Instructor -->
-    <section class="section" id="instructor" aria-label="강사 이력">
+    <section class="section" id="instructor">
       <div class="wrap">
         <div class="sec-head">
-          <div class="sec-icon">🐱‍🏫</div>
+          <div class="sec-icon">🐾</div>
           <h2 class="sec-title">강사 이력</h2>
         </div>
 
         <div class="teacher">
-          <img class="teacher-logo" src="yaong-logo.png" alt="야옹 역사 브랜드 로고" />
+          <img class="teacher-logo" src="yaong-logo.png" alt="야옹 역사 강사 로고" />
           <ul class="bullets">
             <li>역사 교육 경력 10년 이상</li>
             <li>한국사능력검정시험 1급</li>
@@ -235,87 +211,92 @@
       </div>
     </section>
 
-    <!-- Class Info -->
-    <section class="section" id="info" aria-label="수업 안내">
+    <section class="section" id="classinfo">
       <div class="wrap">
         <div class="sec-head">
-          <div class="sec-icon">🧾</div>
+          <div class="sec-icon">🐾</div>
           <h2 class="sec-title">수업 안내</h2>
         </div>
 
-        <div class="panel">
-          <ul class="info-list">
-            <li><b>수업 시간</b> 1회 120분</li>
-            <li><b>수업 정원</b> 4~5명 소수 정예</li>
-            <li><b>대상</b> 초등학생 (학년별 난이도 조절)</li>
-          </ul>
-        </div>
+        <ul class="info-list">
+          <li><b>수업 시간</b> · 1회 120분</li>
+          <li><b>수업 정원</b> · 4~5명 소수 정예</li>
+          <li><b>대상</b> · 초등학생 (학년별 난이도 조절)</li>
+        </ul>
+
+        <div class="tiny-note">※ 장소/학년/인원에 맞춰 커리큘럼을 조정할 수 있어요.</div>
       </div>
     </section>
 
-    <!-- Reviews -->
-    <section class="section" id="reviews" aria-label="생생한 후기">
+    <section class="section" id="review">
       <div class="wrap">
         <div class="sec-head">
-          <div class="sec-icon">💬</div>
+          <div class="sec-icon">🐾</div>
           <h2 class="sec-title">생생한 후기</h2>
         </div>
 
         <div class="gallery">
-          <button class="thumb" type="button" data-gallery="review" data-index="0" aria-label="후기 이미지 크게 보기">
-            <img src="review.jpg" alt="후기 이미지" loading="lazy" />
+          <button class="thumb" type="button" data-gallery="review" data-index="0" aria-label="후기 이미지 확대 보기">
+            <img src="review.jpg" alt="수업 후기 이미지" loading="lazy" />
           </button>
         </div>
       </div>
     </section>
 
-    <!-- Photos -->
-    <section class="section" id="photos" aria-label="활동 사진">
+    <section class="section" id="photos">
       <div class="wrap">
         <div class="sec-head">
-          <div class="sec-icon">📷</div>
+          <div class="sec-icon">🐾</div>
           <h2 class="sec-title">활동 사진</h2>
         </div>
 
-        <div class="gallery gallery--grid" aria-label="활동 사진 모음">
-          <button class="thumb" type="button" data-gallery="photos" data-index="0"><img src="photo1.jpg" alt="활동 사진 1" loading="lazy"></button>
-          <button class="thumb" type="button" data-gallery="photos" data-index="1"><img src="photo2.jpg" alt="활동 사진 2" loading="lazy"></button>
-          <button class="thumb" type="button" data-gallery="photos" data-index="2"><img src="photo3.jpg" alt="활동 사진 3" loading="lazy"></button>
-          <button class="thumb" type="button" data-gallery="photos" data-index="3"><img src="photo4.jpg" alt="활동 사진 4" loading="lazy"></button>
-          <button class="thumb" type="button" data-gallery="photos" data-index="4"><img src="photo5.jpg" alt="활동 사진 5" loading="lazy"></button>
+        <div class="gallery gallery--grid">
+          <button class="thumb" type="button" data-gallery="photos" data-index="0" aria-label="활동 사진 1 확대 보기">
+            <img src="photo1.jpg" alt="활동 사진 1" loading="lazy" />
+          </button>
+          <button class="thumb" type="button" data-gallery="photos" data-index="1" aria-label="활동 사진 2 확대 보기">
+            <img src="photo2.jpg" alt="활동 사진 2" loading="lazy" />
+          </button>
+          <button class="thumb" type="button" data-gallery="photos" data-index="2" aria-label="활동 사진 3 확대 보기">
+            <img src="photo3.jpg" alt="활동 사진 3" loading="lazy" />
+          </button>
+          <button class="thumb" type="button" data-gallery="photos" data-index="3" aria-label="활동 사진 4 확대 보기">
+            <img src="photo4.jpg" alt="활동 사진 4" loading="lazy" />
+          </button>
+          <button class="thumb" type="button" data-gallery="photos" data-index="4" aria-label="활동 사진 5 확대 보기">
+            <img src="photo5.jpg" alt="활동 사진 5" loading="lazy" />
+          </button>
         </div>
       </div>
     </section>
 
-    <!-- Contact -->
-    <section class="section" id="contact" aria-label="수업 문의">
+    <section class="section" id="contact">
       <div class="wrap">
         <div class="sec-head">
-          <div class="sec-icon">✉️</div>
+          <div class="sec-icon">🐾</div>
           <h2 class="sec-title">수업 문의</h2>
         </div>
-
         <p class="sec-sub">궁금한 점이 있다면 언제든 편하게 문의 주세요.</p>
 
-        <form class="form" id="contactForm">
+        <form class="form" id="contactForm" autocomplete="on">
           <label class="field">
             <span class="label">보호자 이름</span>
-            <input name="guardian" type="text" placeholder="예) 홍길동" autocomplete="name" />
+            <input type="text" name="parent" placeholder="예) 홍길동" />
           </label>
 
           <label class="field">
             <span class="label">휴대폰 번호</span>
-            <input name="phone" type="tel" placeholder="예) 010-1234-5678" inputmode="tel" />
+            <input type="tel" name="phone" placeholder="예) 010-1234-5678" />
           </label>
 
           <label class="field">
             <span class="label">인원</span>
-            <input name="count" type="text" placeholder="예) 4~5명" />
+            <input type="text" name="people" placeholder="예) 4~5명" />
           </label>
 
           <label class="field">
             <span class="label">희망 장소/일정</span>
-            <input name="plan" type="text" placeholder="예) 중앙박물관 / 2월 주말" />
+            <input type="text" name="schedule" placeholder="예) 중앙박물관 / 2월 주말" />
           </label>
 
           <label class="field">
@@ -324,14 +305,11 @@
           </label>
 
           <div class="contact-actions">
-            <a class="btn btn--mint btn--wide" id="mailBtn" href="#" role="button">메일로 문의하기</a>
-            <a class="btn btn--ig btn--wide" href="https://instagram.com/yaong_history" target="_blank" rel="noopener">
-              <span class="ig-mark" aria-hidden="true">◎</span>
-              <span>@yaong_history</span>
+            <button class="btn btn--mint" type="button" id="mailBtn">메일로 문의하기</button>
+            <a class="btn btn--ig" href="https://instagram.com/yaong_history" target="_blank" rel="noopener">
+              <span class="ig-mark">⌁</span>@yaong_history
             </a>
           </div>
-
-          <div class="tiny-note">※ 장소/학년/인원에 맞춰 커리큘럼을 조정할 수 있어요.</div>
         </form>
       </div>
     </section>
@@ -345,337 +323,330 @@
     </footer>
   </main>
 
-  <!-- Modal Viewer -->
+  <!-- Modal -->
   <div class="modal" id="modal" aria-hidden="true">
-    <div class="modal-backdrop" data-close></div>
+    <div class="modal-backdrop" id="modalBackdrop"></div>
 
     <div class="modal-panel" role="dialog" aria-modal="true" aria-label="이미지 크게 보기">
       <div class="modal-top">
         <div class="modal-count" id="modalCount">1/1</div>
-        <button class="modal-close" type="button" aria-label="닫기" id="modalClose">×</button>
+        <button class="modal-close" type="button" id="modalClose" aria-label="닫기">×</button>
       </div>
 
-      <div class="modal-stage" id="stage">
-        <button class="nav nav--prev" type="button" aria-label="이전" id="prevBtn">‹</button>
+      <div class="modal-stage">
+        <button class="nav" type="button" id="prevBtn" aria-label="이전">‹</button>
 
         <div class="zoom-wrap" id="zoomWrap">
           <img id="modalImg" alt="확대 이미지" />
         </div>
 
-        <button class="nav nav--next" type="button" aria-label="다음" id="nextBtn">›</button>
+        <button class="nav" type="button" id="nextBtn" aria-label="다음">›</button>
       </div>
 
-      <div class="modal-hint" id="hint">
-        두 손가락으로 확대/축소, 한 손가락으로 이동, 좌우로 넘기기
-      </div>
+      <div class="modal-hint">핀치(두 손가락)로 확대/축소 · 한 손가락으로 이동 · 더블탭으로 초기화</div>
     </div>
   </div>
 
   <script>
     (function () {
-      const header = document.querySelector('.site-header');
-      const scrollLinks = document.querySelectorAll('[data-scroll]');
+      const header = document.querySelector(".site-header");
 
-      function headerOffset() {
+      function getHeaderOffset() {
         const h = header ? header.getBoundingClientRect().height : 0;
-        return Math.ceil(h + 14);
+        return Math.ceil(h + 10);
       }
 
-      function scrollToId(id) {
-        const el = document.getElementById(id);
-        if (!el) return;
-        const top = window.pageYOffset + el.getBoundingClientRect().top - headerOffset();
-        window.scrollTo({ top, behavior: 'smooth' });
+      function smoothScrollTo(el) {
+        const y = window.scrollY + el.getBoundingClientRect().top - getHeaderOffset();
+        window.scrollTo({ top: y, behavior: "smooth" });
       }
 
-      scrollLinks.forEach(a => {
-        a.addEventListener('click', (e) => {
-          const href = a.getAttribute('href') || '';
-          if (!href.startsWith('#')) return;
+      document.querySelectorAll("[data-scroll]").forEach(a => {
+        a.addEventListener("click", (e) => {
+          const href = a.getAttribute("href") || "";
+          if (!href.startsWith("#")) return;
+          const target = document.querySelector(href);
+          if (!target) return;
           e.preventDefault();
-          const id = href.replace('#','');
-          scrollToId(id);
+          smoothScrollTo(target);
         }, { passive: false });
       });
 
-      // Mailto (forms -> email)
-      const mailBtn = document.getElementById('mailBtn');
-      const form = document.getElementById('contactForm');
+      // Mail
+      const mailBtn = document.getElementById("mailBtn");
+      const form = document.getElementById("contactForm");
+      mailBtn.addEventListener("click", () => {
+        const fd = new FormData(form);
+        const parent = (fd.get("parent") || "").toString().trim();
+        const phone = (fd.get("phone") || "").toString().trim();
+        const people = (fd.get("people") || "").toString().trim();
+        const schedule = (fd.get("schedule") || "").toString().trim();
+        const message = (fd.get("message") || "").toString().trim();
 
-      function enc(s){ return encodeURIComponent((s||'').trim()); }
-
-      mailBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const data = new FormData(form);
-
-        const guardian = data.get('guardian') || '';
-        const phone = data.get('phone') || '';
-        const count = data.get('count') || '';
-        const plan = data.get('plan') || '';
-        const message = data.get('message') || '';
-
-        const subject = `야옹 역사 수업 문의 (${guardian ? guardian : '보호자'})`;
-        const body =
-`보호자 이름: ${guardian}
-휴대폰 번호: ${phone}
-인원: ${count}
-희망 장소/일정: ${plan}
-
-문의 내용:
-${message}
-`;
-
-        const mailto = `mailto:yaonghistory@gmail.com?subject=${enc(subject)}&body=${enc(body)}`;
-        window.location.href = mailto;
+        const subject = encodeURIComponent("야옹 역사 수업 문의");
+        const bodyLines = [
+          `보호자 이름: ${parent}`,
+          `휴대폰 번호: ${phone}`,
+          `인원: ${people}`,
+          `희망 장소/일정: ${schedule}`,
+          ``,
+          `문의 내용:`,
+          `${message}`
+        ];
+        const body = encodeURIComponent(bodyLines.join("\n"));
+        location.href = `mailto:yaonghistory@gmail.com?subject=${subject}&body=${body}`;
       });
 
-      // Galleries
-      const GALLERIES = {
-        review: ['review.jpg'],
-        photos: ['photo1.jpg','photo2.jpg','photo3.jpg','photo4.jpg','photo5.jpg']
+      // Modal galleries
+      const galleries = {
+        review: ["review.jpg"],
+        photos: ["photo1.jpg", "photo2.jpg", "photo3.jpg", "photo4.jpg", "photo5.jpg"]
       };
 
-      const modal = document.getElementById('modal');
-      const modalImg = document.getElementById('modalImg');
-      const modalCount = document.getElementById('modalCount');
-      const prevBtn = document.getElementById('prevBtn');
-      const nextBtn = document.getElementById('nextBtn');
-      const closeBtn = document.getElementById('modalClose');
+      const modal = document.getElementById("modal");
+      const modalImg = document.getElementById("modalImg");
+      const modalCount = document.getElementById("modalCount");
+      const modalClose = document.getElementById("modalClose");
+      const modalBackdrop = document.getElementById("modalBackdrop");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const zoomWrap = document.getElementById("zoomWrap");
 
-      let active = { key: 'photos', list: [], i: 0 };
-      let savedScrollY = 0;
+      let currentGalleryKey = "review";
+      let currentIndex = 0;
 
-      // Zoom state (persistent)
-      const zoomWrap = document.getElementById('zoomWrap');
-      let scale = 1, tx = 0, ty = 0;
-      let pointers = new Map();
-      let start = null; // pinch start snapshot
-      let swipeStart = null;
-
-      function applyTransform() {
-        modalImg.style.transform = `translate3d(${tx}px, ${ty}px, 0) scale(${scale})`;
+      // Scroll lock (iOS 안정)
+      let scrollYBefore = 0;
+      function lockScroll() {
+        scrollYBefore = window.scrollY || document.documentElement.scrollTop || 0;
+        document.documentElement.classList.add("modal-lock");
+        document.body.classList.add("modal-lock");
+        document.body.style.top = `-${scrollYBefore}px`;
       }
-      function resetTransform() {
-        scale = 1; tx = 0; ty = 0;
-        applyTransform();
-      }
-
-      function setImage() {
-        const src = active.list[active.i];
-        modalImg.src = src;
-        modalCount.textContent = `${active.i + 1}/${active.list.length}`;
-        prevBtn.disabled = active.list.length <= 1;
-        nextBtn.disabled = active.list.length <= 1;
-        resetTransform();
+      function unlockScroll() {
+        document.documentElement.classList.remove("modal-lock");
+        document.body.classList.remove("modal-lock");
+        const top = document.body.style.top;
+        document.body.style.top = "";
+        const y = top ? Math.abs(parseInt(top, 10)) : scrollYBefore;
+        window.scrollTo(0, y || 0);
       }
 
       function openModal(key, index) {
-        active.key = key;
-        active.list = GALLERIES[key] || [];
-        active.i = Math.max(0, Math.min(index || 0, active.list.length - 1));
+        currentGalleryKey = key;
+        currentIndex = index;
 
-        savedScrollY = window.scrollY || 0;
-
-        modal.classList.add('is-open');
-        modal.setAttribute('aria-hidden', 'false');
-
-        document.documentElement.classList.add('modal-lock');
-        document.body.classList.add('modal-lock');
-        document.body.style.top = `-${savedScrollY}px`;
+        modal.classList.add("is-open");
+        modal.setAttribute("aria-hidden", "false");
+        lockScroll();
 
         setImage();
+        resetZoom(true);
       }
 
       function closeModal() {
-        modal.classList.remove('is-open');
-        modal.setAttribute('aria-hidden', 'true');
-
-        document.documentElement.classList.remove('modal-lock');
-        document.body.classList.remove('modal-lock');
-        document.body.style.top = '';
-
-        window.scrollTo(0, savedScrollY);
+        modal.classList.remove("is-open");
+        modal.setAttribute("aria-hidden", "true");
+        unlockScroll();
+        resetZoom(true);
       }
 
-      document.querySelectorAll('[data-gallery]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const key = btn.getAttribute('data-gallery');
-          const idx = parseInt(btn.getAttribute('data-index') || '0', 10);
-          openModal(key, idx);
+      function setImage() {
+        const list = galleries[currentGalleryKey] || [];
+        const total = list.length;
+
+        const src = list[currentIndex] || "";
+        modalImg.src = src;
+
+        modalCount.textContent = `${currentIndex + 1}/${total}`;
+
+        // 1장일 때는 화살표 비활성
+        const enableNav = total > 1;
+        prevBtn.disabled = !enableNav;
+        nextBtn.disabled = !enableNav;
+        prevBtn.style.visibility = enableNav ? "visible" : "hidden";
+        nextBtn.style.visibility = enableNav ? "visible" : "hidden";
+      }
+
+      function prev() {
+        const list = galleries[currentGalleryKey] || [];
+        if (list.length <= 1) return;
+        currentIndex = (currentIndex - 1 + list.length) % list.length;
+        setImage();
+        resetZoom(true);
+      }
+      function next() {
+        const list = galleries[currentGalleryKey] || [];
+        if (list.length <= 1) return;
+        currentIndex = (currentIndex + 1) % list.length;
+        setImage();
+        resetZoom(true);
+      }
+
+      // Click thumbnails
+      document.querySelectorAll(".thumb[data-gallery]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const key = btn.getAttribute("data-gallery");
+          const idx = parseInt(btn.getAttribute("data-index") || "0", 10);
+          openModal(key, isNaN(idx) ? 0 : idx);
         });
       });
 
-      document.querySelectorAll('[data-close]').forEach(el => {
-        el.addEventListener('click', closeModal);
-      });
-      closeBtn.addEventListener('click', closeModal);
-
-      function prev() {
-        if (active.list.length <= 1) return;
-        active.i = (active.i - 1 + active.list.length) % active.list.length;
-        setImage();
-      }
-      function next() {
-        if (active.list.length <= 1) return;
-        active.i = (active.i + 1) % active.list.length;
-        setImage();
-      }
-      prevBtn.addEventListener('click', prev);
-      nextBtn.addEventListener('click', next);
-
-      // Keyboard close (desktop)
-      document.addEventListener('keydown', (e) => {
-        if (!modal.classList.contains('is-open')) return;
-        if (e.key === 'Escape') closeModal();
-        if (e.key === 'ArrowLeft') prev();
-        if (e.key === 'ArrowRight') next();
+      // Close handlers (X가 안 먹는 문제: 캡처 단계로 확실히 받기)
+      modalClose.addEventListener("click", (e) => { e.preventDefault(); e.stopPropagation(); closeModal(); }, true);
+      modalBackdrop.addEventListener("click", (e) => { e.preventDefault(); closeModal(); }, true);
+      document.addEventListener("keydown", (e) => {
+        if (!modal.classList.contains("is-open")) return;
+        if (e.key === "Escape") closeModal();
+        if (e.key === "ArrowLeft") prev();
+        if (e.key === "ArrowRight") next();
       });
 
-      // Gesture handling (pinch zoom + pan + swipe)
-      function getPoint(e) { return { x: e.clientX, y: e.clientY }; }
+      prevBtn.addEventListener("click", (e) => { e.preventDefault(); prev(); });
+      nextBtn.addEventListener("click", (e) => { e.preventDefault(); next(); });
 
-      function dist(a, b) {
-        const dx = a.x - b.x, dy = a.y - b.y;
+      // =========================
+      // Pinch Zoom + Pan (고정 유지)
+      // =========================
+      let scale = 1;
+      let tx = 0, ty = 0;
+
+      let isPanning = false;
+      let panStartX = 0, panStartY = 0;
+
+      let isPinching = false;
+      let pinchStartDist = 0;
+      let pinchStartScale = 1;
+
+      function applyTransform() {
+        modalImg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+      }
+
+      function resetZoom(hard) {
+        if (hard) {
+          scale = 1;
+          tx = 0; ty = 0;
+          applyTransform();
+        }
+      }
+
+      function clampPan() {
+        // 너무 멀리 안 나가게 간단 클램프 (뷰포트 기준)
+        const rect = zoomWrap.getBoundingClientRect();
+        const maxX = rect.width * (scale - 1) * 0.5;
+        const maxY = rect.height * (scale - 1) * 0.5;
+
+        tx = Math.max(-maxX, Math.min(maxX, tx));
+        ty = Math.max(-maxY, Math.min(maxY, ty));
+      }
+
+      function distance(t1, t2) {
+        const dx = t1.clientX - t2.clientX;
+        const dy = t1.clientY - t2.clientY;
         return Math.hypot(dx, dy);
       }
 
-      function mid(a, b) {
-        return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
-      }
+      function onTouchStart(e) {
+        if (!modal.classList.contains("is-open")) return;
 
-      function clampScale(s) {
-        return Math.max(1, Math.min(4, s));
-      }
-
-      function onPointerDown(e) {
-        if (!modal.classList.contains('is-open')) return;
-        if (e.pointerType === 'mouse' && e.button !== 0) return;
-
-        zoomWrap.setPointerCapture(e.pointerId);
-        pointers.set(e.pointerId, getPoint(e));
-
-        // swipe start (only when not zoomed)
-        if (pointers.size === 1) swipeStart = { p: getPoint(e), t: Date.now() };
-
-        if (pointers.size === 2) {
-          const pts = Array.from(pointers.values());
-          start = {
-            d: dist(pts[0], pts[1]),
-            m: mid(pts[0], pts[1]),
-            scale,
-            tx,
-            ty
-          };
-        }
-      }
-
-      function onPointerMove(e) {
-        if (!pointers.has(e.pointerId)) return;
-
-        pointers.set(e.pointerId, getPoint(e));
-
-        // Pinch zoom
-        if (pointers.size === 2 && start) {
-          const pts = Array.from(pointers.values());
-          const d = dist(pts[0], pts[1]);
-          const m = mid(pts[0], pts[1]);
-
-          const nextScale = clampScale(start.scale * (d / start.d));
-
-          // Keep the pinch midpoint relatively stable
-          const dx = m.x - start.m.x;
-          const dy = m.y - start.m.y;
-
-          scale = nextScale;
-          tx = start.tx + dx;
-          ty = start.ty + dy;
-
-          applyTransform();
+        if (e.touches.length === 2) {
+          isPinching = true;
+          isPanning = false;
+          pinchStartDist = distance(e.touches[0], e.touches[1]);
+          pinchStartScale = scale;
           e.preventDefault();
           return;
         }
 
-        // Pan when zoomed
-        if (pointers.size === 1 && scale > 1) {
-          const p = pointers.get(e.pointerId);
-          if (!start) start = { last: p, tx, ty };
-          if (!start.last) start.last = p;
-
-          const dx = p.x - start.last.x;
-          const dy = p.y - start.last.y;
-
-          tx += dx;
-          ty += dy;
-          start.last = p;
-
-          applyTransform();
-          e.preventDefault();
-          return;
-        }
-
-        // Swipe to change image (only when not zoomed)
-        if (pointers.size === 1 && scale === 1 && swipeStart) {
-          const p = pointers.get(e.pointerId);
-          const dx = p.x - swipeStart.p.x;
-          const dy = p.y - swipeStart.p.y;
-
-          // horizontal intent
-          if (Math.abs(dx) > 14 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+        if (e.touches.length === 1) {
+          // scale>1일 때만 패닝
+          isPanning = scale > 1.01;
+          if (isPanning) {
+            panStartX = e.touches[0].clientX - tx;
+            panStartY = e.touches[0].clientY - ty;
             e.preventDefault();
           }
         }
       }
 
-      function onPointerUp(e) {
-        if (!pointers.has(e.pointerId)) return;
+      function onTouchMove(e) {
+        if (!modal.classList.contains("is-open")) return;
 
-        pointers.delete(e.pointerId);
-
-        // Finish swipe (only if not zoomed)
-        if (scale === 1 && swipeStart) {
-          const end = getPoint(e);
-          const dx = end.x - swipeStart.p.x;
-          const dt = Date.now() - swipeStart.t;
-
-          if (Math.abs(dx) > 60 && dt < 500) {
-            if (dx < 0) next();
-            else prev();
-          }
+        if (isPinching && e.touches.length === 2) {
+          const dist = distance(e.touches[0], e.touches[1]);
+          const ratio = dist / (pinchStartDist || dist);
+          scale = Math.max(1, Math.min(5, pinchStartScale * ratio));
+          clampPan();
+          applyTransform();
+          e.preventDefault();
+          return;
         }
 
-        swipeStart = null;
-
-        // Reset start snapshot appropriately (but do NOT reset zoom)
-        if (pointers.size < 2) {
-          start = null;
+        if (isPanning && e.touches.length === 1) {
+          tx = e.touches[0].clientX - panStartX;
+          ty = e.touches[0].clientY - panStartY;
+          clampPan();
+          applyTransform();
+          e.preventDefault();
         }
       }
 
-      // Prevent iOS double-tap zoom, keep custom zoom
+      function onTouchEnd(e) {
+        // 핵심: 손을 떼도 원래대로 "돌아가지 않게" (값 유지)
+        if (e.touches.length < 2) isPinching = false;
+        if (e.touches.length === 0) isPanning = false;
+      }
+
+      // 더블탭으로 초기화
       let lastTap = 0;
-      function onTouchEndPreventDoubleTap(e) {
+      function onTap(e) {
         const now = Date.now();
-        if (now - lastTap < 350) {
-          e.preventDefault();
+        if (now - lastTap < 280) {
+          resetZoom(true);
+          lastTap = 0;
+          return;
         }
         lastTap = now;
       }
 
-      zoomWrap.addEventListener('pointerdown', onPointerDown, { passive: false });
-      zoomWrap.addEventListener('pointermove', onPointerMove, { passive: false });
-      zoomWrap.addEventListener('pointerup', onPointerUp, { passive: false });
-      zoomWrap.addEventListener('pointercancel', onPointerUp, { passive: false });
-      zoomWrap.addEventListener('touchend', onTouchEndPreventDoubleTap, { passive: false });
+      // iOS 인앱에서는 default pinch가 방해 → touch-action none + preventDefault로 처리
+      zoomWrap.addEventListener("touchstart", onTouchStart, { passive: false });
+      zoomWrap.addEventListener("touchmove", onTouchMove, { passive: false });
+      zoomWrap.addEventListener("touchend", onTouchEnd, { passive: true });
+      zoomWrap.addEventListener("touchcancel", onTouchEnd, { passive: true });
+      zoomWrap.addEventListener("click", onTap, { passive: true });
 
-      // Double click / double tap to reset (optional quality-of-life)
-      zoomWrap.addEventListener('dblclick', (e) => {
-        e.preventDefault();
-        resetTransform();
-      }, { passive: false });
+      // Swipe for next/prev (scale==1일 때만)
+      let swipeX = 0, swipeY = 0;
+      zoomWrap.addEventListener("touchstart", (e) => {
+        if (!modal.classList.contains("is-open")) return;
+        if (e.touches.length !== 1) return;
+        swipeX = e.touches[0].clientX;
+        swipeY = e.touches[0].clientY;
+      }, { passive: true });
 
-      // Ensure no accidental drag image ghost
-      modalImg.addEventListener('dragstart', (e) => e.preventDefault());
+      zoomWrap.addEventListener("touchend", (e) => {
+        if (!modal.classList.contains("is-open")) return;
+        const list = galleries[currentGalleryKey] || [];
+        if (list.length <= 1) return;
+        if (scale > 1.01) return; // 확대 중엔 스와이프 페이지 전환 방지
 
+        const touch = (e.changedTouches && e.changedTouches[0]) ? e.changedTouches[0] : null;
+        if (!touch) return;
+
+        const dx = touch.clientX - swipeX;
+        const dy = touch.clientY - swipeY;
+
+        if (Math.abs(dx) > 55 && Math.abs(dy) < 40) {
+          if (dx < 0) next();
+          else prev();
+        }
+      }, { passive: true });
+
+      // iOS 사파리에서 이미지 로딩 후 transform 적용 안정
+      modalImg.addEventListener("load", () => {
+        applyTransform();
+      });
     })();
   </script>
 </body>
