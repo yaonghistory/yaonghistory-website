@@ -9,31 +9,8 @@
   <!-- NanumSquareRound -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquareround.min.css">
 
-  <!-- ✅ 캐시가 끈질기면 v 숫자만 올려주세요 -->
-  <link rel="stylesheet" href="./style.css?v=1201" />
-
-  <!-- ✅ style.css가 캐시로 안 먹어도, 단어쪼개짐/라이트박스 “주루룩” 방지 -->
-  <style>
-    body, p, h1, h2, h3, h4, li, a, button, span, div{
-      word-break: keep-all;
-      overflow-wrap: break-word;
-      line-break: strict;
-    }
-
-    /* 라이트박스가 페이지 하단에 노출되는 현상 방지 */
-    .lightbox{display:none; position:fixed; inset:0; z-index:9999; background:rgba(0,0,0,.68); align-items:center; justify-content:center; padding:18px;}
-    .lightbox.open{display:flex;}
-    .lightbox__img{width:min(980px, 96vw); max-height:78vh; object-fit:contain; background:#111; border-radius:18px;}
-    .lightbox__close{position:absolute; top:14px; right:14px; width:44px; height:44px; border-radius:999px; border:1px solid rgba(255,255,255,.25); background:rgba(0,0,0,.35); color:#fff; font-size:28px; cursor:pointer;}
-    .lightbox__nav{position:absolute; top:50%; transform:translateY(-50%); width:46px; height:46px; border-radius:999px; border:1px solid rgba(255,255,255,.22); background:rgba(0,0,0,.30); color:#fff; font-size:26px; display:grid; place-items:center; cursor:pointer;}
-    .lightbox__nav--prev{left:12px;} .lightbox__nav--next{right:12px;}
-    .lightbox__count{position:absolute; left:50%; top:14px; transform:translateX(-50%); padding:8px 12px; border-radius:999px; background:rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.18); color:#fff; font-weight:900; font-size:13px;}
-    .lightbox__thumbs{position:absolute; left:50%; bottom:14px; transform:translateX(-50%); display:flex; gap:8px; padding:10px 12px; border-radius:999px; background:rgba(0,0,0,.30); border:1px solid rgba(255,255,255,.18); max-width:92vw; overflow:auto; -webkit-overflow-scrolling:touch;}
-    .lightbox__thumb{width:44px; height:44px; border-radius:12px; overflow:hidden; border:2px solid rgba(255,255,255,.18); opacity:.78; cursor:pointer; background:#222;}
-    .lightbox__thumb img{width:100%; height:100%; object-fit:cover;}
-    .lightbox__thumb.active{opacity:1; border-color:rgba(255,255,255,.70);}
-    body.modal-open{overflow:hidden;}
-  </style>
+  <!-- ✅ 캐시가 안 바뀌면 v 숫자만 올리기 -->
+  <link rel="stylesheet" href="./style.css?v=2101" />
 </head>
 
 <body>
@@ -68,12 +45,7 @@
             <strong>살아있는 한국사 수업</strong>
           </p>
 
-          <div class="hero__bullets">
-            <div class="hero__bullet">박물관에서</div>
-            <div class="hero__bullet">궁궐에서</div>
-            <div class="hero__bullet">역사 현장에서</div>
-            <div class="hero__bullet hero__bullet--note">아이들이 스스로 발견하는 역사</div>
-          </div>
+          <!-- ✅ 요청: 박물관/궁궐/현장/발견 4개 박스 제거 -->
 
           <div class="hero__cta">
             <a class="btn" href="#about">수업 소개 보기</a>
@@ -83,7 +55,7 @@
 
           <ul class="stats" aria-label="핵심 정보">
             <li><span class="stats__num">120분</span><span class="stats__txt">1회 수업</span></li>
-            <li><span class="stats__num">3–4명</span><span class="stats__txt">소수 정예</span></li>
+            <li><span class="stats__num">4–5명</span><span class="stats__txt">소수 정예</span></li>
             <li><span class="stats__num">현장+이론</span><span class="stats__txt">유물·전시 병행</span></li>
           </ul>
         </div>
@@ -120,7 +92,7 @@
               <li>초등 눈높이에 맞춘 <strong>현장 체험형</strong> 한국사 수업</li>
               <li><strong>암기</strong>가 아닌 <strong>관찰과 질문</strong> 중심</li>
               <li><strong>1회 120분</strong> 집중 수업</li>
-              <li><strong>3~4명</strong> 소수 정예 수업</li>
+              <li><strong>4~5명</strong> 소수 정예 수업</li>
             </ul>
           </article>
 
@@ -198,10 +170,25 @@
         </div>
 
         <div class="grid grid--4">
-          <article class="cardMini"><h3>선사시대</h3><p>“사람들은 어떻게 살았을까?”</p></article>
-          <article class="cardMini"><h3>삼국시대</h3><p>“나라는 왜 생겼을까?”</p></article>
-          <article class="cardMini"><h3>고려시대</h3><p>“불교와 나라는 어떤 관계였을까?”</p></article>
-          <article class="cardMini"><h3>조선시대</h3><p>“왕은 어떻게 나라를 다스렸을까?”</p></article>
+          <article class="cardMini">
+            <h3>선사시대</h3>
+            <p>“사람들은 어떻게 살았을까?”</p>
+          </article>
+
+          <article class="cardMini">
+            <h3>삼국시대</h3>
+            <p>“한강을 차지하라!”</p>
+          </article>
+
+          <article class="cardMini">
+            <h3>고려시대</h3>
+            <p>“최고의 외교술, 금속활자, 코리아(Korea)!”</p>
+          </article>
+
+          <article class="cardMini">
+            <h3>조선시대</h3>
+            <p>“유교의 나라, 백성을 사랑한 임금님, 우리들의 이순신!”</p>
+          </article>
         </div>
 
         <div class="section__note">한 번으로 끝나지 않는, 이어지는 역사 수업</div>
@@ -222,7 +209,7 @@
           </div>
 
           <div class="teacher__body">
-            <ul class="list list--bold">
+            <ul class="list">
               <li>역사 교육 경력 10년 이상</li>
               <li>한국사능력검정시험 1급</li>
               <li>전) 궁궐문화원 선임연구원</li>
@@ -245,12 +232,12 @@
           <div class="infoCard">
             <div class="infoCard__icon">⏱️</div>
             <div class="infoCard__title">수업 시간</div>
-            <div class="infoCard__desc">1회 120분 (2시간)</div>
+            <div class="infoCard__desc">1회 120분</div>
           </div>
           <div class="infoCard">
             <div class="infoCard__icon">👧👦</div>
             <div class="infoCard__title">수업 정원</div>
-            <div class="infoCard__desc">3~4명 소수 정예</div>
+            <div class="infoCard__desc">4~5명 소수 정예</div>
           </div>
           <div class="infoCard">
             <div class="infoCard__icon">🎒</div>
@@ -275,6 +262,7 @@
     <section id="photos" class="section section--plainAlt reveal">
       <div class="container">
         <div class="section__head"><h2>활동사진</h2></div>
+
         <div class="gallery" aria-label="활동사진 갤러리">
           <figure class="shot"><img class="zoomable" src="./photo1.jpg" alt="활동사진 1" loading="lazy"></figure>
           <figure class="shot"><img class="zoomable" src="./photo2.jpg" alt="활동사진 2" loading="lazy"></figure>
@@ -309,7 +297,7 @@
             <div class="contactForm__row">
               <label class="field">
                 <span class="field__label">인원</span>
-                <input class="field__input" type="text" name="count" placeholder="예) 3명 (3~4명)">
+                <input class="field__input" type="text" name="count" placeholder="예) 4명 (4~5명)">
               </label>
               <label class="field">
                 <span class="field__label">희망 장소/일정</span>
@@ -348,7 +336,7 @@
     </div>
   </footer>
 
-  <!-- ✅ Lightbox -->
+  <!-- ✅ Lightbox (그룹 분리 + 스와이프 + 핀치줌) -->
   <div class="lightbox" id="lightbox" aria-hidden="true">
     <button class="lightbox__close" type="button" aria-label="닫기">×</button>
     <button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="이전 사진">‹</button>
@@ -364,7 +352,7 @@
       const isWebView = /KAKAOTALK|NAVER|Daum|Kakao/i.test(ua);
       if (isWebView) document.body.classList.add("webview");
 
-      // ✅ 고정 헤더 때문에 앵커 이동 시 제목이 가려지는 문제 해결 (JS 보정)
+      // ✅ 고정 헤더 가림 방지 (앵커 이동 보정)
       const header = document.querySelector(".header");
       const getOffset = () => (header ? header.getBoundingClientRect().height : 0) + 14;
 
@@ -383,37 +371,36 @@
         history.replaceState(null, "", id);
       });
 
-      // ===== 문의 폼 mailto =====
-      const form = document.getElementById('contactForm');
+      // ✅ 문의 폼: mailto 생성
+      const form = document.getElementById("contactForm");
       if (form) {
-        form.addEventListener('submit', function (e) {
+        form.addEventListener("submit", function (e) {
           e.preventDefault();
 
           const data = new FormData(form);
-          const parentName = (data.get('parentName') || '').toString().trim();
-          const phone = (data.get('phone') || '').toString().trim();
-          const count = (data.get('count') || '').toString().trim();
-          const whenWhere = (data.get('whenWhere') || '').toString().trim();
-          const message = (data.get('message') || '').toString().trim();
+          const parentName = (data.get("parentName") || "").toString().trim();
+          const phone = (data.get("phone") || "").toString().trim();
+          const count = (data.get("count") || "").toString().trim();
+          const whenWhere = (data.get("whenWhere") || "").toString().trim();
+          const message = (data.get("message") || "").toString().trim();
 
-          const subject = `[야옹 역사] 수업 문의 (${parentName || '보호자'})`;
-          const bodyLines = [
+          const subject = `[야옹 역사] 수업 문의 (${parentName || "보호자"})`;
+          const body = [
             `보호자 이름: ${parentName}`,
             `휴대폰 번호: ${phone}`,
-            `인원: ${count || '-'}`,
-            `희망 장소/일정: ${whenWhere || '-'}`,
+            `인원: ${count || "-"}`,
+            `희망 장소/일정: ${whenWhere || "-"}`,
             ``,
             `문의 내용:`,
             `${message}`
-          ];
+          ].join("\n");
 
-          const mailto =
-            `mailto:yaonghistory@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join('\n'))}`;
+          const mailto = `mailto:yaonghistory@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
           window.location.href = mailto;
         });
       }
 
-      // ===== Reveal (스크롤 기반) =====
+      // ✅ Reveal 애니메이션 (WebView에서도 안정적으로)
       const reveals = Array.from(document.querySelectorAll(".reveal"));
       const revealCheck = () => {
         const vh = window.innerHeight || document.documentElement.clientHeight;
@@ -423,12 +410,19 @@
           if (r.top <= vh * 0.88) el.classList.add("active");
         });
       };
-      window.addEventListener("scroll", () => requestAnimationFrame(revealCheck), { passive:true });
+      window.addEventListener("scroll", () => requestAnimationFrame(revealCheck), { passive: true });
       window.addEventListener("resize", revealCheck);
       revealCheck();
       setTimeout(revealCheck, 200);
 
-      // ===== ✅ Lightbox (후기/활동 분리 + 스와이프) =====
+      // =========================
+      // ✅ LIGHTBOX (그룹 분리)
+      // - reviews: 후기 1장만
+      // - photos: 활동 5장만
+      // + 좌우 스와이프
+      // + 썸네일
+      // + 핀치 줌/드래그 이동
+      // =========================
       const lb = document.getElementById("lightbox");
       const lbImg = document.getElementById("lightboxImg");
       const lbCount = document.getElementById("lightboxCount");
@@ -448,7 +442,25 @@
 
       let currentGroup = "photos";
       let current = 0;
+
+      // 핀치 줌 상태
+      let scale = 1, lastScale = 1;
+      let startDistance = 0;
+      let posX = 0, posY = 0;
+      let startX = 0, startY = 0;
+      let isDragging = false;
+
       const getItems = () => groups[currentGroup] || [];
+
+      const setTransform = () => {
+        lbImg.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+      };
+
+      const resetTransform = () => {
+        scale = 1; lastScale = 1;
+        posX = 0; posY = 0;
+        setTransform();
+      };
 
       const renderThumbs = () => {
         const items = getItems();
@@ -468,6 +480,7 @@
           lbThumbs.appendChild(b);
         });
 
+        // 후기(1장)면 썸네일 숨김
         lbThumbs.style.display = (items.length <= 1) ? "none" : "flex";
       };
 
@@ -483,7 +496,7 @@
         thumbs.forEach((t, i) => t.classList.toggle("active", i === current));
 
         const active = thumbs[current];
-        if (active) active.scrollIntoView({ behavior:"smooth", inline:"center", block:"nearest" });
+        if (active) active.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
       };
 
       const openLB = (groupName, index, keepOpen) => {
@@ -504,6 +517,7 @@
 
         renderThumbs();
         syncUI();
+        resetTransform();
       };
 
       const closeLB = () => {
@@ -511,11 +525,13 @@
         lb.setAttribute("aria-hidden", "true");
         lbImg.src = "";
         document.body.classList.remove("modal-open");
+        resetTransform();
       };
 
       const showPrev = () => openLB(currentGroup, current - 1, true);
       const showNext = () => openLB(currentGroup, current + 1, true);
 
+      // 그룹별 클릭 연결
       reviewImgs.forEach((img, idx) => img.addEventListener("click", () => openLB("reviews", idx)));
       photoImgs.forEach((img, idx) => img.addEventListener("click", () => openLB("photos", idx)));
 
@@ -532,36 +548,82 @@
         if (e.key === "ArrowRight") showNext();
       });
 
-      let startX = 0, startY = 0, tracking = false;
+      // ✅ 스와이프: 확대(scale>1) 상태면 넘김 방지
+      let swipeStartX = 0, swipeStartY = 0, tracking = false;
 
       lb.addEventListener("touchstart", (e) => {
         if (!lb.classList.contains("open")) return;
         const t = e.touches[0];
-        startX = t.clientX; startY = t.clientY;
+        swipeStartX = t.clientX;
+        swipeStartY = t.clientY;
         tracking = true;
-      }, { passive:true });
-
-      lb.addEventListener("touchmove", (e) => {
-        if (!tracking) return;
-        const t = e.touches[0];
-        const dx = t.clientX - startX;
-        const dy = t.clientY - startY;
-        if (Math.abs(dy) > Math.abs(dx) + 10) tracking = false;
-      }, { passive:true });
+      }, { passive: true });
 
       lb.addEventListener("touchend", (e) => {
         if (!tracking) return;
         tracking = false;
+        if (scale > 1) return; // 확대 중엔 스와이프 넘김 금지
+
         const t = e.changedTouches[0];
-        const dx = t.clientX - startX;
-        const threshold = 50;
+        const dx = t.clientX - swipeStartX;
+        const dy = t.clientY - swipeStartY;
+        if (Math.abs(dy) > Math.abs(dx) + 10) return;
 
         const items = getItems();
         if (items.length <= 1) return;
 
+        const threshold = 50;
         if (dx > threshold) showPrev();
         else if (dx < -threshold) showNext();
-      }, { passive:true });
+      }, { passive: true });
+
+      // ✅ 핀치줌 + 드래그 이동 (이미지에만 적용)
+      lbImg.addEventListener("touchstart", (e) => {
+        if (!lb.classList.contains("open")) return;
+
+        if (e.touches.length === 2) {
+          const dx = e.touches[0].clientX - e.touches[1].clientX;
+          const dy = e.touches[0].clientY - e.touches[1].clientY;
+          startDistance = Math.hypot(dx, dy);
+        } else if (e.touches.length === 1 && scale > 1) {
+          isDragging = true;
+          startX = e.touches[0].clientX - posX;
+          startY = e.touches[0].clientY - posY;
+        }
+      }, { passive: true });
+
+      lbImg.addEventListener("touchmove", (e) => {
+        if (!lb.classList.contains("open")) return;
+
+        if (e.touches.length === 2) {
+          e.preventDefault();
+          const dx = e.touches[0].clientX - e.touches[1].clientX;
+          const dy = e.touches[0].clientY - e.touches[1].clientY;
+          const distance = Math.hypot(dx, dy);
+
+          scale = Math.min(Math.max((distance / startDistance) * lastScale, 1), 4);
+          setTransform();
+        } else if (e.touches.length === 1 && isDragging) {
+          e.preventDefault();
+          posX = e.touches[0].clientX - startX;
+          posY = e.touches[0].clientY - startY;
+          setTransform();
+        }
+      }, { passive: false });
+
+      lbImg.addEventListener("touchend", () => {
+        lastScale = scale;
+        if (scale <= 1) resetTransform();
+        isDragging = false;
+      }, { passive: true });
+
+      // 더블탭으로 원복(편의)
+      let lastTap = 0;
+      lbImg.addEventListener("click", () => {
+        const now = Date.now();
+        if (now - lastTap < 300) resetTransform();
+        lastTap = now;
+      });
     })();
   </script>
 </body>
