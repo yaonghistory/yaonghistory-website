@@ -2,147 +2,113 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="format-detection" content="telephone=no" />
-  <meta name="color-scheme" content="light" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>야옹 역사 | 초등 현장 한국사 수업</title>
+  <meta name="description" content="교과서 밖에서 직접 보고, 묻고, 배우는 살아있는 초등 현장 한국사 수업 ‘야옹 역사’" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@1.0/nanumsquareround.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/moonspam/NanumSquare@2.0/nanumsquareround.min.css">
+  <link rel="stylesheet" href="./style.css?v=4201" />
 
-  <link rel="stylesheet" href="./style.css?v=6001" />
-
-  <!-- Critical: 3플랫폼 동일 강제(1열 + 버튼 입체감 + 볼드 과함 완화) -->
   <style>
     html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
-    body{
-      font-family:"NanumSquareRound","Noto Sans KR",system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
-      font-weight:600;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
-    h1,h2,h3{font-weight:800}
-    .hero__grid,
-    .grid--2,.grid--3,.grid--4,
-    .gallery,
-    .contactForm__row{grid-template-columns:1fr !important}
-    .hero__cta{display:flex;gap:10px;flex-wrap:nowrap !important}
-    .hero__cta .btn{flex:1 1 0;min-width:0}
-    @media (max-width:520px){
-      .hero__cta{flex-wrap:wrap !important}
-      .hero__cta .btn{flex:1 1 calc(33.33% - 8px)}
-    }
-    .btn,.miniCta,.insta-contact__btn{
-      box-shadow: 0 12px 26px rgba(0,0,0,.14), inset 0 1px 0 rgba(255,255,255,.85);
-      transform: translateZ(0);
-      -webkit-transform: translateZ(0);
-      backface-visibility:hidden;
-      -webkit-backface-visibility:hidden;
-    }
-    .btn:active{transform:translateY(1px) translateZ(0)}
-    section[id]{scroll-margin-top:110px}
-  </style>
+    body,p,h1,h2,h3,h4,li,a,button,span,div{word-break:keep-all;overflow-wrap:break-word;line-break:strict}
+    .header{position:sticky;top:0;z-index:50}
+    .lightbox{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.68);align-items:center;justify-content:center;padding:18px}
+    .lightbox.open{display:flex}
+    .lightbox__img{width:min(980px,96vw);max-height:78vh;object-fit:contain;background:#111;border-radius:18px;touch-action:none}
+    .lightbox__close{position:absolute;top:14px;right:14px;width:44px;height:44px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.35);color:#fff;font-size:28px;cursor:pointer}
+    .lightbox__nav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:999px;border:1px solid rgba(255,255,255,.22);background:rgba(0,0,0,.30);color:#fff;font-size:26px;display:grid;place-items:center;cursor:pointer}
+    .lightbox__nav--prev{left:12px}.lightbox__nav--next{right:12px}
+    .lightbox__count{position:absolute;left:50%;top:14px;transform:translateX(-50%);padding:8px 12px;border-radius:999px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.18);color:#fff;font-weight:900;font-size:13px}
+    .lightbox__thumbs{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:8px;padding:10px 12px;border-radius:999px;background:rgba(0,0,0,.30);border:1px solid rgba(255,255,255,.18);max-width:92vw;overflow:auto;-webkit-overflow-scrolling:touch}
+    .lightbox__thumb{width:44px;height:44px;border-radius:12px;overflow:hidden;border:2px solid rgba(255,255,255,.18);opacity:.78;cursor:pointer;background:#222}
+    .lightbox__thumb img{width:100%;height:100%;object-fit:cover}
+    .lightbox__thumb.active{opacity:1;border-color:rgba(255,255,255,.70)}
+    body.modal-open{overflow:hidden}
 
-  <style>
-    /* Lightbox(확대): 인앱 캐시/로드 변동 대비로 index 안에 포함 */
-    .lb{position:fixed;inset:0;z-index:9999;background:rgba(10,12,14,.70);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
-    .lb[aria-hidden="true"]{display:none}
-    .lb__backdrop{position:absolute;inset:0}
-    .lb__top{position:absolute;left:0;right:0;top:env(safe-area-inset-top);display:flex;align-items:center;justify-content:space-between;padding:14px 14px;pointer-events:none}
-    .lb__count{pointer-events:auto;background:rgba(0,0,0,.45);color:#fff;padding:8px 12px;border-radius:999px;font-weight:800}
-    .lb__x{pointer-events:auto;width:44px;height:44px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.45);color:#fff;font-size:18px;font-weight:800}
-    .lb__stage{position:absolute;inset:0;display:grid;place-items:center;padding:80px 16px 110px;touch-action:none}
-    .lb__stage img{max-width:min(92vw,860px);max-height:70vh;border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,.35);touch-action:none;user-select:none;-webkit-user-drag:none;transform-origin:center center}
-    .lb__nav{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:rgba(0,0,0,.45);color:#fff;font-size:34px;line-height:0;display:grid;place-items:center}
-    .lb__prev{left:10px}
-    .lb__next{right:10px}
-    .lb__thumbs{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 10px);display:flex;gap:10px;padding:10px 12px;overflow:auto;-webkit-overflow-scrolling:touch;justify-content:center}
-    .lb__thumb{border:none;background:transparent;padding:0;width:56px;height:56px;border-radius:14px;overflow:hidden;outline:2px solid rgba(255,255,255,.18);opacity:.78;flex:0 0 auto}
-    .lb__thumb.is-active{outline:2px solid rgba(255,255,255,.9);opacity:1}
-    .lb__thumb img{width:100%;height:100%;object-fit:cover;display:block}
-    @media (max-width:520px){
-      .lb__stage{padding:76px 12px 104px}
-      .lb__stage img{max-height:66vh}
-      .lb__nav{display:none}
+    /* 인앱 브라우저(카카오/네이버)에서도 모바일은 '항상 1열'로 강제 */
+    @media (hover:none) and (pointer:coarse){
+      .hero__grid{grid-template-columns:1fr!important}
+      .grid--2,.grid--3,.grid--4{grid-template-columns:1fr!important}
+      .locations{grid-template-columns:1fr!important}
+      .stats{grid-template-columns:1fr!important}
+      .gallery{grid-template-columns:repeat(2,1fr)!important}
+      .hero__cta{flex-wrap:nowrap!important}
     }
+    @media (max-width:360px){.gallery{grid-template-columns:1fr!important}}
   </style>
 </head>
 
 <body>
-  <header class="header">
+  <header class="header" id="top">
     <div class="container header__inner">
-      <div class="brand">
-        <span class="brand__mark">
-          <img src="./yaong-cat.png" alt="야옹 역사 로고" />
+      <div class="brand" aria-label="야옹 역사">
+        <span class="brand__mark" aria-hidden="true">
+          <img src="./yaong-cat.png" alt="">
         </span>
         <span class="brand__text">
           <span class="brand__name">야옹 역사</span>
           <span class="brand__tag">초등 현장 한국사 수업</span>
         </span>
       </div>
-      <a class="miniCta" href="#contact" data-jump>문의</a>
+      <a class="miniCta" href="#contact" aria-label="수업 문의로 이동">문의</a>
     </div>
   </header>
 
   <main>
-    <section class="hero blob blob--sky">
+    <section class="hero reveal">
       <div class="container hero__grid">
-        <div>
+        <div class="hero__copy">
           <span class="badge">🐾 현장형 · 소수정예 · 120분</span>
           <h1 class="hero__title">야옹 역사</h1>
           <p class="hero__subtitle">초등 현장 한국사 수업</p>
-          <p class="hero__headline">
-            교과서 밖에서 직접 보고, 묻고, 배우는<br>
-            살아있는 한국사 수업
-          </p>
+          <p class="hero__headline">교과서 밖에서 직접 보고, 묻고, 배우는<br><strong>살아있는 한국사 수업</strong></p>
 
           <div class="hero__cta">
-            <a class="btn" href="#about" data-jump>수업 소개 보기</a>
-            <a class="btn btn--soft" href="#curriculum" data-jump>커리큘럼 보기</a>
-            <a class="btn btn--outline" href="#contact" data-jump>문의하기</a>
+            <a class="btn" href="#about">수업 소개 보기</a>
+            <a class="btn btn--soft" href="#curriculum">커리큘럼 보기</a>
+            <a class="btn btn--outline" href="#contact">문의하기</a>
           </div>
 
-          <ul class="stats">
+          <ul class="stats" aria-label="핵심 정보">
             <li><span class="stats__num">120분</span><span class="stats__txt">1회 수업</span></li>
-            <li><span class="stats__num">4~5명</span><span class="stats__txt">소수 정예</span></li>
-            <li><span class="stats__num">현장+이론</span><span class="stats__txt">관찰·질문</span></li>
+            <li><span class="stats__num">4–5명</span><span class="stats__txt">소수 정예</span></li>
+            <li><span class="stats__num">현장+이론</span><span class="stats__txt">유물·전시 병행</span></li>
           </ul>
         </div>
 
-        <aside class="hero__card">
-          <h3 class="card__title">오늘, 역사가 ‘보이는’ 수업</h3>
-          <p class="card__lead">‘외우는 역사’가 아니라, 관찰하고 질문하는 역사로 바뀝니다.</p>
+        <aside class="hero__card" aria-label="요약 카드">
+          <h2 class="card__title">오늘, 역사가 ‘보이는’ 수업</h2>
+          <p class="card__lead">‘외우는 역사’가 아니라, <strong>관찰하고 질문하는 역사</strong>로 바뀝니다.</p>
           <ul class="checklist">
             <li>초등 눈높이 현장 체험형 수업</li>
             <li>관찰 → 질문 → 기록 → 토론</li>
             <li>주제/장소는 학년·관심사에 맞춤</li>
           </ul>
-          <p class="card__note">※ 일정·장소는 협의 후 조율 가능</p>
+          <div class="card__note">※ 일정·장소는 협의 후 조율 가능</div>
         </aside>
       </div>
     </section>
 
-    <section id="about" class="section blob blob--mint reveal">
+    <section id="about" class="section blob blob--sky reveal">
       <div class="container">
-        <header class="section__head">
+        <div class="section__head">
           <h2>야옹 역사는 이런 수업이에요</h2>
           <p>따뜻하고 친근하지만, 내용은 탄탄하게. 아이와 부모 모두 안심하는 현장 수업.</p>
-        </header>
+        </div>
 
         <div class="grid grid--2">
-          <div class="panel">
+          <article class="panel">
             <h3>수업 핵심</h3>
-            <ul class="list list--bold">
-              <li>초등 눈높이에 맞춘 현장 체험형 한국사 수업</li>
-              <li>암기가 아닌 관찰과 질문 중심</li>
-              <li>1회 120분 집중 수업</li>
-              <li>4~5명 소수 정예 수업</li>
+            <ul class="list">
+              <li>초등 눈높이에 맞춘 <strong>현장 체험형</strong> 한국사 수업</li>
+              <li><strong>암기</strong>가 아닌 <strong>관찰과 질문</strong> 중심</li>
+              <li><strong>1회 120분</strong> 집중 수업</li>
+              <li><strong>4~5명</strong> 소수 정예 수업</li>
             </ul>
-          </div>
+          </article>
 
-          <div class="panel">
+          <article class="panel panel--soft">
             <h3>키워드</h3>
             <div class="chips">
               <span class="chip">#현장수업</span>
@@ -150,53 +116,53 @@
               <span class="chip">#질문하는아이</span>
               <span class="chip">#소수정예</span>
             </div>
-            <div class="quote">“아이들이 스스로 발견한 역사는 오래 기억됩니다.”</div>
-          </div>
+            <div class="quote">“아이들이 <strong>스스로 발견</strong>한 역사는 오래 기억됩니다.”</div>
+          </article>
         </div>
       </div>
     </section>
 
-    <section id="style" class="section blob blob--lemon reveal">
+    <section id="style" class="section blob blob--mint reveal">
       <div class="container">
-        <header class="section__head">
+        <div class="section__head">
           <h2>수업은 이렇게 진행돼요</h2>
-          <p>현장 설명 + 이론 학습, 그리고 관찰·질문·기록으로 연결됩니다.</p>
-        </header>
+          <p>현장에서 이해하고, 질문하고, 기록하며 나만의 ‘역사 노트’를 만들어갑니다.</p>
+        </div>
 
         <div class="grid grid--4">
           <div class="step">
             <div class="step__num">1</div>
             <div class="step__title">현장 설명 + 이론 학습</div>
-            <div class="step__desc">핵심 개념을 짧고 명확하게</div>
+            <div class="step__desc">배경지식으로 ‘왜’인지 이해하기</div>
           </div>
           <div class="step">
             <div class="step__num">2</div>
             <div class="step__title">유물·전시 관람 병행</div>
-            <div class="step__desc">실물을 보며 이해를 확장</div>
+            <div class="step__desc">눈으로 보고, 연결해서 기억하기</div>
           </div>
           <div class="step">
             <div class="step__num">3</div>
-            <div class="step__title">관찰·질문·기록</div>
-            <div class="step__desc">보고, 묻고, 남기며 사고 확장</div>
+            <div class="step__title">관찰 · 질문 · 기록</div>
+            <div class="step__desc">🔎 관찰 / 💬 질문 / 🗒️ 기록</div>
           </div>
           <div class="step">
             <div class="step__num">4</div>
-            <div class="step__title">활동지 & 토론</div>
-            <div class="step__desc">생각을 정리하고 표현하기</div>
+            <div class="step__title">활동지 및 토론</div>
+            <div class="step__desc">생각을 말로 정리하고 확장하기</div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="locations" class="section blob blob--sky2 reveal">
+    <section id="locations" class="section blob blob--lemon reveal">
       <div class="container">
-        <header class="section__head">
+        <div class="section__head">
           <h2>역사가 있는 모든 곳이 교실입니다</h2>
-          <p>교실을 벗어나, 역사를 직접 만나는 수업</p>
-        </header>
+          <p class="subcopy">교실을 벗어나, 역사를 직접 만나는 수업</p>
+        </div>
 
         <div class="locations">
-          <div class="locations__item">국립중앙박물관 (시대별)</div>
+          <div class="locations__item">국립중앙박물관 <span class="muted">(시대별)</span></div>
           <div class="locations__item">경복궁 · 덕수궁 · 창경궁</div>
           <div class="locations__item">서대문형무소 · 전쟁기념관</div>
           <div class="locations__item">고궁박물관 · 화폐박물관</div>
@@ -205,48 +171,48 @@
       </div>
     </section>
 
-    <section id="curriculum" class="section blob blob--mint2 reveal">
+    <section id="curriculum" class="section blob blob--sky2 reveal">
       <div class="container">
-        <header class="section__head">
+        <div class="section__head">
           <h2>시대별로 나누어 배우는 한국사</h2>
           <p>중앙박물관 커리큘럼 예시</p>
-        </header>
+        </div>
 
-        <div class="grid grid--2">
-          <div class="cardMini">
+        <div class="grid grid--4">
+          <article class="cardMini">
             <h3>선사시대</h3>
             <p>“사람들은 어떻게 살았을까?”</p>
-          </div>
-          <div class="cardMini">
+          </article>
+          <article class="cardMini">
             <h3>삼국시대</h3>
             <p>“한강을 차지하라!”</p>
-          </div>
-          <div class="cardMini">
+          </article>
+          <article class="cardMini">
             <h3>고려시대</h3>
             <p>“최고의 외교술, 금속활자, 코리아(Korea)!”</p>
-          </div>
-          <div class="cardMini">
+          </article>
+          <article class="cardMini">
             <h3>조선시대</h3>
             <p>“유교의 나라, 백성을 사랑한 임금님, 우리들의 이순신!”</p>
-          </div>
+          </article>
         </div>
 
         <div class="section__note">한 번으로 끝나지 않는, 이어지는 역사 수업</div>
       </div>
     </section>
 
-    <section id="instructor" class="section blob blob--lemon2 reveal">
+    <section id="instructor" class="section blob blob--mint2 reveal">
       <div class="container">
-        <header class="section__head">
+        <div class="section__head">
           <h2>강사 이력</h2>
           <p>아이들의 눈높이에 맞춰, 어렵지 않고 재미있게 역사를 전달합니다.</p>
-        </header>
+        </div>
 
         <div class="teacher">
+          <div class="teacher__logo" aria-hidden="true">
+            <img src="./yaong-logo.png" alt="">
+          </div>
           <div class="teacher__body">
-            <div class="teacher__logo">
-              <img src="./yaong-logo.png" alt="야옹 역사 로고" />
-            </div>
             <ul class="list list--bold">
               <li>역사 교육 경력 10년 이상</li>
               <li>한국사능력검정시험 1급</li>
@@ -259,368 +225,329 @@
       </div>
     </section>
 
-    <section id="info" class="section section--plainAlt reveal">
+    <section id="info" class="section blob blob--lemon2 reveal">
       <div class="container">
-        <header class="section__head">
+        <div class="section__head">
           <h2>수업 안내</h2>
-          <p>학년별 난이도 조절로 부담 없이 시작합니다.</p>
-        </header>
+        </div>
 
         <div class="grid grid--3">
           <div class="infoCard">
             <div class="infoCard__icon">⏱️</div>
             <div class="infoCard__title">수업 시간</div>
-            <p class="infoCard__desc">1회 120분</p>
+            <div class="infoCard__desc">1회 120분</div>
           </div>
           <div class="infoCard">
-            <div class="infoCard__icon">👥</div>
+            <div class="infoCard__icon">👧👦</div>
             <div class="infoCard__title">수업 정원</div>
-            <p class="infoCard__desc">4~5명 소수 정예</p>
+            <div class="infoCard__desc">4~5명 소수 정예</div>
           </div>
           <div class="infoCard">
             <div class="infoCard__icon">🎒</div>
             <div class="infoCard__title">대상</div>
-            <p class="infoCard__desc">초등학생 (학년별 난이도 조절)</p>
+            <div class="infoCard__desc">초등학생 (학년별 난이도 조절)</div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="reviews" class="section blob blob--sky reveal">
+    <section id="reviews" class="section reveal">
       <div class="container">
-        <header class="section__head">
+        <div class="section__head">
           <h2>생생한 후기</h2>
-          <p>실제 참여한 보호자/아이들의 이야기</p>
-        </header>
-
+        </div>
         <div class="review-wrap">
-          <img class="review-img zoomable" src="./review.jpg" alt="후기 이미지" data-group="reviews" data-index="0">
+          <img class="review-img zoomable" src="./review.jpg" alt="야옹 역사 수업 후기">
         </div>
       </div>
     </section>
 
-    <section id="photos" class="section blob blob--mint reveal">
+    <section id="photos" class="section section--plainAlt reveal">
       <div class="container">
-        <header class="section__head">
-          <h2>활동 사진</h2>
-          <p>현장에서 직접 보고, 묻고, 배우는 순간들</p>
-        </header>
+        <div class="section__head">
+          <h2>활동사진</h2>
+        </div>
 
-        <div class="gallery">
-          <figure class="shot"><img class="zoomable" src="./photo1.jpg" alt="활동 사진 1" data-group="photos" data-index="0"></figure>
-          <figure class="shot"><img class="zoomable" src="./photo2.jpg" alt="활동 사진 2" data-group="photos" data-index="1"></figure>
-          <figure class="shot"><img class="zoomable" src="./photo3.jpg" alt="활동 사진 3" data-group="photos" data-index="2"></figure>
-          <figure class="shot"><img class="zoomable" src="./photo4.jpg" alt="활동 사진 4" data-group="photos" data-index="3"></figure>
-          <figure class="shot"><img class="zoomable" src="./photo5.jpg" alt="활동 사진 5" data-group="photos" data-index="4"></figure>
+        <div class="gallery" aria-label="활동사진 갤러리">
+          <figure class="shot"><img class="zoomable" src="./photo1.jpg" alt="활동사진 1" loading="lazy"></figure>
+          <figure class="shot"><img class="zoomable" src="./photo2.jpg" alt="활동사진 2" loading="lazy"></figure>
+          <figure class="shot"><img class="zoomable" src="./photo3.jpg" alt="활동사진 3" loading="lazy"></figure>
+          <figure class="shot"><img class="zoomable" src="./photo4.jpg" alt="활동사진 4" loading="lazy"></figure>
+          <figure class="shot"><img class="zoomable" src="./photo5.jpg" alt="활동사진 5" loading="lazy"></figure>
         </div>
       </div>
     </section>
 
     <section id="contact" class="section blob blob--contact reveal">
       <div class="container">
-        <header class="section__head">
+        <div class="section__head">
           <h2>수업 문의</h2>
           <p>궁금한 점이 있다면 언제든 편하게 문의 주세요.</p>
-        </header>
+        </div>
 
         <div class="contact__box">
-          <form id="contactForm" class="contactForm" autocomplete="on">
+          <form class="contactForm" id="contactForm" aria-label="수업 문의 양식">
             <div class="contactForm__row">
               <label class="field">
                 <span class="field__label">보호자 이름</span>
-                <input class="field__input" name="guardian" placeholder="예) 홍길동" required>
+                <input class="field__input" type="text" name="parentName" placeholder="예) 홍길동" required>
               </label>
               <label class="field">
                 <span class="field__label">휴대폰 번호</span>
-                <input class="field__input" name="phone" inputmode="tel" placeholder="예) 010-1234-5678" required>
+                <input class="field__input" type="tel" name="phone" placeholder="예) 010-1234-5678" required>
               </label>
             </div>
 
             <div class="contactForm__row">
               <label class="field">
                 <span class="field__label">인원</span>
-                <input class="field__input" name="people" placeholder="예) 4~5명">
+                <input class="field__input" type="text" name="count" placeholder="예) 4~5명">
               </label>
               <label class="field">
                 <span class="field__label">희망 장소/일정</span>
-                <input class="field__input" name="schedule" placeholder="예) 중앙박물관 / 2월 주말">
+                <input class="field__input" type="text" name="whenWhere" placeholder="예) 중앙박물관 / 2월 주말">
               </label>
             </div>
 
             <label class="field">
               <span class="field__label">문의 내용</span>
-              <textarea class="field__textarea" name="message" rows="6" placeholder="학년, 관심 주제, 궁금한 점을 적어주세요." required></textarea>
+              <textarea class="field__textarea" name="message" rows="5" placeholder="학년, 관심 주제, 궁금한 점을 적어주세요." required></textarea>
             </label>
 
             <div class="contact__actions">
-              <button type="button" id="mailBtn" class="btn btn--mail">메일로 문의하기</button>
-              <a class="insta-contact__btn" href="https://instagram.com/yaong_history" target="_blank" rel="noopener">
-                <img src="./instagram.png" alt="Instagram">
-                <span>@yaong_history</span>
+              <button type="submit" class="btn btn--mail">메일로 문의하기</button>
+              <a class="insta-contact__btn" href="https://instagram.com/yaong_history" target="_blank" rel="noopener" aria-label="야옹 역사 인스타그램">
+                <img src="./instagram.png" alt="Instagram"><span>@yaong_history</span>
               </a>
             </div>
-
-            <div class="contact__note">※ DM 문의 가능 · 예약 및 일정 조율 가능</div>
           </form>
         </div>
+
+        <div class="contact__note">※ 장소/학년/인원에 맞춰 커리큘럼을 조정할 수 있어요.</div>
       </div>
     </section>
-
-    <footer class="footer">
-      <div class="container footer__inner">
-        <div>
-          <div class="footer__title">야옹 역사</div>
-          <div class="footer__sub">초등 현장 한국사 수업</div>
-        </div>
-        <div class="footer__copy">© Yaong History</div>
-      </div>
-    </footer>
   </main>
 
-  <div id="lightbox" class="lb" aria-hidden="true">
-    <div class="lb__backdrop" id="lbClose"></div>
-    <div class="lb__top">
-      <div class="lb__count" id="lbCount">1/1</div>
-      <button class="lb__x" id="lbX" aria-label="닫기">✕</button>
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>
+        <div class="footer__title">야옹 역사</div>
+        <div class="footer__sub">초등 현장 한국사 수업</div>
+      </div>
+      <div class="footer__copy">© Yaong History</div>
     </div>
-    <button class="lb__nav lb__prev" id="lbPrev" aria-label="이전">‹</button>
-    <button class="lb__nav lb__next" id="lbNext" aria-label="다음">›</button>
-    <div class="lb__stage" id="lbStage"><img id="lbImg" alt=""></div>
-    <div class="lb__thumbs" id="lbThumbs"></div>
+  </footer>
+
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox__close" type="button" aria-label="닫기">×</button>
+    <button class="lightbox__nav lightbox__nav--prev" type="button" aria-label="이전 사진">‹</button>
+    <div class="lightbox__count" id="lightboxCount">1/1</div>
+    <img class="lightbox__img" id="lightboxImg" alt="">
+    <button class="lightbox__nav lightbox__nav--next" type="button" aria-label="다음 사진">›</button>
+    <div class="lightbox__thumbs" id="lightboxThumbs" aria-label="썸네일 목록"></div>
   </div>
 
   <script>
   (function(){
-    const header = document.querySelector('.header');
+    const header=document.querySelector(".header");
+    const getOffset=()=>{
+      const h = header ? header.offsetHeight : 0;
+      return h + 20;
+    };
 
-    function headerOffset(){
-      const h = header ? header.getBoundingClientRect().height : 0;
-      return Math.round(h + 6);
-    }
+    document.addEventListener("click",(e)=>{
+      const a=e.target.closest('a[href^="#"]'); if(!a) return;
+      const id=a.getAttribute("href"); if(!id||id==="#") return;
+      const t=document.querySelector(id); if(!t) return;
+      e.preventDefault();
+      const top=t.getBoundingClientRect().top + window.pageYOffset - getOffset();
+      window.scrollTo({top,behavior:"smooth"});
+      history.replaceState(null,"",id);
+    });
 
-    function hardScrollTo(y){
-      window.scrollTo(0, y);
-      requestAnimationFrame(()=> window.scrollTo(0, y));
-      setTimeout(()=> window.scrollTo(0, y), 30);
-      setTimeout(()=> window.scrollTo(0, y), 90);
-      setTimeout(()=> window.scrollTo(0, y), 180);
-      setTimeout(()=> window.scrollTo(0, y), 360);
-    }
-
-    function jumpTo(hash){
-      const el = document.querySelector(hash);
-      if(!el) return;
-      const y = el.getBoundingClientRect().top + window.pageYOffset - headerOffset();
-      hardScrollTo(y);
-    }
-
-    document.querySelectorAll('a[data-jump]').forEach(a=>{
-      a.addEventListener('click', (e)=>{
-        const href = a.getAttribute('href');
-        if(!href || !href.startsWith('#')) return;
+    const form=document.getElementById("contactForm");
+    if(form){
+      form.addEventListener("submit",function(e){
         e.preventDefault();
-        history.pushState(null,'',href);
-        jumpTo(href);
+        const d=new FormData(form);
+        const parentName=(d.get("parentName")||"").toString().trim();
+        const phone=(d.get("phone")||"").toString().trim();
+        const count=(d.get("count")||"").toString().trim();
+        const whenWhere=(d.get("whenWhere")||"").toString().trim();
+        const message=(d.get("message")||"").toString().trim();
+
+        const subject=`[야옹 역사] 수업 문의 (${parentName||"보호자"})`;
+        const body=[
+          `보호자 이름: ${parentName}`,
+          `휴대폰 번호: ${phone}`,
+          `인원: ${count||"-"}`,
+          `희망 장소/일정: ${whenWhere||"-"}`,
+          ``,
+          `문의 내용:`,
+          `${message}`
+        ].join("\n");
+
+        window.location.href=`mailto:yaonghistory@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       });
-    });
+    }
 
-    window.addEventListener('hashchange', ()=>{ if(location.hash) jumpTo(location.hash); });
-    window.addEventListener('pageshow', ()=>{ if(location.hash) jumpTo(location.hash); });
-    window.addEventListener('load', ()=>{ if(location.hash) jumpTo(location.hash); });
+    const reveals=[...document.querySelectorAll(".reveal")];
+    const check=()=>{
+      const vh=window.innerHeight||document.documentElement.clientHeight;
+      reveals.forEach(el=>{
+        if(el.classList.contains("active")) return;
+        const r=el.getBoundingClientRect();
+        if(r.top<=vh*0.88) el.classList.add("active");
+      });
+    };
+    window.addEventListener("scroll",()=>requestAnimationFrame(check),{passive:true});
+    window.addEventListener("resize",check);
+    check(); setTimeout(check,220);
 
-    // reveal
-    const reveals = document.querySelectorAll('.reveal');
-    const io = ('IntersectionObserver' in window) ? new IntersectionObserver((entries)=>{
-      entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
-    }, {threshold: 0.12}) : null;
-    if(io){ reveals.forEach(el => io.observe(el)); }
-    else{ reveals.forEach(el => el.classList.add('active')); }
+    const lb=document.getElementById("lightbox");
+    const lbImg=document.getElementById("lightboxImg");
+    const lbCount=document.getElementById("lightboxCount");
+    const lbThumbs=document.getElementById("lightboxThumbs");
+    const btnClose=lb.querySelector(".lightbox__close");
+    const btnPrev=lb.querySelector(".lightbox__nav--prev");
+    const btnNext=lb.querySelector(".lightbox__nav--next");
 
-    // mailto
-    const mailBtn = document.getElementById('mailBtn');
-    const form = document.getElementById('contactForm');
-    mailBtn.addEventListener('click', ()=>{
-      const fd = new FormData(form);
-      const guardian = (fd.get('guardian')||'').toString().trim();
-      const phone = (fd.get('phone')||'').toString().trim();
-      const people = (fd.get('people')||'').toString().trim();
-      const schedule = (fd.get('schedule')||'').toString().trim();
-      const message = (fd.get('message')||'').toString().trim();
-      if(!guardian || !phone || !message){
-        alert('보호자 이름, 휴대폰 번호, 문의 내용을 입력해주세요.');
-        return;
-      }
-      const subject = encodeURIComponent('[야옹 역사] 수업 문의');
-      const body = encodeURIComponent(
-        `보호자 이름: ${guardian}\n`+
-        `휴대폰 번호: ${phone}\n`+
-        `인원: ${people || '미정'}\n`+
-        `희망 장소/일정: ${schedule || '미정'}\n\n`+
-        `문의 내용:\n${message}`
-      );
-      location.href = `mailto:yaonghistory@gmail.com?subject=${subject}&body=${body}`;
-    });
+    const reviewImgs=[...document.querySelectorAll("#reviews img.zoomable")];
+    const photoImgs=[...document.querySelectorAll("#photos img.zoomable")];
 
-    // Lightbox
-    const lb = document.getElementById('lightbox');
-    const lbImg = document.getElementById('lbImg');
-    const lbThumbs = document.getElementById('lbThumbs');
-    const lbCount = document.getElementById('lbCount');
-    const lbPrev = document.getElementById('lbPrev');
-    const lbNext = document.getElementById('lbNext');
-    const lbClose = document.getElementById('lbClose');
-    const lbX = document.getElementById('lbX');
-    const stage = document.getElementById('lbStage');
+    const groups={
+      reviews: reviewImgs.map(img=>({src:img.getAttribute("src"),alt:img.getAttribute("alt")||""})),
+      photos:  photoImgs.map(img=>({src:img.getAttribute("src"),alt:img.getAttribute("alt")||""}))
+    };
 
-    let items = [];
-    let idx = 0;
+    let currentGroup="photos";
+    let current=0;
 
-    let scale = 1, tx = 0, ty = 0;
-    let pointers = new Map();
-    let startDist = 0, startScale = 1;
-    let startMid = null, startTx = 0, startTy = 0;
+    let scale=1,lastScale=1,startDistance=0,posX=0,posY=0,startX=0,startY=0,isDragging=false;
 
-    const clamp=(v,min,max)=>Math.min(max, Math.max(min, v));
-    const apply=()=>{ lbImg.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`; };
-    const reset=()=>{ scale=1; tx=0; ty=0; apply(); };
-    const updateCount=()=>{ lbCount.textContent = `${idx+1}/${items.length}`; };
+    const items=()=>groups[currentGroup]||[];
+    const setTransform=()=>{ lbImg.style.transform=`translate(${posX}px,${posY}px) scale(${scale})`; };
+    const resetTransform=()=>{ scale=1;lastScale=1;posX=0;posY=0;setTransform(); };
 
-    function buildThumbs(){
-      lbThumbs.innerHTML = '';
-      items.forEach((el,i)=>{
-        const b=document.createElement('button');
-        b.type='button';
-        b.className='lb__thumb'+(i===idx?' is-active':'');
-        const im=document.createElement('img');
-        im.src=el.getAttribute('src');
-        im.alt=el.getAttribute('alt')||'';
+    const renderThumbs=()=>{
+      const it=items(); lbThumbs.innerHTML="";
+      it.forEach((v,idx)=>{
+        const b=document.createElement("button");
+        b.type="button";
+        b.className="lightbox__thumb"+(idx===current?" active":"");
+        const im=document.createElement("img"); im.src=v.src; im.alt="";
         b.appendChild(im);
-        b.addEventListener('click', ()=>show(i));
+        b.addEventListener("click",()=>openLB(currentGroup,idx,true));
         lbThumbs.appendChild(b);
       });
-      lbThumbs.style.display = (items.length<=1) ? 'none' : 'flex';
-      lbPrev.style.display = (items.length<=1) ? 'none' : '';
-      lbNext.style.display = (items.length<=1) ? 'none' : '';
+      lbThumbs.style.display=(it.length<=1)?"none":"flex";
+    };
+
+    const syncUI=()=>{
+      const it=items();
+      lbCount.textContent=`${current+1}/${it.length}`;
+      const multi=it.length>1;
+      btnPrev.style.display=multi?"":"none";
+      btnNext.style.display=multi?"":"none";
+      [...lbThumbs.querySelectorAll(".lightbox__thumb")].forEach((t,i)=>t.classList.toggle("active",i===current));
+      const act=lbThumbs.querySelectorAll(".lightbox__thumb")[current];
+      if(act) act.scrollIntoView({behavior:"smooth",inline:"center",block:"nearest"});
+    };
+
+    function openLB(groupName,index){
+      const it=groups[groupName]||[];
+      if(!it.length) return;
+      currentGroup=groupName;
+      current=(index+it.length)%it.length;
+      lbImg.src=it[current].src;
+      lbImg.alt=it[current].alt;
+
+      if(!lb.classList.contains("open")){
+        lb.classList.add("open");
+        lb.setAttribute("aria-hidden","false");
+        document.body.classList.add("modal-open");
+      }
+      renderThumbs();
+      syncUI();
+      resetTransform();
     }
 
-    function show(i){
-      idx = (i + items.length) % items.length;
-      lbImg.src = items[idx].getAttribute('src');
-      lbImg.alt = items[idx].getAttribute('alt') || '';
-      updateCount();
-      buildThumbs();
-      reset();
-    }
+    const closeLB=()=>{
+      lb.classList.remove("open");
+      lb.setAttribute("aria-hidden","true");
+      lbImg.src="";
+      document.body.classList.remove("modal-open");
+      resetTransform();
+    };
 
-    function open(group, startIndex){
-      items = Array.from(document.querySelectorAll(`.zoomable[data-group="${group}"]`))
-        .sort((a,b)=>Number(a.dataset.index||0)-Number(b.dataset.index||0));
-      if(!items.length) return;
-      lb.setAttribute('aria-hidden','false');
-      document.documentElement.style.overflow='hidden';
-      document.body.style.overflow='hidden';
-      show(startIndex);
-    }
+    const prev=()=>openLB(currentGroup,current-1);
+    const next=()=>openLB(currentGroup,current+1);
 
-    function close(){
-      lb.setAttribute('aria-hidden','true');
-      document.documentElement.style.overflow='';
-      document.body.style.overflow='';
-      pointers.clear();
-      reset();
-    }
+    reviewImgs.forEach((img,idx)=>img.addEventListener("click",()=>openLB("reviews",idx)));
+    photoImgs.forEach((img,idx)=>img.addEventListener("click",()=>openLB("photos",idx)));
 
-    const prev=()=>show(idx-1);
-    const next=()=>show(idx+1);
+    btnClose.addEventListener("click",closeLB);
+    btnPrev.addEventListener("click",prev);
+    btnNext.addEventListener("click",next);
 
-    document.querySelectorAll('.zoomable').forEach(el=>{
-      el.addEventListener('click', ()=> open(el.dataset.group||'photos', Number(el.dataset.index||0)));
+    lb.addEventListener("click",(e)=>{ if(e.target===lb) closeLB(); });
+
+    document.addEventListener("keydown",(e)=>{
+      if(!lb.classList.contains("open")) return;
+      if(e.key==="Escape") closeLB();
+      if(e.key==="ArrowLeft") prev();
+      if(e.key==="ArrowRight") next();
     });
 
-    lbPrev.addEventListener('click', prev);
-    lbNext.addEventListener('click', next);
-    lbClose.addEventListener('click', close);
-    lbX.addEventListener('click', close);
+    let sx=0,tracking=false;
+    lb.addEventListener("touchstart",(e)=>{
+      if(!lb.classList.contains("open")) return;
+      const t=e.touches[0]; sx=t.clientX; tracking=true;
+    },{passive:true});
 
-    document.addEventListener('keydown', (e)=>{
-      if(lb.getAttribute('aria-hidden')==='true') return;
-      if(e.key==='Escape') close();
-      if(e.key==='ArrowLeft') prev();
-      if(e.key==='ArrowRight') next();
-    });
+    lb.addEventListener("touchend",(e)=>{
+      if(!tracking) return;
+      tracking=false;
+      const t=e.changedTouches[0];
+      const dx=t.clientX-sx;
+      const it=items(); if(it.length<=1) return;
+      if(dx>50) prev();
+      else if(dx<-50) next();
+    },{passive:true});
 
-    // swipe
-    let sx=0, sy=0, sw=false;
-    stage.addEventListener('touchstart', (e)=>{
-      if(e.touches.length!==1) return;
-      sw=true; sx=e.touches[0].clientX; sy=e.touches[0].clientY;
-    }, {passive:true});
-    stage.addEventListener('touchend', (e)=>{
-      if(!sw) return; sw=false;
-      if(items.length<=1) return;
-      const t=e.changedTouches && e.changedTouches[0];
-      if(!t) return;
-      const dx=t.clientX-sx, dy=t.clientY-sy;
-      if(Math.abs(dx)>40 && Math.abs(dx)>Math.abs(dy)){
-        if(dx<0) next(); else prev();
+    lbImg.addEventListener("touchstart",(e)=>{
+      if(e.touches.length===2){
+        const dx=e.touches[0].clientX-e.touches[1].clientX;
+        const dy=e.touches[0].clientY-e.touches[1].clientY;
+        startDistance=Math.hypot(dx,dy);
+      }else if(e.touches.length===1 && scale>1){
+        isDragging=true;
+        startX=e.touches[0].clientX-posX;
+        startY=e.touches[0].clientY-posY;
       }
-    }, {passive:true});
+    },{passive:true});
 
-    // pinch zoom
-    stage.style.touchAction='none';
-    stage.addEventListener('pointerdown', (e)=>{
-      if(lb.getAttribute('aria-hidden')==='true') return;
-      stage.setPointerCapture(e.pointerId);
-      pointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
-      if(pointers.size===1){ startTx=tx; startTy=ty; }
-      if(pointers.size===2){
-        const pts=Array.from(pointers.values());
-        const dx=pts[0].x-pts[1].x, dy=pts[0].y-pts[1].y;
-        startDist=Math.hypot(dx,dy)||1;
-        startScale=scale;
-        startMid={x:(pts[0].x+pts[1].x)/2, y:(pts[0].y+pts[1].y)/2};
-        startTx=tx; startTy=ty;
+    lbImg.addEventListener("touchmove",(e)=>{
+      if(!lb.classList.contains("open")) return;
+      e.preventDefault();
+      if(e.touches.length===2){
+        const dx=e.touches[0].clientX-e.touches[1].clientX;
+        const dy=e.touches[0].clientY-e.touches[1].clientY;
+        const dist=Math.hypot(dx,dy);
+        scale=Math.min(Math.max((dist/startDistance)*lastScale,1),4);
+        setTransform();
+      }else if(e.touches.length===1 && isDragging){
+        posX=e.touches[0].clientX-startX;
+        posY=e.touches[0].clientY-startY;
+        setTransform();
       }
-    });
+    },{passive:false});
 
-    stage.addEventListener('pointermove', (e)=>{
-      if(!pointers.has(e.pointerId)) return;
-      pointers.set(e.pointerId, {x:e.clientX, y:e.clientY});
-      if(pointers.size===2){
-        const pts=Array.from(pointers.values());
-        const dx=pts[0].x-pts[1].x, dy=pts[0].y-pts[1].y;
-        const dist=Math.hypot(dx,dy)||1;
-        const nextScale=clamp(startScale*(dist/startDist), 1, 4);
-        const mid={x:(pts[0].x+pts[1].x)/2, y:(pts[0].y+pts[1].y)/2};
-        const mdx=mid.x-(startMid?startMid.x:mid.x);
-        const mdy=mid.y-(startMid?startMid.y:mid.y);
-        scale=nextScale; tx=startTx+mdx; ty=startTy+mdy;
-        apply();
-      }
-    });
-
-    stage.addEventListener('pointerup', (e)=>{
-      pointers.delete(e.pointerId);
-      if(scale<1.02) reset();
-      if(pointers.size<2){
-        startDist=0; startMid=null; startScale=scale; startTx=tx; startTy=ty;
-      }
-    });
-    stage.addEventListener('pointercancel', (e)=>{
-      pointers.delete(e.pointerId);
-      if(pointers.size===0) reset();
-    });
-
-    // double tap
-    let lastTap=0;
-    stage.addEventListener('touchend', ()=>{
-      const now=Date.now();
-      if(now-lastTap<280){
-        if(scale<=1.01){ scale=2; tx=0; ty=0; apply(); }
-        else reset();
-      }
-      lastTap=now;
-    }, {passive:true});
+    lbImg.addEventListener("touchend",()=>{
+      lastScale=scale;
+      if(scale===1){posX=0;posY=0;setTransform();}
+      isDragging=false;
+    },{passive:true});
   })();
   </script>
 </body>
