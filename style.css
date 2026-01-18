@@ -1,10 +1,10 @@
 :root{
-  /* 브랜드 톤: 파스텔 하늘 + 연노랑 + 은은한 종이 느낌 */
   --sky:#eaf3ff;
   --sky2:#f3f8ff;
   --lemon:#fff2c7;
   --lemon2:#fff7dd;
   --mint:#eef8f3;
+  --mint2:#f2fbf6;
   --paper:#fbfaf6;
 
   --ink:#24313a;
@@ -14,13 +14,13 @@
   --radius:22px;
 }
 
-/* ✅ 앵커 이동 시 고정 헤더에 가려짐 방지 (CSS 레벨) */
+/* ✅ 고정 헤더 앵커 가림 방지(브라우저 레벨) */
 html{
   font-size:16px;
   -webkit-text-size-adjust:100%;
   text-size-adjust:100%;
   scroll-behavior:smooth;
-  scroll-padding-top: 92px; /* 헤더 높이 + 여유 */
+  scroll-padding-top:92px;
 }
 
 *{box-sizing:border-box}
@@ -38,36 +38,28 @@ body{
   color:var(--ink);
   line-height:1.75;
 
-  /* ✅ 신뢰감 있는 배경(민트 과함 제거) */
   background:
     radial-gradient(900px 520px at 18% 0%, rgba(234,243,255,.95), transparent 60%),
     radial-gradient(900px 520px at 84% 0%, rgba(251,250,246,.95), transparent 60%),
     linear-gradient(180deg, #ffffff, #fbfbfb);
 
-  font-synthesis:none;
   text-rendering:optimizeLegibility;
+  font-synthesis:none;
 }
 
-/* ✅ 한국어 단어/글자 쪼개짐 방지 핵심 */
+/* ✅ 한국어 단어 쪼개짐 방지 */
 body, p, h1, h2, h3, h4, li, a, button, span, div{
   word-break: keep-all;
   overflow-wrap: break-word;
   line-break: strict;
 }
 
-/* URL/메일은 예외적으로 끊기 허용 */
-code, pre, .url, .email{
-  word-break: break-all;
-  overflow-wrap:anywhere;
-}
-
-a,a:visited{color:inherit;text-decoration:none}
 img{max-width:100%;height:auto;display:block}
+a,a:visited{color:inherit;text-decoration:none}
+
 .container{width:min(1120px,92vw);margin:0 auto;padding:0 14px}
 .muted{color:var(--muted)}
-
-/* ✅ 섹션 앵커도 추가 안전장치 */
-section[id]{scroll-margin-top: 92px;}
+section[id]{scroll-margin-top:92px}
 
 /* ================= HEADER ================= */
 .header{
@@ -76,56 +68,40 @@ section[id]{scroll-margin-top: 92px;}
   border-bottom:1px solid var(--line);
 }
 @supports (backdrop-filter: blur(10px)){
-  .header{
-    background:rgba(255,255,255,.88);
-    backdrop-filter:blur(10px);
-  }
+  .header{ background:rgba(255,255,255,.88); backdrop-filter:blur(10px); }
 }
-.header__inner{
-  display:flex; align-items:center; justify-content:space-between;
-  gap:12px; padding:12px 0;
-}
+.header__inner{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0}
 
-.brand{display:flex; align-items:center; gap:12px; min-width:0}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
 .brand__mark{
-  width:62px; height:62px;
-  background:transparent;
-  border:none;
-  overflow:hidden;
+  width:62px;height:62px;
+  background:transparent;border:none;overflow:hidden;
   flex:0 0 auto;
 }
-.brand__mark img{width:100%; height:100%; object-fit:contain}
-.brand__text{display:flex; flex-direction:column; min-width:0}
-.brand__name{font-weight:900; font-size:19px; line-height:1.1}
-.brand__tag{font-weight:900; font-size:12px; color:var(--muted)}
+.brand__mark img{width:100%;height:100%;object-fit:contain}
+.brand__text{display:flex;flex-direction:column;min-width:0}
+.brand__name{font-weight:900;font-size:19px;line-height:1.1}
+.brand__tag{font-weight:900;font-size:12px;color:var(--muted)}
 
 .miniCta{
-  display:inline-flex; align-items:center; justify-content:center;
-  padding:10px 14px;
-  border-radius:999px;
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:10px 14px;border-radius:999px;
   font-weight:900;
   background:linear-gradient(180deg, var(--lemon2), var(--paper));
   border:1px solid var(--line);
-  color:var(--ink);
   box-shadow:0 8px 18px rgba(0,0,0,.08);
+  color:var(--ink);
 }
 
-/* ================= REVEAL ANIMATION ================= */
+/* ================= REVEAL ================= */
 .reveal{
   opacity:0;
   transform:translateY(18px);
   transition:opacity .9s ease, transform .9s ease;
   will-change:opacity, transform;
 }
-.reveal.active{
-  opacity:1;
-  transform:translateY(0);
-}
-/* WebView(카카오/네이버)에서도 “사파리 느낌 최대한” 유지 */
-body.webview .reveal{
-  transform:translateY(10px);
-  transition:opacity .85s ease, transform .85s ease;
-}
+.reveal.active{opacity:1;transform:translateY(0)}
+body.webview .reveal{transform:translateY(10px);transition-duration:.85s}
 @media (prefers-reduced-motion: reduce){
   .reveal{opacity:1;transform:none;transition:none}
 }
@@ -138,7 +114,6 @@ body.webview .reveal{
   gap:16px;
   align-items:start;
 }
-
 .badge{
   display:inline-flex;
   padding:7px 12px;
@@ -149,51 +124,29 @@ body.webview .reveal{
   color:var(--muted);
   margin-bottom:10px;
 }
-
 .hero__title{margin:0;font-size:clamp(34px,4.2vw,56px);letter-spacing:-.6px}
 .hero__subtitle{margin:6px 0 10px;font-weight:900;color:var(--muted)}
 .hero__headline{margin:0 0 14px;font-weight:900}
-.hero__headline strong{font-weight:900}
-
-.hero__bullets{display:grid;gap:10px;margin:10px 0 14px}
-.hero__bullet{
-  padding:10px 12px;
-  border-radius:16px;
-  background:#fff;
-  border:1px solid var(--line);
-  font-weight:900;
-}
-.hero__bullet--note{background:var(--sky)}
-
 .hero__cta{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 14px}
 
 .btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:12px 16px;
-  border-radius:999px;
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:12px 16px;border-radius:999px;
   border:1px solid var(--line);
   background:linear-gradient(180deg, var(--sky), var(--paper));
   box-shadow:0 8px 18px rgba(0,0,0,.08);
   font-weight:900;
   cursor:pointer;
   color:var(--ink);
-  -webkit-appearance:none;
-  appearance:none;
+  -webkit-appearance:none;appearance:none;
 }
 .btn--soft{background:linear-gradient(180deg, var(--lemon), var(--sky))}
 .btn--outline{background:#fff;box-shadow:none}
-.btn--mail{color:#111 !important} /* 요청: 민트 버튼 글자 검정 */
+.btn--mail{color:#111 !important}
 
-.stats{
-  list-style:none;
-  padding:0;margin:0;
-  display:flex; gap:10px; flex-wrap:wrap;
-}
+.stats{list-style:none;padding:0;margin:0;display:flex;gap:10px;flex-wrap:wrap}
 .stats li{
-  background:#fff;
-  border:1px solid rgba(0,0,0,.08);
+  background:#fff;border:1px solid rgba(0,0,0,.08);
   border-radius:18px;
   padding:10px 12px;
   min-width:128px;
@@ -223,7 +176,7 @@ body.webview .reveal{
   color:var(--muted);
 }
 
-/* ================= SECTIONS + BLOBS ================= */
+/* ================= SECTIONS / BLOBS ================= */
 .section{padding:54px 0;position:relative}
 .section__head{margin-bottom:16px}
 .section__head h2{margin:0 0 8px;font-size:28px;letter-spacing:-.4px;font-weight:900}
@@ -252,6 +205,7 @@ body.webview .reveal{
 .blob--lemon::before{background:linear-gradient(140deg, var(--lemon2), var(--paper))}
 .blob--sky2::before{background:linear-gradient(140deg, var(--sky2), var(--mint))}
 .blob--mint2::before{background:linear-gradient(140deg, var(--mint2), var(--lemon2))}
+.blob--lemon2::before{background:linear-gradient(140deg, var(--lemon2), var(--sky2))}
 .blob--contact::before{background:linear-gradient(140deg, var(--sky2), var(--paper))}
 
 .section--plainAlt{
@@ -279,17 +233,12 @@ body.webview .reveal{
 
 .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
 .chip{
-  padding:8px 12px;
-  border-radius:999px;
-  background:#fff;
-  border:1px solid rgba(0,0,0,.08);
-  font-weight:900;
-  color:var(--muted);
+  padding:8px 12px;border-radius:999px;
+  background:#fff;border:1px solid rgba(0,0,0,.08);
+  font-weight:900;color:var(--muted);
 }
 .quote{
-  margin-top:14px;
-  padding:14px;
-  border-radius:18px;
+  margin-top:14px;padding:14px;border-radius:18px;
   background:rgba(234,243,255,.75);
   border:1px dashed rgba(0,0,0,.12);
   font-weight:900;
@@ -346,9 +295,9 @@ body.webview .reveal{
   color:var(--muted);
 }
 
-/* Teacher logo (혹시 다시 추가할 때 대비) */
+/* Instructor */
 .teacher{
-  display:flex; gap:16px;
+  display:flex;gap:16px;
   align-items:flex-start;
   flex-wrap:wrap;
   border-radius:var(--radius);
@@ -358,11 +307,27 @@ body.webview .reveal{
   box-shadow:0 10px 22px rgba(0,0,0,.08);
 }
 .teacher__logo{
-  width:150px;height:150px;
+  /* ✅ 요청: 고양이 위아래 공백 줄이고 + 크기 키우기 */
+  width:190px;height:190px;
+  margin:8px 0;              /* 위아래 공백 줄임 */
   background:transparent;border:none;
   overflow:hidden;flex:0 0 auto;
+  display:grid;place-items:center;
 }
 .teacher__logo img{width:100%;height:100%;object-fit:contain}
+.teacher__body{min-width:260px;flex:1 1 260px}
+
+/* Class info cards */
+.infoCard{
+  border-radius:var(--radius);
+  background:#fff;
+  border:1px solid rgba(0,0,0,.10);
+  box-shadow:0 10px 22px rgba(0,0,0,.08);
+  padding:16px;
+}
+.infoCard__icon{font-size:22px;margin-bottom:8px}
+.infoCard__title{font-weight:900;margin-bottom:6px}
+.infoCard__desc{color:var(--muted);font-weight:900}
 
 /* Reviews */
 .review-wrap{margin-top:12px;display:flex;justify-content:center}
@@ -408,14 +373,13 @@ body.webview .reveal{
 }
 .contact__actions{
   margin-top:12px;
-  display:flex; gap:10px;
+  display:flex;gap:10px;
   flex-wrap:wrap;
   align-items:center;
 }
 .insta-contact__btn{
-  display:inline-flex; align-items:center; gap:8px;
-  padding:10px 14px;
-  border-radius:999px;
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 14px;border-radius:999px;
   background:rgba(255,255,255,.92);
   border:1px solid rgba(0,0,0,.10);
   box-shadow:0 8px 18px rgba(0,0,0,.08);
@@ -432,8 +396,7 @@ body.webview .reveal{
 .field__label{font-weight:900;font-size:14px}
 .field__input,.field__textarea{
   width:100%;
-  padding:12px;
-  border-radius:16px;
+  padding:12px;border-radius:16px;
   border:1px solid rgba(0,0,0,.12);
   background:rgba(255,255,255,.95);
   font-family:inherit;
@@ -459,154 +422,12 @@ body.webview .reveal{
 .footer__sub{color:var(--muted);font-weight:900}
 .footer__copy{color:var(--muted);font-weight:900}
 
-/* ================= ✅ LIGHTBOX (핵심!) ================= */
-/* ✅ 이게 제대로 적용되면 “페이지 밑에 주루룩” 현상은 절대 안 생김 */
+/* ================= ✅ LIGHTBOX ================= */
 body.modal-open{overflow:hidden}
 
 .lightbox{
   position:fixed;
   inset:0;
   background:rgba(0,0,0,.68);
-  display:none;              /* ✅ 기본은 숨김 */
-  align-items:center;
-  justify-content:center;
-  padding:18px;
-  z-index:9999;
-  touch-action: pan-y;
-}
-.lightbox.open{display:flex;} /* ✅ 열릴 때만 flex */
-
-.lightbox__img{
-  width:min(980px, 96vw);
-  max-height:78vh;
-  border-radius:18px;
-  border:1px solid rgba(255,255,255,.18);
-  box-shadow:0 18px 48px rgba(0,0,0,.35);
-  object-fit:contain;
-  background:#111;
-  user-select:none;
-  -webkit-user-select:none;
-  -webkit-touch-callout:none;
-}
-
-.lightbox__close{
-  position:absolute;
-  top:14px;
-  right:14px;
-  width:44px;
-  height:44px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.25);
-  background:rgba(0,0,0,.35);
-  color:#fff;
-  font-size:28px;
-  line-height:1;
-  cursor:pointer;
-}
-
-.lightbox__nav{
-  position:absolute;
-  top:50%;
-  transform:translateY(-50%);
-  width:46px;
-  height:46px;
-  border-radius:999px;
-  border:1px solid rgba(255,255,255,.22);
-  background:rgba(0,0,0,.30);
-  color:#fff;
-  font-size:26px;
-  display:grid;
-  place-items:center;
-  cursor:pointer;
-}
-.lightbox__nav--prev{left:12px}
-.lightbox__nav--next{right:12px}
-
-.lightbox__count{
-  position:absolute;
-  left:50%;
-  top:14px;
-  transform:translateX(-50%);
-  padding:8px 12px;
-  border-radius:999px;
-  background:rgba(0,0,0,.35);
-  border:1px solid rgba(255,255,255,.18);
-  color:#fff;
-  font-weight:900;
-  font-size:13px;
-}
-
-.lightbox__thumbs{
-  position:absolute;
-  left:50%;
-  bottom:14px;
-  transform:translateX(-50%);
-  display:flex;
-  gap:8px;
-  padding:10px 12px;
-  border-radius:999px;
-  background:rgba(0,0,0,.30);
-  border:1px solid rgba(255,255,255,.18);
-  max-width:92vw;
-  overflow:auto;
-  -webkit-overflow-scrolling:touch;
-}
-.lightbox__thumb{
-  width:44px;
-  height:44px;
-  border-radius:12px;
-  overflow:hidden;
-  border:2px solid rgba(255,255,255,.18);
-  flex:0 0 auto;
-  opacity:.78;
-  cursor:pointer;
-  background:#222;
-}
-.lightbox__thumb img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-}
-.lightbox__thumb.active{
-  opacity:1;
-  border-color:rgba(255,255,255,.70);
-}
-
-/* 모바일 튜닝 */
-@media (max-width: 520px){
-  .lightbox__nav{width:40px;height:40px;font-size:22px}
-  .lightbox__thumb{width:40px;height:40px}
-  .lightbox__img{max-height:72vh}
-}
-
-/* ================= RESPONSIVE ================= */
-@media (max-width: 980px){
-  .hero__grid{grid-template-columns:1fr}
-  .grid--4{grid-template-columns:repeat(2,1fr)}
-  .grid--3{grid-template-columns:1fr}
-  .grid--2{grid-template-columns:1fr}
-  .locations{grid-template-columns:1fr}
-
-  /* ✅ 모바일에서 사진이 과하게 커 보이지 않게 */
-  .gallery{grid-template-columns:repeat(2,1fr)}
-  .shot img{height:140px}
-  .review-img{max-height:340px}
-
-  .contactForm__row{grid-template-columns:1fr}
-
-  .reveal{transform:translateY(14px);transition-duration:.75s}
-}
-
-@media (max-width: 420px){
-  .brand__mark{width:52px;height:52px}
-  .brand__name{font-size:18px}
-  .hero__title{font-size:32px}
-
-  .gallery{grid-template-columns:1fr}
-  .shot img{height:170px}
-  .review-img{max-height:300px}
-}
-
-/* WebView 초보정 */
-button,input,textarea{-webkit-appearance:none;appearance:none}
-a:active,a:hover{color:inherit}
+  display:none;
+ 
