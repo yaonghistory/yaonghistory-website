@@ -1,78 +1,33 @@
 (() => {
   const header = document.querySelector(".site-header");
 
-  // ===== Smooth scroll (header offset) =====
-  function getHeaderOffset() {
+  function headerOffset() {
     const h = header ? header.getBoundingClientRect().height : 0;
-    return Math.ceil(h + 12);
+    return Math.ceil(h + 10);
   }
 
-  function smoothScrollTo(target) {
-    const y = window.scrollY + target.getBoundingClientRect().top - getHeaderOffset();
+  function smoothScrollTo(targetEl) {
+    const y = window.scrollY + targetEl.getBoundingClientRect().top - headerOffset();
     window.scrollTo({ top: y, behavior: "smooth" });
   }
 
+  // Anchor smooth scroll with sticky-header offset
   document.querySelectorAll("[data-scroll]").forEach((a) => {
-    a.addEventListener(
-      "click",
-      (e) => {
-        const href = a.getAttribute("href") || "";
-        if (!href.startsWith("#")) return;
-        const target = document.querySelector(href);
-        if (!target) return;
-        e.preventDefault();
-        smoothScrollTo(target);
-      },
-      { passive: false }
-    );
+    a.addEventListener("click", (e) => {
+      const href = a.getAttribute("href") || "";
+      if (!href.startsWith("#")) return;
+
+      const target = document.querySelector(href);
+      if (!target) return;
+
+      e.preventDefault();
+      smoothScrollTo(target);
+    }, { passive: false });
   });
 
-  // ===== Accordion (multi-open) =====
-  const accRoot = document.querySelector("[data-accordion]");
-  if (accRoot) {
-    const items = Array.from(accRoot.querySelectorAll(".acc-item"));
-    items.forEach((item) => {
-      const btn = item.querySelector(".acc-btn");
-      const panel = item.querySelector(".acc-panel");
-      if (!btn || !panel) return;
-
-      // init sync
-      const expanded = btn.getAttribute("aria-expanded") === "true";
-      panel.hidden = !expanded;
-
-      btn.addEventListener("click", () => {
-        const isOpen = btn.getAttribute("aria-expanded") === "true";
-        btn.setAttribute("aria-expanded", String(!isOpen));
-        panel.hidden = isOpen;
-
-        // 열릴 때는 헤더 바로 아래로 살짝 맞추기
-        if (!isOpen) {
-          setTimeout(() => smoothScrollTo(item), 40);
-        }
-      });
-    });
-  }
-
-  // ===== Reveal on scroll (fade in + fade out past) =====
-  const revealEls = document.querySelectorAll(".reveal");
-  if (revealEls.length) {
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) entry.target.classList.add("show");
-          else entry.target.classList.remove("show");
-        });
-      },
-      { threshold: 0.14 }
-    );
-
-    revealEls.forEach((el) => io.observe(el));
-  }
-
-  // ===== Mail (Form -> mailto) =====
+  // Mail button -> mailto with form content
   const mailBtn = document.getElementById("mailBtn");
   const form = document.getElementById("contactForm");
-
   if (mailBtn && form) {
     mailBtn.addEventListener("click", () => {
       const fd = new FormData(form);
@@ -83,19 +38,43 @@
       const message = (fd.get("message") || "").toString().trim();
 
       const subject = encodeURIComponent("야옹 역사 수업 문의");
-      const body = encodeURIComponent(
-        [
-          `보호자 이름: ${parent}`,
-          `휴대폰 번호: ${phone}`,
-          `인원: ${people}`,
-          `희망 장소/일정: ${schedule}`,
-          "",
-          "문의 내용:",
-          message
-        ].join("\n")
-      );
-
+      const bodyLines = [
+        `보호자 이름: ${parent}`,
+        `휴대폰 번호: ${phone}`,
+        `인원: ${people}`,
+        `희망 장소/일정: ${schedule}`,
+        ``,
+        `문의 내용:`,
+        `${message}`
+      ];
+      const body = encodeURIComponent(bodyLines.join("\n"));
       location.href = `mailto:yaonghistory@gmail.com?subject=${subject}&body=${body}`;
     });
   }
+
+  // Fade in/out on scroll (visible when in view, hidden when out)
+  const animEls = Array.from(document.querySelectorAll(".anim"));
+  const reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (reduceMotion) {
+    animEls.forEach(el => el.classList.add("is-visible"));
+    return;
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      // 들어오면 보이고, 벗어나면 다시 숨김(요청한 페이드아웃)
+      if (entry.isIntersecting && entry.intersectionRatio > 0.12) {
+        entry.target.classList.add("is-visible");
+      } else {
+        entry.target.classList.remove("is-visible");
+      }
+    });
+  }, {
+    root: null,
+    rootMargin: "0px 0px -12% 0px",
+    threshold: [0, 0.12, 0.25]
+  });
+
+  animEls.forEach(el => io.observe(el));
 })();
