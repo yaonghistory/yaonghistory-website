@@ -4,19 +4,19 @@
 
   const header = $(".site-header");
 
-  function headerOffset(){
+  function headerOffset() {
     const h = header ? header.getBoundingClientRect().height : 0;
     return Math.ceil(h + 10);
   }
 
-  // 부드러운 스크롤 (인앱에서도 안정적으로)
-  function smoothScrollTo(el){
+  function smoothScrollTo(el) {
     const y = window.scrollY + el.getBoundingClientRect().top - headerOffset();
     window.scrollTo({ top: y, behavior: "smooth" });
     // 일부 인앱에서 첫 호출이 튀는 경우 보정
     requestAnimationFrame(() => window.scrollTo({ top: y, behavior: "smooth" }));
   }
 
+  // Smooth anchor scroll
   $$("[data-scroll]").forEach(a => {
     a.addEventListener("click", (e) => {
       const href = a.getAttribute("href") || "";
@@ -28,10 +28,10 @@
     }, { passive: false });
   });
 
-  // 메일 문의 (폼 → mailto)
+  // Mailto from form
   const mailBtn = $("#mailBtn");
   const form = $("#contactForm");
-  if (mailBtn && form){
+  if (mailBtn && form) {
     mailBtn.addEventListener("click", () => {
       const fd = new FormData(form);
       const parent = String(fd.get("parent") || "").trim();
@@ -55,22 +55,19 @@
     });
   }
 
-  // 스크롤 페이드 인/아웃 (IntersectionObserver)
+  // Reveal on scroll (fade in / fade out)
   const items = $$(".reveal");
   if (!items.length) return;
 
   const io = new IntersectionObserver((entries) => {
     entries.forEach(ent => {
-      if (ent.isIntersecting){
+      if (ent.isIntersecting) {
         ent.target.classList.add("is-in");
         ent.target.classList.remove("is-out");
       } else {
-        // 지나간 요소는 은은하게 페이드 아웃 느낌
-        // (화면 아래로 아직 안 온 요소는 is-out 안 붙여서 깔끔 유지)
+        // 지나간 요소만 살짝 페이드아웃
         const rect = ent.target.getBoundingClientRect();
-        if (rect.top < 0) {
-          ent.target.classList.add("is-out");
-        }
+        if (rect.top < 0) ent.target.classList.add("is-out");
       }
     });
   }, {
