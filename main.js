@@ -1,29 +1,34 @@
-(function () {
+// main.js
+(() => {
   const header = document.querySelector(".site-header");
 
-  function getHeaderOffset() {
+  function headerOffset() {
     const h = header ? header.getBoundingClientRect().height : 0;
-    return Math.ceil(h + 10);
+    return Math.ceil(h + 12);
   }
 
   function smoothScrollTo(el) {
-    const y = window.scrollY + el.getBoundingClientRect().top - getHeaderOffset();
+    const y = window.scrollY + el.getBoundingClientRect().top - headerOffset();
     window.scrollTo({ top: y, behavior: "smooth" });
   }
 
-  // Smooth scroll for buttons/anchors with data-scroll
-  document.querySelectorAll("[data-scroll]").forEach(a => {
-    a.addEventListener("click", (e) => {
-      const href = a.getAttribute("href") || "";
-      if (!href.startsWith("#")) return;
-      const target = document.querySelector(href);
-      if (!target) return;
-      e.preventDefault();
-      smoothScrollTo(target);
-    }, { passive: false });
+  // Smooth scroll with header offset
+  document.querySelectorAll("[data-scroll]").forEach((a) => {
+    a.addEventListener(
+      "click",
+      (e) => {
+        const href = a.getAttribute("href") || "";
+        if (!href.startsWith("#")) return;
+        const target = document.querySelector(href);
+        if (!target) return;
+        e.preventDefault();
+        smoothScrollTo(target);
+      },
+      { passive: false }
+    );
   });
 
-  // Mail button
+  // Mail
   const mailBtn = document.getElementById("mailBtn");
   const form = document.getElementById("contactForm");
   if (mailBtn && form) {
@@ -43,43 +48,57 @@
         `희망 장소/일정: ${schedule}`,
         ``,
         `문의 내용:`,
-        `${message}`
+        `${message}`,
       ];
       const body = encodeURIComponent(bodyLines.join("\n"));
       location.href = `mailto:yaonghistory@gmail.com?subject=${subject}&body=${body}`;
     });
   }
 
-  // Fade-in / fade-out on scroll
-  const targets = [
-    ...document.querySelectorAll(".section .wrap > *"),
-    ...document.querySelectorAll(".team-card"),
-    ...document.querySelectorAll(".panel"),
-    ...document.querySelectorAll(".card"),
-    ...document.querySelectorAll(".step"),
-    ...document.querySelectorAll(".stat"),
-    ...document.querySelectorAll(".place-list li"),
-    ...document.querySelectorAll(".info-list li"),
-    ...document.querySelectorAll(".thumb"),
-  ];
+  // Fade in + fade out past
+  const items = Array.from(document.querySelectorAll(".reveal"));
+  if (!items.length) return;
 
-  targets.forEach(el => el.setAttribute("data-animate", "1"));
+  function updateReveal() {
+    const vh = window.innerHeight || 800;
+    const enterTop = vh * 0.12;
+    const enterBottom = vh * 0.86;
 
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      const el = entry.target;
-      if (entry.isIntersecting) {
-        el.classList.add("is-in");
-        el.classList.remove("is-out");
-      } else {
-        const rect = el.getBoundingClientRect();
-        if (rect.top < 0) el.classList.add("is-out");
+    for (const el of items) {
+      const r = el.getBoundingClientRect();
+
+      if (r.bottom < enterTop) {
+        el.classList.remove("is-in");
+        el.classList.add("is-past");
+        continue;
       }
-    });
-  }, {
-    root: null,
-    threshold: [0.12, 0.22, 0.35],
-  });
 
-  targets.forEach(el => io.observe(el));
+      const inZone = r.top < enterBottom && r.bottom > enterTop;
+      if (inZone) {
+        el.classList.add("is-in");
+        el.classList.remove("is-past");
+      } else {
+        if (r.top >= enterBottom) {
+          el.classList.remove("is-in");
+          el.classList.remove("is-past");
+        }
+      }
+    }
+  }
+
+  let ticking = false;
+  function onScrollOrResize() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      updateReveal();
+      ticking = false;
+    });
+  }
+
+  window.addEventListener("scroll", onScrollOrResize, { passive: true });
+  window.addEventListener("resize", onScrollOrResize, { passive: true });
+  window.addEventListener("orientationchange", onScrollOrResize, { passive: true });
+
+  updateReveal();
 })();
