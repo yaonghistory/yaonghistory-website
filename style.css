@@ -1,3 +1,9 @@
+/* =========================
+   Yaong History - style.css
+   (Safari/Kakao/Naver 통일 + 충돌 최소화)
+========================= */
+
+/* ============== Base ============== */
 :root{
   --bg: #f6f3ea;
   --paper: rgba(255,255,255,.78);
@@ -10,25 +16,25 @@
 
   --yellow: #f4e3b2;
   --yellow2:#f8efcf;
+
   --mint: #cfece6;
   --mint2:#e6f6f3;
 
   --radius: 22px;
   --radius2: 28px;
 
-  --btnH: 46px;
-  --wrap: 720px;
+  --btnH: 48px;
+  --wrap: 760px;
 
   --headerH: 78px;
-  --anchorPad: 12px;
 }
 
-*{ box-sizing:border-box; }
+*{ box-sizing: border-box; }
 html,body{ height:100%; }
 html{
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  scroll-behavior: auto;
+  scroll-behavior: auto; /* JS가 제어 */
 }
 body{
   margin:0;
@@ -44,13 +50,17 @@ body{
   line-height: 1.45;
   word-break: keep-all;
   overflow-wrap: break-word;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 img{ max-width:100%; height:auto; display:block; }
-a{ color:inherit; text-decoration:none; }
-button,input,textarea{ font:inherit; color:inherit; }
+a{ color: inherit; text-decoration: none; }
+button,input,textarea{
+  font: inherit;
+  color: inherit;
+}
 input,textarea{
   background: rgba(255,255,255,.92);
   border: 1px solid rgba(31,42,46,.16);
@@ -74,12 +84,14 @@ textarea{ resize: vertical; }
   margin:0 auto;
 }
 
-/* 헤더: fixed로 안정화 */
+/* ============== Header (fixed) ============== */
 .site-header{
   position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 9999;
-  background: rgba(246,243,234,.92);
+  left:0; right:0; top:0;
+  z-index: 50;
+  background: rgba(246,243,234,.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(31,42,46,.10);
 }
 .header-inner{
@@ -95,7 +107,7 @@ textarea{ resize: vertical; }
   min-width: 0;
 }
 .brand-logo{
-  width: 52px; height: 52px;
+  width: 54px; height: 54px;
   border-radius: 14px;
   background: rgba(255,255,255,.65);
   box-shadow: 0 10px 18px rgba(0,0,0,.08);
@@ -114,35 +126,17 @@ textarea{ resize: vertical; }
   color: var(--muted);
 }
 
-/* 헤더 높이만큼 본문 밀기 */
-main{ padding-top: var(--headerH); }
-
-/* 앵커 정렬 보조(브라우저 기본 점프에도 대비) */
-#about, #curriculum, #contact{
-  scroll-margin-top: calc(var(--headerH) + var(--anchorPad));
+/* header fixed 보정 */
+main{
+  padding-top: calc(var(--headerH) + 10px);
 }
 
-/* 섹션 */
-.section{ padding: 26px 0 8px; }
-.hero{ padding-top: 16px; }
+/* ============== Sections ============== */
+.section{
+  padding: 28px 0 8px;
+}
+.hero{ padding-top: 18px; }
 
-/* 페이드 애니메이션 대상(섹션 내부 래퍼) */
-.reveal{
-  opacity: 0;
-  transform: translateY(12px);
-  transition: opacity .55s ease, transform .55s ease;
-  will-change: opacity, transform;
-}
-.reveal.is-in{
-  opacity: 1;
-  transform: none;
-}
-.reveal.is-out{
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
-/* 히어로 */
 .pill{
   display:inline-flex; align-items:center; gap: 8px;
   padding: 10px 14px;
@@ -150,9 +144,11 @@ main{ padding-top: var(--headerH); }
   border: 2px dashed rgba(31,42,46,.16);
   background: rgba(255,255,255,.55);
   color: rgba(31,42,46,.78);
-  font-weight: 600;
+  font-weight: 650;
   box-shadow: 0 12px 24px rgba(0,0,0,.05);
 }
+.pill-dot{ filter: saturate(1.1); }
+
 .hero-title{
   margin: 16px 0 6px;
   font-size: 44px;
@@ -172,7 +168,7 @@ main{ padding-top: var(--headerH); }
   font-weight: 520;
 }
 
-/* 버튼 */
+/* ============== Buttons ============== */
 .btn-row{
   display:flex;
   flex-wrap: nowrap;
@@ -198,7 +194,7 @@ main{ padding-top: var(--headerH); }
   font-weight: 700;
   font-size: 15px;
   white-space: nowrap;
-  transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+  transition: transform .12s ease, box-shadow .12s ease;
 }
 .btn:active{
   transform: translateY(1px);
@@ -207,6 +203,7 @@ main{ padding-top: var(--headerH); }
     inset 0 1px 0 rgba(255,255,255,.9);
 }
 .btn--wide{ flex: 1 1 0; min-width: 0; }
+
 .btn--accent{
   background: linear-gradient(180deg, #fff7dc, var(--yellow));
   border-color: rgba(173,133,46,.22);
@@ -223,11 +220,16 @@ main{ padding-top: var(--headerH); }
   width: 18px;
   height: 18px;
   margin-right: 8px;
-  object-fit: contain;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
 }
-.ig-text{ display:inline-block; }
+.ig-icon img{
+  width: 18px;
+  height: 18px;
+}
 
-/* 요약 리스트: 1열 고정 */
+/* ============== Stats (1열 고정) ============== */
 .stat-list{
   list-style:none;
   padding:0; margin: 12px 0 0;
@@ -253,7 +255,7 @@ main{ padding-top: var(--headerH); }
   font-weight: 600;
 }
 
-/* 카드 */
+/* ============== Cards ============== */
 .card{
   margin-top: 14px;
   padding: 18px 18px 16px;
@@ -272,12 +274,14 @@ main{ padding-top: var(--headerH); }
   margin:0 0 6px;
   font-size: 22px;
   font-weight: 820;
+  letter-spacing: -0.4px;
 }
 .card-lead{
   margin:0 0 10px;
   color: rgba(31,42,46,.72);
   font-weight: 560;
 }
+
 .bullets{
   margin: 0;
   padding-left: 18px;
@@ -296,7 +300,7 @@ main{ padding-top: var(--headerH); }
   font-weight: 650;
 }
 
-/* 섹션 헤더 */
+/* ============== Section Head ============== */
 .sec-head{
   display:flex;
   align-items:center;
@@ -326,7 +330,7 @@ main{ padding-top: var(--headerH); }
   color: rgba(31,42,46,.74);
 }
 
-/* 패널 */
+/* ============== Panels ============== */
 .panel{
   margin: 14px 0;
   padding: 18px 18px 16px;
@@ -340,12 +344,6 @@ main{ padding-top: var(--headerH); }
   font-size: 20px;
   font-weight: 800;
 }
-.panel-sub{
-  margin: 0 0 12px;
-  color: rgba(31,42,46,.70);
-  font-weight: 600;
-}
-
 .tag-row{
   display:flex;
   flex-wrap: wrap;
@@ -369,7 +367,7 @@ main{ padding-top: var(--headerH); }
   font-size: 18px;
 }
 
-/* Steps */
+/* ============== Steps (1열) ============== */
 .steps{
   list-style:none;
   padding:0;
@@ -394,9 +392,7 @@ main{ padding-top: var(--headerH); }
   background: rgba(255,255,255,.9);
   border: 1px solid rgba(31,42,46,.12);
   font-weight: 900;
-  flex: 0 0 auto;
 }
-.step-body{ min-width:0; }
 .step-title{
   font-weight: 820;
   font-size: 17px;
@@ -407,7 +403,7 @@ main{ padding-top: var(--headerH); }
   color: rgba(31,42,46,.70);
 }
 
-/* Locations: 1열 */
+/* ============== Locations (1열) ============== */
 .place-list{
   list-style: none;
   padding: 0;
@@ -434,57 +430,135 @@ main{ padding-top: var(--headerH); }
   color: rgba(31,42,46,.74);
 }
 
-/* Curriculum blocks */
-.mini-title{
-  margin: 14px 0 10px;
-  font-weight: 850;
-  color: rgba(31,42,46,.90);
-}
-.curr-ol{
-  margin: 0;
-  padding-left: 18px;
-}
-.curr-ol li{
-  margin: 8px 0;
-  font-weight: 650;
-  color: rgba(31,42,46,.80);
-}
-.curr-list{
-  display:flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 10px;
-}
-.curr{
-  padding: 16px 16px;
+/* ============== Curriculum Teams ============== */
+.team{
+  margin-top: 18px;
+  padding: 18px;
   border-radius: var(--radius2);
-  background: rgba(255,255,255,.82);
+  background: rgba(255,255,255,.72);
   border: 1px solid rgba(31,42,46,.10);
   box-shadow: var(--shadow);
 }
-.curr-title{
-  margin:0 0 6px;
-  font-size: 18px;
-  font-weight: 900;
+.team-head{
+  margin-bottom: 12px;
 }
-.curr-q{
+.team-title{
   margin:0;
-  font-size: 16px;
-  font-weight: 700;
-  color: rgba(31,42,46,.70);
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: -0.4px;
 }
-.wide-note{
-  margin-top: 14px;
-  padding: 14px 16px;
-  border-radius: 20px;
-  border: 2px dashed rgba(31,42,46,.18);
-  background: rgba(255,255,255,.55);
-  font-weight: 800;
-  text-align:center;
+.team-desc{
+  margin: 6px 0 0;
   color: rgba(31,42,46,.72);
+  font-weight: 650;
 }
 
-/* Instructor */
+/* 방학특강: 민트 라인 강조 */
+.team--vacation{
+  border-left: 5px solid rgba(120, 210, 200, .55);
+}
+
+/* 정규팀: 기본 */
+.team--regular{
+  border-left: 5px solid rgba(244, 227, 178, .75);
+}
+
+.team-box{
+  margin-top: 12px;
+  padding: 14px 14px;
+  border-radius: 20px;
+  background: rgba(255,255,255,.78);
+  border: 1px solid rgba(31,42,46,.10);
+}
+
+.team-info{
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.info-row{
+  display:flex;
+  gap: 12px;
+  align-items:flex-start;
+}
+.info-row .k{
+  flex: 0 0 84px;
+  font-weight: 850;
+  color: rgba(31,42,46,.92);
+}
+.info-row .v{
+  flex: 1 1 auto;
+  font-weight: 650;
+  color: rgba(31,42,46,.74);
+}
+
+/* 정규팀/방학특강 커리큘럼 그룹 */
+.curr-groups{
+  margin-top: 14px;
+  display:flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.curr-group{
+  padding: 14px;
+  border-radius: 22px;
+  background: rgba(255,255,255,.78);
+  border: 1px solid rgba(31,42,46,.10);
+}
+.curr-group-head{
+  margin-bottom: 10px;
+}
+.curr-group-title{
+  font-weight: 900;
+  font-size: 17px;
+}
+.curr-group-sub{
+  margin-top: 4px;
+  font-weight: 650;
+  color: rgba(31,42,46,.66);
+  font-size: 14px;
+}
+
+/* 장소 중심(조선) 그룹: 🏛️ 포인트 */
+.curr-group--place .curr-group-title::before{
+  content:"🏛️ ";
+}
+
+/* 카드 리스트: 1열 고정 */
+.curr-cards{
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.curr-card{
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.9);
+  border: 1px solid rgba(31,42,46,.10);
+  box-shadow: 0 10px 16px rgba(0,0,0,.05);
+  font-weight: 750;
+  color: rgba(31,42,46,.80);
+}
+.curr-card .num{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width: 28px;
+  height: 28px;
+  margin-right: 10px;
+  border-radius: 10px;
+  background: rgba(255,239,203,.85);
+  border: 1px solid rgba(173,133,46,.18);
+  font-weight: 900;
+}
+.curr-card .loc{
+  font-weight: 700;
+  color: rgba(31,42,46,.62);
+  margin-left: 6px;
+}
+
+/* ============== Instructor ============== */
 .teacher{
   margin-top: 12px;
   padding: 18px 18px 16px;
@@ -494,14 +568,14 @@ main{ padding-top: var(--headerH); }
   box-shadow: var(--shadow);
 }
 .teacher-logo{
-  width: 92px;
+  width: 96px;
   margin: 4px auto 10px;
   border-radius: 16px;
   background: rgba(255,255,255,.55);
   box-shadow: 0 12px 20px rgba(0,0,0,.08);
 }
 
-/* Info */
+/* ============== Class info ============== */
 .info-list{
   list-style:none;
   padding:0;
@@ -526,28 +600,30 @@ main{ padding-top: var(--headerH); }
   font-weight: 650;
 }
 
-/* Galleries: 1열, 클릭 기능 없음 */
+/* ============== Galleries (모달/확대 기능 제거) ============== */
 .gallery{
   margin-top: 12px;
+}
+.gallery--grid{
   display:flex;
   flex-direction: column;
   gap: 12px;
 }
-.shot{
-  margin: 0;
+.thumb{
+  width: 100%;
   border-radius: var(--radius2);
   overflow: hidden;
   box-shadow: var(--shadow);
   border: 1px solid rgba(31,42,46,.10);
-  background: rgba(255,255,255,.70);
+  background: rgba(255,255,255,.65);
 }
-.shot img{
-  width: 100%;
+.thumb img{
+  width:100%;
   height: auto;
   display:block;
 }
 
-/* Contact */
+/* ============== Contact ============== */
 .form{
   margin-top: 10px;
   padding: 18px 18px 16px;
@@ -574,8 +650,10 @@ main{ padding-top: var(--headerH); }
   font-size: 15px;
 }
 
-/* Footer */
-.footer{ padding: 26px 0 34px; }
+/* ============== Footer ============== */
+.footer{
+  padding: 26px 0 34px;
+}
 .footer-inner{
   text-align:center;
   color: rgba(31,42,46,.78);
@@ -584,12 +662,28 @@ main{ padding-top: var(--headerH); }
 .footer-sub{ margin-top: 4px; font-weight: 650; color: rgba(31,42,46,.66); }
 .footer-copy{ margin-top: 10px; font-weight: 650; color: rgba(31,42,46,.58); }
 
-/* Mobile tweaks */
+/* ============== Fade animation ============== */
+.reveal{
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .65s ease, transform .65s ease;
+  will-change: opacity, transform;
+}
+.reveal.is-in{
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal.is-out{
+  opacity: .18;
+  transform: translateY(-6px);
+}
+
+/* ============== Responsive ============== */
 @media (max-width: 420px){
   .hero-title{ font-size: 40px; }
   .sec-title{ font-size: 26px; }
   .btn{ font-size: 14.5px; }
   .btn-row{ gap: 8px; }
   .brand-title{ font-size: 19px; }
-  .brand-logo{ width: 50px; height: 50px; }
+  .brand-logo{ width: 52px; height: 52px; }
 }
