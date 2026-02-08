@@ -22,21 +22,24 @@
           <div class="brand-sub">초등 현장 한국사 수업</div>
         </div>
       </div>
+
+      <a class="chip" href="#contact" data-scroll>문의</a>
     </div>
   </header>
 
   <main id="main">
-    <section class="section hero">
+    <!-- HERO -->
+    <section class="section hero" id="home">
       <div class="wrap">
-        <div class="pill"><span class="pill-dot">🐾</span>현장형 · 소수정예 · 150분</div>
+        <!-- 상단 멘트: 소수정예 제거 + 2줄 방지 -->
+        <div class="pill">
+          <span class="pill-dot">🐾</span>
+          탄탄한 커리큘럼 · 역사 교육 경력 15년+
+        </div>
 
         <h1 class="hero-title">야옹 역사</h1>
         <div class="hero-sub">초등 현장 한국사 수업</div>
-
-        <p class="hero-copy">
-          교과서 밖에서 직접 보고, 묻고, 배우는<br />
-          살아있는 한국사 수업
-        </p>
+        <p class="hero-copy">교과서 밖에서 직접 보고, 묻고, 배우는<br>살아있는 한국사 수업</p>
 
         <div class="btn-row">
           <a class="btn btn--wide" href="#about" data-scroll>수업 소개 보기</a>
@@ -72,6 +75,7 @@
       </div>
     </section>
 
+    <!-- ABOUT -->
     <section class="section" id="about">
       <div class="wrap">
         <div class="sec-head">
@@ -79,8 +83,9 @@
           <h2 class="sec-title">야옹 역사는 이런 수업이에요</h2>
         </div>
 
+        <!-- 요청: 두 줄로 고정 -->
         <p class="sec-sub">
-          따뜻하고 친근하지만, 내용은 탄탄하게.<br />
+          따뜻하고 친근하지만, 내용은 탄탄하게.<br>
           아이와 부모 모두 안심하는 현장 수업.
         </p>
 
@@ -107,6 +112,7 @@
       </div>
     </section>
 
+    <!-- STYLE -->
     <section class="section" id="style">
       <div class="wrap">
         <div class="sec-head">
@@ -147,6 +153,7 @@
       </div>
     </section>
 
+    <!-- LOCATIONS -->
     <section class="section" id="locations">
       <div class="wrap">
         <div class="sec-head">
@@ -159,13 +166,14 @@
           <li>경복궁 · 덕수궁 · 창경궁</li>
           <li>서대문형무소 · 전쟁기념관</li>
           <li>고궁박물관 · 화폐박물관</li>
-          <li>그리스&로마관 · 선정릉</li>
+          <li>그리스&amp;로마관 · 선정릉</li>
         </ul>
 
         <div class="place-note">교실을 벗어나, 역사를 직접 만나는 수업</div>
       </div>
     </section>
 
+    <!-- CURRICULUM (정규팀 + 방학특강팀) -->
     <section class="section" id="curriculum">
       <div class="wrap">
         <div class="sec-head">
@@ -175,125 +183,173 @@
         <p class="sec-sub">야옹 역사는 두 가지 팀으로 운영됩니다.</p>
 
         <!-- 정규팀 -->
-        <article class="team-card team--regular">
+        <article class="team-card team-card--regular">
           <div class="team-top">
             <span class="team-badge team-badge--yellow">정규팀</span>
-            <h3 class="team-title">학기 중, 월 1~2회로 부담 없이 이어가는 ‘현장 한국사 루틴’</h3>
+            <h3 class="team-title">
+              학기 중, 월 1~2회로 부담 없이 이어가는<br>
+              <b>‘현장 한국사 루틴’</b>
+            </h3>
           </div>
 
           <div class="team-meta">
-            <dl class="meta-grid">
-              <div class="meta-row">
-                <dt>수업 시간</dt>
-                <dd>1회 150분</dd>
+            <div class="meta-row">
+              <div class="meta-k">수업 시간</div>
+              <div class="meta-v">1회 150분</div>
+            </div>
+            <div class="meta-row">
+              <div class="meta-k">운영</div>
+              <div class="meta-v">
+                월 1회 또는 2회<br>
+                <span class="meta-sub">(토요일 또는 일요일)</span>
               </div>
-              <div class="meta-row">
-                <dt>운영</dt>
-                <dd>월 1회 또는 2회 · 토요일 또는 일요일</dd>
+            </div>
+            <div class="meta-row">
+              <div class="meta-k">시간대</div>
+              <div class="meta-v">
+                오전 10:00 ~ 오후 12:30 또는<br>
+                오후 1:30 ~ 오후 4:00
               </div>
-              <div class="meta-row">
-                <dt>시간대</dt>
-                <dd>
-                  오전 10:00 ~ 오후 12:30<br />
-                  또는<br />
-                  오후 1:30 ~ 오후 4:00
-                </dd>
+            </div>
+            <div class="meta-row">
+              <div class="meta-k">비고</div>
+              <div class="meta-v">
+                시간은 조정 가능합니다.<br>
+                <span class="meta-sub">(협의 후 결정)</span>
               </div>
-              <div class="meta-row">
-                <dt>비고</dt>
-                <dd>시간은 조정 가능합니다. (협의 후 결정)</dd>
-              </div>
-            </dl>
+            </div>
           </div>
 
-          <div class="team-block">
-            <div class="team-block-title">
-              <span class="title-emoji" aria-hidden="true">🕰️</span>
-              시대 흐름 중심 (선사~고려)
-            </div>
-            <div class="team-block-sub">중앙박물관 중심</div>
+          <div class="curr-block">
+            <div class="curr-headline">🕰️ 시대 흐름 중심 (선사~고려)</div>
+            <div class="curr-subline">중앙박물관 중심</div>
 
-            <ol class="curr-cards">
-              <li class="curr-card"><span class="num">1</span><span class="txt">선사시대</span><span class="place">(중앙박물관)</span></li>
-              <li class="curr-card"><span class="num">2</span><span class="txt">청동기 문화와 고조선</span><span class="place">(중앙박물관)</span></li>
-              <li class="curr-card"><span class="num">3</span><span class="txt">부여, 삼한, 고구려</span><span class="place">(중앙박물관)</span></li>
-              <li class="curr-card"><span class="num">4</span><span class="txt">백제</span><span class="place">(한성백제박물관)</span></li>
-              <li class="curr-card"><span class="num">5</span><span class="txt">신라, 가야</span><span class="place">(중앙박물관)</span></li>
-              <li class="curr-card"><span class="num">6</span><span class="txt">통일신라, 발해</span><span class="place">(중앙박물관)</span></li>
-              <li class="curr-card"><span class="num">7</span><span class="txt">고려 건국과 후삼국 통일, 고려 후기 전쟁</span><span class="place">(중앙박물관)</span></li>
+            <ol class="curr-items">
+              <li class="curr-item">
+                <span class="num">1</span>
+                <span class="txt">선사시대</span>
+                <span class="place">(중앙박물관)</span>
+              </li>
+              <li class="curr-item">
+                <span class="num">2</span>
+                <span class="txt">청동기 문화와 고조선</span>
+                <span class="place">(중앙박물관)</span>
+              </li>
+              <li class="curr-item">
+                <span class="num">3</span>
+                <span class="txt">부여, 삼한, 고구려</span>
+                <span class="place">(중앙박물관)</span>
+              </li>
+              <li class="curr-item">
+                <span class="num">4</span>
+                <span class="txt">백제</span>
+                <span class="place">(한성백제박물관)</span>
+              </li>
+              <li class="curr-item">
+                <span class="num">5</span>
+                <span class="txt">신라, 가야</span>
+                <span class="place">(중앙박물관)</span>
+              </li>
+              <li class="curr-item">
+                <span class="num">6</span>
+                <span class="txt">통일신라, 발해</span>
+                <span class="place">(중앙박물관)</span>
+              </li>
+              <li class="curr-item">
+                <span class="num">7</span>
+                <span class="txt">고려 건국과 후삼국 통일<br>고려 후기 전쟁</span>
+                <span class="place">(중앙박물관)</span>
+              </li>
             </ol>
           </div>
 
-          <div class="team-block team-block--place">
-            <div class="team-block-title">
-              <span class="title-emoji" aria-hidden="true">🏛️</span>
-              장소 중심 (조선)
-            </div>
-            <div class="team-block-sub">궁궐·역사현장 탐방</div>
+          <div class="curr-block curr-block--places">
+            <div class="curr-headline">🏛️ 장소 중심 (조선)</div>
+            <div class="curr-subline">궁궐·역사현장 탐방</div>
 
-            <ol class="curr-cards">
-              <li class="curr-card"><span class="num">8</span><span class="txt">경복궁</span></li>
-              <li class="curr-card"><span class="num">9</span><span class="txt">종묘</span></li>
-              <li class="curr-card"><span class="num">10</span><span class="txt">선정릉</span></li>
-              <li class="curr-card"><span class="num">11</span><span class="txt">조선관</span><span class="place">(중앙박물관)</span></li>
-              <li class="curr-card"><span class="num">12</span><span class="txt">운현궁</span></li>
-              <li class="curr-card"><span class="num">13</span><span class="txt">덕수궁, 중명전</span></li>
-              <li class="curr-card"><span class="num">14</span><span class="txt">서대문형무소 역사관</span></li>
-              <li class="curr-card"><span class="num">15</span><span class="txt">대한민국 역사박물관</span></li>
+            <ol class="curr-items">
+              <li class="curr-item"><span class="num">8</span><span class="txt">경복궁</span><span class="place"></span></li>
+              <li class="curr-item"><span class="num">9</span><span class="txt">종묘</span><span class="place"></span></li>
+              <li class="curr-item"><span class="num">10</span><span class="txt">선정릉</span><span class="place"></span></li>
+              <li class="curr-item"><span class="num">11</span><span class="txt">조선관</span><span class="place">(중앙박물관)</span></li>
+              <li class="curr-item"><span class="num">12</span><span class="txt">운현궁</span><span class="place"></span></li>
+              <li class="curr-item"><span class="num">13</span><span class="txt">덕수궁, 중명전</span><span class="place"></span></li>
+              <li class="curr-item"><span class="num">14</span><span class="txt">서대문형무소 역사관</span><span class="place"></span></li>
+              <li class="curr-item"><span class="num">15</span><span class="txt">대한민국 역사박물관</span><span class="place"></span></li>
             </ol>
           </div>
         </article>
 
         <!-- 방학특강팀 -->
-        <article class="team-card team--camp">
+        <article class="team-card team-card--camp">
           <div class="team-top">
             <span class="team-badge team-badge--mint">방학특강팀</span>
-            <h3 class="team-title">방학 기간, 핵심 시대를 4회로 압축한 ‘몰입형 한국사 특강’</h3>
+            <h3 class="team-title">
+              방학 기간, 핵심 시대를 4회로 압축한<br>
+              <b>‘몰입형 한국사 특강’</b>
+            </h3>
           </div>
 
           <div class="team-meta">
-            <dl class="meta-grid">
-              <div class="meta-row">
-                <dt>수업 시간</dt>
-                <dd>1회 150분</dd>
+            <div class="meta-row">
+              <div class="meta-k">수업 시간</div>
+              <div class="meta-v">1회 150분</div>
+            </div>
+            <div class="meta-row">
+              <div class="meta-k">운영</div>
+              <div class="meta-v">
+                방학 기간 집중 운영<br>
+                <span class="meta-sub">(모든 요일 진행 가능)</span>
               </div>
-              <div class="meta-row">
-                <dt>운영</dt>
-                <dd>방학 기간 집중 운영 · 모든 요일 진행 가능</dd>
+            </div>
+            <div class="meta-row">
+              <div class="meta-k">시간대</div>
+              <div class="meta-v">
+                오전 10:00 ~ 오후 12:30 또는<br>
+                오후 1:30 ~ 오후 4:00
               </div>
-              <div class="meta-row">
-                <dt>시간대</dt>
-                <dd>
-                  오전 10:00 ~ 오후 12:30<br />
-                  또는<br />
-                  오후 1:30 ~ 오후 4:00
-                </dd>
+            </div>
+            <div class="meta-row">
+              <div class="meta-k">비고</div>
+              <div class="meta-v">
+                시간은 조정 가능합니다.<br>
+                <span class="meta-sub">(협의 후 결정)</span>
               </div>
-              <div class="meta-row">
-                <dt>비고</dt>
-                <dd>시간은 조정 가능합니다. (협의 후 결정)</dd>
-              </div>
-            </dl>
+            </div>
           </div>
 
-          <div class="team-block team-block--mintline">
-            <div class="team-block-title">
-              <span class="title-emoji" aria-hidden="true">🧩</span>
-              시대별 4회 압축 커리큘럼
-            </div>
-            <div class="team-block-sub">중앙박물관 중심</div>
+          <div class="curr-block">
+            <div class="curr-headline">🧩 시대별 4회 압축 커리큘럼</div>
+            <div class="curr-subline">중앙박물관 중심</div>
 
-            <ol class="curr-cards">
-              <li class="curr-card"><span class="num">1</span><span class="txt">선사시대</span><span class="place">(중앙박물관)</span></li>
-              <li class="curr-card"><span class="num">2</span><span class="txt">삼국시대</span><span class="place">(중앙박물관)</span></li>
-              <li class="curr-card"><span class="num">3</span><span class="txt">고려시대</span><span class="place">(중앙박물관)</span></li>
-              <li class="curr-card"><span class="num">4</span><span class="txt">조선시대</span><span class="place">(중앙박물관)</span></li>
+            <ol class="curr-items">
+              <li class="curr-item">
+                <span class="num mint">1</span>
+                <span class="txt">선사시대</span>
+                <span class="place">(중앙박물관)</span>
+              </li>
+              <li class="curr-item">
+                <span class="num mint">2</span>
+                <span class="txt">삼국시대</span>
+                <span class="place">(중앙박물관)</span>
+              </li>
+              <li class="curr-item">
+                <span class="num mint">3</span>
+                <span class="txt">고려시대</span>
+                <span class="place">(중앙박물관)</span>
+              </li>
+              <li class="curr-item">
+                <span class="num mint">4</span>
+                <span class="txt">조선시대</span>
+                <span class="place">(중앙박물관)</span>
+              </li>
             </ol>
           </div>
         </article>
       </div>
     </section>
 
+    <!-- INSTRUCTOR -->
     <section class="section" id="instructor">
       <div class="wrap">
         <div class="sec-head">
@@ -314,23 +370,7 @@
       </div>
     </section>
 
-    <section class="section" id="classinfo">
-      <div class="wrap">
-        <div class="sec-head">
-          <div class="sec-icon">🐾</div>
-          <h2 class="sec-title">수업 안내</h2>
-        </div>
-
-        <ul class="info-list">
-          <li><b>수업 시간</b> · 1회 150분</li>
-          <li><b>수업 정원</b> · 4~5명 소수 정예</li>
-          <li><b>대상</b> · 초등학생 (학년별 난이도 조절)</li>
-        </ul>
-
-        <div class="tiny-note">※ 장소/학년/인원에 맞춰 커리큘럼을 조정할 수 있어요.</div>
-      </div>
-    </section>
-
+    <!-- REVIEW (이미지 확대 기능 제거, 3장) -->
     <section class="section" id="review">
       <div class="wrap">
         <div class="sec-head">
@@ -338,14 +378,21 @@
           <h2 class="sec-title">생생한 후기</h2>
         </div>
 
-        <div class="gallery gallery--grid">
-          <div class="thumb thumb--static"><img src="review1.jpg" alt="수업 후기 이미지 1" loading="lazy" /></div>
-          <div class="thumb thumb--static"><img src="review2.jpg" alt="수업 후기 이미지 2" loading="lazy" /></div>
-          <div class="thumb thumb--static"><img src="review3.jpg" alt="수업 후기 이미지 3" loading="lazy" /></div>
+        <div class="gallery gallery--stack">
+          <figure class="thumb thumb--static">
+            <img src="review1.jpg" alt="수업 후기 이미지 1" loading="lazy" />
+          </figure>
+          <figure class="thumb thumb--static">
+            <img src="review2.jpg" alt="수업 후기 이미지 2" loading="lazy" />
+          </figure>
+          <figure class="thumb thumb--static">
+            <img src="review3.jpg" alt="수업 후기 이미지 3" loading="lazy" />
+          </figure>
         </div>
       </div>
     </section>
 
+    <!-- PHOTOS (이미지 확대 기능 제거) -->
     <section class="section" id="photos">
       <div class="wrap">
         <div class="sec-head">
@@ -354,15 +401,16 @@
         </div>
 
         <div class="gallery gallery--grid">
-          <div class="thumb thumb--static"><img src="photo1.jpg" alt="활동 사진 1" loading="lazy" /></div>
-          <div class="thumb thumb--static"><img src="photo2.jpg" alt="활동 사진 2" loading="lazy" /></div>
-          <div class="thumb thumb--static"><img src="photo3.jpg" alt="활동 사진 3" loading="lazy" /></div>
-          <div class="thumb thumb--static"><img src="photo4.jpg" alt="활동 사진 4" loading="lazy" /></div>
-          <div class="thumb thumb--static"><img src="photo5.jpg" alt="활동 사진 5" loading="lazy" /></div>
+          <figure class="thumb thumb--static"><img src="photo1.jpg" alt="활동 사진 1" loading="lazy" /></figure>
+          <figure class="thumb thumb--static"><img src="photo2.jpg" alt="활동 사진 2" loading="lazy" /></figure>
+          <figure class="thumb thumb--static"><img src="photo3.jpg" alt="활동 사진 3" loading="lazy" /></figure>
+          <figure class="thumb thumb--static"><img src="photo4.jpg" alt="활동 사진 4" loading="lazy" /></figure>
+          <figure class="thumb thumb--static"><img src="photo5.jpg" alt="활동 사진 5" loading="lazy" /></figure>
         </div>
       </div>
     </section>
 
+    <!-- CONTACT -->
     <section class="section" id="contact">
       <div class="wrap">
         <div class="sec-head">
@@ -399,9 +447,8 @@
 
           <div class="contact-actions">
             <button class="btn btn--mint" type="button" id="mailBtn">메일로 문의하기</button>
-
             <a class="btn btn--ig" href="https://instagram.com/yaong_history" target="_blank" rel="noopener">
-              <img class="ig-icon" src="instagram.png" alt="" />
+              <img class="ig-icon" src="instagram.png" alt="" aria-hidden="true" />
               @yaong_history
             </a>
           </div>
@@ -418,6 +465,6 @@
     </footer>
   </main>
 
-  <script src="main.js"></script>
+  <script src="main.js" defer></script>
 </body>
 </html>
