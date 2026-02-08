@@ -1,177 +1,117 @@
 (() => {
   "use strict";
 
-  // =========================
-  // Helpers
-  // =========================
-  const $ = (sel, root = document) => root.querySelector(sel);
-  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+  const header = document.querySelector(".site-header");
+  const revealEls = Array.from(document.querySelectorAll(".reveal"));
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const header = $(".site-header");
-  const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  function getHeaderOffset() {
-    // CSS 변수(--header-offset) 우선, 없으면 실제 헤더 높이로 계산
-    const root = document.documentElement;
-    const cssVal = getComputedStyle(root).getPropertyValue("--header-offset").trim();
-    const cssNum = cssVal ? parseInt(cssVal, 10) : NaN;
-    const h = header ? Math.ceil(header.getBoundingClientRect().height) : 0;
-    const base = Number.isFinite(cssNum) ? cssNum : (h + 10);
-    return Math.max(60, base);
+  function headerOffset() {
+    if (!header) return 0;
+    const h = header.getBoundingClientRect().height;
+    return Math.ceil(h + 10);
   }
 
-  function clamp(n, min, max) {
-    return Math.max(min, Math.min(max, n));
+  // ----------------------------
+  // Smooth scroll with fixed header offset
+  // ----------------------------
+  function smoothScrollTo(target) {
+    const y = window.scrollY + target.getBoundingClientRect().top - headerOffset();
+    window.scrollTo({ top: y, behavior: prefersReduced ? "auto" : "smooth" });
   }
 
-  // requestAnimationFrame 기반 스무스 스크롤(인앱 브라우저 호환)
-  function smoothScrollToY(targetY) {
-    const startY = window.pageYOffset || document.documentElement.scrollTop || 0;
-    const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-    const endY = clamp(targetY, 0, maxY);
+  document.querySelectorAll("[data-scroll]").forEach((a) => {
+    a.addEventListener(
+      "click",
+      (e) => {
+        const href = a.getAttribute("href") || "";
+        if (!href.startsWith("#")) return;
 
-    if (prefersReducedMotion) {
-      window.scrollTo(0, endY);
-      return;
-    }
+        const target = document.querySelector(href);
+        if (!target) return;
 
-    const duration = 520; // ms
-    const startT = performance.now();
+        e.preventDefault();
+        smoothScrollTo(target);
+      },
+      { passive: false }
+    );
+  });
 
-    const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
-
-    function tick(now) {
-      const t = clamp((now - startT) / duration, 0, 1);
-      const eased = easeOutCubic(t);
-      const y = startY + (endY - startY) * eased;
-      window.scrollTo(0, y);
-      if (t < 1) requestAnimationFrame(tick);
-    }
-
-    requestAnimationFrame(tick);
+  // ----------------------------
+  // Reveal / Fade-out on scroll
+  //  - Enter viewport: fade in
+  //  - Leave far behind: fade out
+  // ----------------------------
+  if (prefersReduced) {
+    // motion 줄이기 설정이면 즉시 표시
+    revealEls.forEach((el) => el.classList.add("is-visible"));
+    return;
   }
 
-  function scrollToEl(el) {
-    const rect = el.getBoundingClientRect();
-    const y = (window.pageYOffset || document.documentElement.scrollTop || 0) + rect.top - getHeaderOffset();
-    smoothScrollToY(y);
-  }
-
-  // =========================
-  // 1) Anchor smooth scroll with header offset
-  // =========================
-  function bindSmoothAnchors() {
-    $$("[data-scroll]").forEach((a) => {
-      a.addEventListener(
-        "click",
-        (e) => {
-          const href = a.getAttribute("href") || "";
-          if (!href.startsWith("#")) return;
-
-          const target = $(href);
-          if (!target) return;
-
-          e.preventDefault();
-          scrollToEl(target);
-
-          // URL hash는 유지(뒤로가기/공유에 도움)
-          // 스크롤이 끝난 후에 넣는 게 이상적이지만, 인앱에서 튀는 경우가 있어 바로 처리
-          history.replaceState(null, "", href);
-        },
-        { passive: false }
-      );
-    });
-  }
-
-  // =========================
-  // 2) Reveal animations (fade-in/out)
-  // =========================
-  function markRevealTargets() {
-    // 너무 과하지 않게 "덩어리" 단위로
-    const selectors = [
-      ".section .sec-head",
-      ".hero .pill",
-      ".hero-title",
-      ".hero-sub",
-      ".hero-copy",
-      ".btn-row",
-      ".stat",
-      ".card",
-      ".panel",
-      ".step",
-      ".place-list li",
-      ".place-note",
-      ".team-card",
-      ".teacher",
-      ".gallery .thumb",
-      ".form",
-      ".footer-inner"
-    ];
-
-    const set = new Set();
-    selectors.forEach((sel) => $$(sel).forEach((el) => set.add(el)));
-
-    set.forEach((el) => el.classList.add("reveal"));
-    return Array.from(set);
-  }
-
-  function bindRevealObserver(targets) {
-    if (!("IntersectionObserver" in window)) {
-      // 폴백: 전부 보이게
-      targets.forEach((el) => el.classList.add("is-in"));
-      return;
-    }
-
+  // IntersectionObserver 지원 시 (대부분)
+  if ("IntersectionObserver" in window) {
     const io = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           const el = entry.target;
 
-          // 화면 안으로 들어오면 선명
+          // 뷰포트 안으로 들어오면 보여주기
           if (entry.isIntersecting) {
-            el.classList.add("is-in");
-            el.classList.remove("is-out");
+            el.classList.add("is-visible");
           } else {
-            // 지나간(위로 올라가서 사라진) 요소는 희미하게
-            // 아래로 아직 안 온 요소는 그대로(0) 유지
-            const rect = el.getBoundingClientRect();
-            if (rect.top < (getHeaderOffset() + 10)) {
-              el.classList.remove("is-in");
-              el.classList.add("is-out");
+            // 지나간 부분은 페이드아웃(위로 많이 올라간 경우만)
+            // entry.boundingClientRect.top: 요소의 현재 뷰포트 기준 위치
+            // top이 -60px보다 더 위면 "지나감"으로 판단
+            if (entry.boundingClientRect.top < -60) {
+              el.classList.remove("is-visible");
             }
           }
         });
       },
       {
         root: null,
-        threshold: [0, 0.08, 0.18, 0.35],
-        rootMargin: `-${getHeaderOffset()}px 0px -15% 0px`
+        threshold: 0.12,
+        // 위쪽에서 살짝 미리 등장하고, 아래쪽은 여유 있게
+        rootMargin: "0px 0px -12% 0px",
       }
     );
 
-    targets.forEach((el) => io.observe(el));
+    revealEls.forEach((el) => io.observe(el));
+  } else {
+    // IntersectionObserver 없을 때(구형 인앱) 대비: rAF 스크롤 체크
+    const onScroll = () => {
+      const vh = window.innerHeight || document.documentElement.clientHeight;
 
-    // 스크롤/리사이즈 때 오프셋이 바뀌면 rootMargin이 달라져야 해서 간단 재설정
-    let raf = 0;
-    const refresh = () => {
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        io.disconnect();
-        targets.forEach((el) => io.observe(el));
+      revealEls.forEach((el) => {
+        const r = el.getBoundingClientRect();
+        const inView = r.top < vh * 0.88 && r.bottom > vh * 0.12;
+
+        if (inView) el.classList.add("is-visible");
+        else if (r.top < -60) el.classList.remove("is-visible");
       });
     };
-    window.addEventListener("resize", refresh, { passive: true });
-    window.addEventListener("orientationchange", refresh, { passive: true });
+
+    let ticking = false;
+    const requestTick = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        onScroll();
+        ticking = false;
+      });
+    };
+
+    window.addEventListener("scroll", requestTick, { passive: true });
+    window.addEventListener("resize", requestTick, { passive: true });
+    requestTick();
   }
 
-  // =========================
-  // 3) Mailto (문의 폼)
-  // =========================
-  function bindMail() {
-    const mailBtn = $("#mailBtn");
-    const form = $("#contactForm");
-    if (!mailBtn || !form) return;
+  // ----------------------------
+  // Mail button -> mailto compose with form template
+  // ----------------------------
+  const mailBtn = document.getElementById("mailBtn");
+  const form = document.getElementById("contactForm");
 
+  if (mailBtn && form) {
     mailBtn.addEventListener("click", () => {
       const fd = new FormData(form);
       const parent = (fd.get("parent") || "").toString().trim();
@@ -181,44 +121,19 @@
       const message = (fd.get("message") || "").toString().trim();
 
       const subject = encodeURIComponent("야옹 역사 수업 문의");
-      const bodyLines = [
-        `보호자 이름: ${parent}`,
-        `휴대폰 번호: ${phone}`,
-        `인원: ${people}`,
-        `희망 장소/일정: ${schedule}`,
-        ``,
-        `문의 내용:`,
-        `${message}`
-      ];
-      const body = encodeURIComponent(bodyLines.join("\n"));
+      const body = encodeURIComponent(
+        [
+          `보호자 이름: ${parent}`,
+          `휴대폰 번호: ${phone}`,
+          `인원: ${people}`,
+          `희망 장소/일정: ${schedule}`,
+          ``,
+          `문의 내용:`,
+          `${message}`,
+        ].join("\n")
+      );
+
       location.href = `mailto:yaonghistory@gmail.com?subject=${subject}&body=${body}`;
     });
-  }
-
-  // =========================
-  // Init
-  // =========================
-  function init() {
-    bindSmoothAnchors();
-
-    const targets = markRevealTargets();
-    bindRevealObserver(targets);
-
-    bindMail();
-
-    // 처음 로드 시 해시가 있으면 헤더 오프셋 반영해서 위치 보정
-    // (인앱에서 기본 점프 후 위치가 어긋나는 케이스 대응)
-    if (location.hash) {
-      const el = $(location.hash);
-      if (el) {
-        setTimeout(() => scrollToEl(el), 0);
-      }
-    }
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
   }
 })();
