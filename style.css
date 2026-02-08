@@ -1,8 +1,3 @@
-/* =========================
-   Yaong History - style.css
-   (Safari/Kakao/Naver 통일 + 충돌 최소화)
-========================= */
-
 /* ============== Base ============== */
 :root{
   --bg: #f6f3ea;
@@ -16,15 +11,14 @@
 
   --yellow: #f4e3b2;
   --yellow2:#f8efcf;
-
   --mint: #cfece6;
   --mint2:#e6f6f3;
 
   --radius: 22px;
   --radius2: 28px;
 
-  --btnH: 48px;
-  --wrap: 760px;
+  --btnH: 46px;
+  --wrap: 720px;
 
   --headerH: 78px;
 }
@@ -34,7 +28,7 @@ html,body{ height:100%; }
 html{
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-  scroll-behavior: auto; /* JS가 제어 */
+  scroll-behavior: smooth;
 }
 body{
   margin:0;
@@ -50,17 +44,13 @@ body{
   line-height: 1.45;
   word-break: keep-all;
   overflow-wrap: break-word;
-
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 img{ max-width:100%; height:auto; display:block; }
 a{ color: inherit; text-decoration: none; }
-button,input,textarea{
-  font: inherit;
-  color: inherit;
-}
+button,input,textarea{ font: inherit; color: inherit; }
 input,textarea{
   background: rgba(255,255,255,.92);
   border: 1px solid rgba(31,42,46,.16);
@@ -84,12 +74,12 @@ textarea{ resize: vertical; }
   margin:0 auto;
 }
 
-/* ============== Header (fixed) ============== */
+/* ============== Header ============== */
 .site-header{
   position: fixed;
-  left:0; right:0; top:0;
+  top: 0; left: 0; right: 0;
   z-index: 50;
-  background: rgba(246,243,234,.88);
+  background: rgba(246,243,234,.90);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid rgba(31,42,46,.10);
@@ -102,40 +92,22 @@ textarea{ resize: vertical; }
   gap: 14px;
   padding: 10px 0;
 }
-.brand{
-  display:flex; align-items:center; gap: 12px;
-  min-width: 0;
-}
+.brand{ display:flex; align-items:center; gap: 12px; min-width: 0; }
 .brand-logo{
-  width: 54px; height: 54px;
+  width: 52px; height: 52px;
   border-radius: 14px;
   background: rgba(255,255,255,.65);
   box-shadow: 0 10px 18px rgba(0,0,0,.08);
   object-fit: cover;
 }
 .brand-text{ min-width:0; }
-.brand-title{
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.4px;
-}
-.brand-sub{
-  margin-top: 2px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--muted);
-}
-
-/* header fixed 보정 */
-main{
-  padding-top: calc(var(--headerH) + 10px);
-}
+.brand-title{ font-size: 20px; font-weight: 700; letter-spacing: -0.4px; }
+.brand-sub{ margin-top: 2px; font-size: 13px; font-weight: 500; color: var(--muted); }
+main{ padding-top: calc(var(--headerH) + 10px); }
 
 /* ============== Sections ============== */
-.section{
-  padding: 28px 0 8px;
-}
-.hero{ padding-top: 18px; }
+.section{ padding: 26px 0 8px; }
+.hero{ padding-top: 16px; }
 
 .pill{
   display:inline-flex; align-items:center; gap: 8px;
@@ -144,10 +116,9 @@ main{
   border: 2px dashed rgba(31,42,46,.16);
   background: rgba(255,255,255,.55);
   color: rgba(31,42,46,.78);
-  font-weight: 650;
+  font-weight: 600;
   box-shadow: 0 12px 24px rgba(0,0,0,.05);
 }
-.pill-dot{ filter: saturate(1.1); }
 
 .hero-title{
   margin: 16px 0 6px;
@@ -156,11 +127,7 @@ main{
   font-weight: 800;
   letter-spacing: -0.8px;
 }
-.hero-sub{
-  font-size: 18px;
-  font-weight: 650;
-  color: rgba(31,42,46,.82);
-}
+.hero-sub{ font-size: 18px; font-weight: 650; color: rgba(31,42,46,.82); }
 .hero-copy{
   margin: 12px 0 18px;
   font-size: 18px;
@@ -168,7 +135,7 @@ main{
   font-weight: 520;
 }
 
-/* ============== Buttons ============== */
+/* 버튼 */
 .btn-row{
   display:flex;
   flex-wrap: nowrap;
@@ -194,7 +161,7 @@ main{
   font-weight: 700;
   font-size: 15px;
   white-space: nowrap;
-  transition: transform .12s ease, box-shadow .12s ease;
+  transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
 }
 .btn:active{
   transform: translateY(1px);
@@ -203,7 +170,6 @@ main{
     inset 0 1px 0 rgba(255,255,255,.9);
 }
 .btn--wide{ flex: 1 1 0; min-width: 0; }
-
 .btn--accent{
   background: linear-gradient(180deg, #fff7dc, var(--yellow));
   border-color: rgba(173,133,46,.22);
@@ -215,21 +181,11 @@ main{
 }
 .btn--ig{
   background: linear-gradient(180deg, #fff, rgba(255,255,255,.78));
+  gap: 8px;
 }
-.ig-icon{
-  width: 18px;
-  height: 18px;
-  margin-right: 8px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-}
-.ig-icon img{
-  width: 18px;
-  height: 18px;
-}
+.ig-icon{ width: 18px; height: 18px; border-radius: 6px; }
 
-/* ============== Stats (1열 고정) ============== */
+/* 통계 카드 */
 .stat-list{
   list-style:none;
   padding:0; margin: 12px 0 0;
@@ -244,18 +200,10 @@ main{
   border: 1px solid rgba(31,42,46,.10);
   box-shadow: var(--shadow);
 }
-.stat-top{
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: -0.6px;
-}
-.stat-bottom{
-  margin-top: 4px;
-  color: rgba(31,42,46,.66);
-  font-weight: 600;
-}
+.stat-top{ font-size: 28px; font-weight: 800; letter-spacing: -0.6px; }
+.stat-bottom{ margin-top: 4px; color: rgba(31,42,46,.66); font-weight: 600; }
 
-/* ============== Cards ============== */
+/* 카드 */
 .card{
   margin-top: 14px;
   padding: 18px 18px 16px;
@@ -270,26 +218,10 @@ main{
     radial-gradient(700px 420px at 80% 0%, rgba(255,239,203,.32), transparent 60%),
     rgba(255,255,255,.78);
 }
-.card-title{
-  margin:0 0 6px;
-  font-size: 22px;
-  font-weight: 820;
-  letter-spacing: -0.4px;
-}
-.card-lead{
-  margin:0 0 10px;
-  color: rgba(31,42,46,.72);
-  font-weight: 560;
-}
-
-.bullets{
-  margin: 0;
-  padding-left: 18px;
-}
-.bullets li{
-  margin: 8px 0;
-  font-weight: 600;
-}
+.card-title{ margin:0 0 6px; font-size: 22px; font-weight: 820; letter-spacing: -0.4px; }
+.card-lead{ margin:0 0 10px; color: rgba(31,42,46,.72); font-weight: 560; }
+.bullets{ margin: 0; padding-left: 18px; }
+.bullets li{ margin: 8px 0; font-weight: 600; }
 .note{
   margin-top: 12px;
   padding: 12px 14px;
@@ -300,13 +232,8 @@ main{
   font-weight: 650;
 }
 
-/* ============== Section Head ============== */
-.sec-head{
-  display:flex;
-  align-items:center;
-  gap: 10px;
-  margin: 8px 0 8px;
-}
+/* 섹션 헤더 */
+.sec-head{ display:flex; align-items:center; gap: 10px; margin: 8px 0 8px; }
 .sec-icon{
   width: 34px; height: 34px;
   border-radius: 12px;
@@ -317,20 +244,10 @@ main{
   border: 1px solid rgba(31,42,46,.12);
   box-shadow: 0 10px 18px rgba(0,0,0,.06);
 }
-.sec-title{
-  margin:0;
-  font-size: 28px;
-  font-weight: 820;
-  letter-spacing: -0.6px;
-}
-.sec-sub{
-  margin: 0 0 14px;
-  font-size: 16px;
-  font-weight: 560;
-  color: rgba(31,42,46,.74);
-}
+.sec-title{ margin:0; font-size: 28px; font-weight: 820; letter-spacing: -0.6px; }
+.sec-sub{ margin: 0 0 14px; font-size: 16px; font-weight: 560; color: rgba(31,42,46,.74); }
 
-/* ============== Panels ============== */
+/* 패널 */
 .panel{
   margin: 14px 0;
   padding: 18px 18px 16px;
@@ -339,16 +256,8 @@ main{
   border: 1px solid rgba(31,42,46,.10);
   box-shadow: var(--shadow);
 }
-.panel-title{
-  margin: 0 0 12px;
-  font-size: 20px;
-  font-weight: 800;
-}
-.tag-row{
-  display:flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
+.panel-title{ margin: 0 0 12px; font-size: 20px; font-weight: 800; }
+.tag-row{ display:flex; flex-wrap: wrap; gap: 10px; }
 .tag{
   padding: 10px 14px;
   border-radius: 999px;
@@ -367,7 +276,7 @@ main{
   font-size: 18px;
 }
 
-/* ============== Steps (1열) ============== */
+/* Steps */
 .steps{
   list-style:none;
   padding:0;
@@ -393,17 +302,10 @@ main{
   border: 1px solid rgba(31,42,46,.12);
   font-weight: 900;
 }
-.step-title{
-  font-weight: 820;
-  font-size: 17px;
-}
-.step-desc{
-  margin-top: 4px;
-  font-weight: 560;
-  color: rgba(31,42,46,.70);
-}
+.step-title{ font-weight: 820; font-size: 17px; }
+.step-desc{ margin-top: 4px; font-weight: 560; color: rgba(31,42,46,.70); }
 
-/* ============== Locations (1열) ============== */
+/* Locations */
 .place-list{
   list-style: none;
   padding: 0;
@@ -430,135 +332,223 @@ main{
   color: rgba(31,42,46,.74);
 }
 
-/* ============== Curriculum Teams ============== */
-.team{
-  margin-top: 18px;
-  padding: 18px;
-  border-radius: var(--radius2);
-  background: rgba(255,255,255,.72);
+/* ============== Curriculum (팀 카드) ============== */
+.team-card{
+  margin: 14px 0;
+  padding: 18px 18px 16px;
+  border-radius: 30px;
   border: 1px solid rgba(31,42,46,.10);
   box-shadow: var(--shadow);
-}
-.team-head{
-  margin-bottom: 12px;
-}
-.team-title{
-  margin:0;
-  font-size: 22px;
-  font-weight: 900;
-  letter-spacing: -0.4px;
-}
-.team-desc{
-  margin: 6px 0 0;
-  color: rgba(31,42,46,.72);
-  font-weight: 650;
+  position: relative;
+  overflow: hidden;
+
+  /* ✅ 한지 느낌 제거: 깨끗한 브랜드 글로우 */
+  background:
+    radial-gradient(900px 520px at 12% 0%, rgba(255,255,255,.62), transparent 62%),
+    radial-gradient(900px 520px at 92% 18%, rgba(255,239,203,.16), transparent 62%),
+    linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.78));
 }
 
-/* 방학특강: 민트 라인 강조 */
-.team--vacation{
-  border-left: 5px solid rgba(120, 210, 200, .55);
+/* 브랜드 “한끗” 글로우 (텍스처 X) */
+.team-card::after{
+  content:"";
+  position:absolute;
+  inset:-40px -60px auto -60px;
+  height: 120px;
+  background: radial-gradient(closest-side, rgba(255,255,255,.55), transparent 70%);
+  opacity: .55;
+  pointer-events:none;
 }
 
-/* 정규팀: 기본 */
-.team--regular{
-  border-left: 5px solid rgba(244, 227, 178, .75);
-}
+.team--regular{ border-left: 10px solid rgba(244,227,178,.92); }
+.team--camp{ border-left: 10px solid rgba(207,236,230,.98); }
 
-.team-box{
-  margin-top: 12px;
-  padding: 14px 14px;
-  border-radius: 20px;
-  background: rgba(255,255,255,.78);
-  border: 1px solid rgba(31,42,46,.10);
-}
-
-.team-info{
-  display:flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.info-row{
-  display:flex;
-  gap: 12px;
-  align-items:flex-start;
-}
-.info-row .k{
-  flex: 0 0 84px;
-  font-weight: 850;
-  color: rgba(31,42,46,.92);
-}
-.info-row .v{
-  flex: 1 1 auto;
-  font-weight: 650;
-  color: rgba(31,42,46,.74);
-}
-
-/* 정규팀/방학특강 커리큘럼 그룹 */
-.curr-groups{
-  margin-top: 14px;
-  display:flex;
-  flex-direction: column;
-  gap: 14px;
-}
-.curr-group{
-  padding: 14px;
+.team--regular::before,
+.team--camp::before{
+  content:"";
+  position:absolute;
+  left:-10px; top: 18px; bottom: 18px;
+  width: 26px;
   border-radius: 22px;
-  background: rgba(255,255,255,.78);
+  filter: blur(14px);
+  opacity: .40;
+}
+.team--regular::before{ background: rgba(244,227,178,.92); }
+.team--camp::before{ background: rgba(207,236,230,.98); }
+
+.team-top{ margin-bottom: 14px; position: relative; z-index: 1; }
+
+.team-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-weight: 850;
   border: 1px solid rgba(31,42,46,.10);
+  box-shadow: 0 10px 18px rgba(0,0,0,.06);
+  position: relative;
+  overflow: hidden;
 }
-.curr-group-head{
-  margin-bottom: 10px;
+.team-badge::after{
+  content:"";
+  position:absolute;
+  inset:-40%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.42), transparent);
+  transform: rotate(20deg);
+  opacity: .55;
 }
-.curr-group-title{
+.team-badge--yellow{ background: linear-gradient(180deg, #fff7dc, var(--yellow)); }
+.team-badge--mint{ background: linear-gradient(180deg, var(--mint2), var(--mint)); }
+
+.team-title{
+  margin: 10px 0 0;
+  font-size: 18px;
+  font-weight: 820;
+  color: rgba(31,42,46,.90);
+  position: relative;
+  z-index: 1;
+}
+
+.team-meta{
+  margin-top: 14px;
+  margin-bottom: 18px;
+  padding: 16px;
+  border-radius: 22px;
+  background: rgba(255,255,255,.76);
+  border: 1px solid rgba(31,42,46,.10);
+  box-shadow: 0 10px 18px rgba(0,0,0,.05);
+  position: relative;
+  z-index: 1;
+}
+
+.meta-grid{ margin:0; display:grid; gap: 12px; }
+.meta-row{ display:grid; grid-template-columns: 92px 1fr; gap: 12px; align-items:start; }
+.meta-row dt{ font-weight: 900; color: rgba(31,42,46,.85); }
+.meta-row dd{ margin:0; font-weight: 650; color: rgba(31,42,46,.74); }
+
+.team-block{
+  margin-top: 14px;
+  padding: 16px;
+  border-radius: 22px;
+  background: rgba(255,255,255,.76);
+  border: 1px solid rgba(31,42,46,.10);
+  box-shadow: 0 10px 18px rgba(0,0,0,.05);
+  position: relative;
+  z-index: 1;
+}
+
+/* 제목 라벨: 브랜드 하이라이트 */
+.team-block-title{
   font-weight: 900;
-  font-size: 17px;
-}
-.curr-group-sub{
-  margin-top: 4px;
-  font-weight: 650;
-  color: rgba(31,42,46,.66);
-  font-size: 14px;
-}
-
-/* 장소 중심(조선) 그룹: 🏛️ 포인트 */
-.curr-group--place .curr-group-title::before{
-  content:"🏛️ ";
+  font-size: 18px;
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,.86), rgba(255,255,255,.34));
+  border: 1px solid rgba(31,42,46,.08);
 }
 
-/* 카드 리스트: 1열 고정 */
+.title-emoji{
+  width: 28px; height: 28px;
+  border-radius: 10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,255,255,.92);
+  border: 1px solid rgba(31,42,46,.10);
+  box-shadow: 0 8px 14px rgba(0,0,0,.06);
+  flex: 0 0 auto;
+}
+
+.team-block-sub{
+  margin-top: 8px;
+  font-weight: 700;
+  color: rgba(31,42,46,.62);
+}
+
+/* 방학특강팀만 민트 라인 강조 */
+.team-block--mintline{
+  position: relative;
+  padding-left: 18px;
+}
+.team-block--mintline::before{
+  content:"";
+  position:absolute;
+  left: 14px;
+  top: 18px;
+  bottom: 18px;
+  width: 4px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(140,214,201,.92), rgba(140,214,201,.34));
+  box-shadow: 0 10px 18px rgba(0,0,0,.08);
+}
+
+/* 커리큘럼 카드 리스트 */
 .curr-cards{
+  list-style:none;
+  padding:0;
+  margin: 14px 0 0;
   display:flex;
   flex-direction: column;
   gap: 10px;
 }
 .curr-card{
-  padding: 12px 14px;
-  border-radius: 18px;
-  background: rgba(255,255,255,.9);
-  border: 1px solid rgba(31,42,46,.10);
-  box-shadow: 0 10px 16px rgba(0,0,0,.05);
-  font-weight: 750;
-  color: rgba(31,42,46,.80);
-}
-.curr-card .num{
-  display:inline-flex;
+  display:flex;
   align-items:center;
-  justify-content:center;
-  width: 28px;
-  height: 28px;
-  margin-right: 10px;
-  border-radius: 10px;
-  background: rgba(255,239,203,.85);
-  border: 1px solid rgba(173,133,46,.18);
-  font-weight: 900;
+  gap: 12px;
+  padding: 14px 14px;
+  border-radius: 20px;
+  background:
+    radial-gradient(700px 260px at 10% 0%, rgba(255,255,255,.92), transparent 60%),
+    rgba(255,255,255,.82);
+  border: 1px solid rgba(31,42,46,.10);
+  box-shadow: 0 10px 18px rgba(0,0,0,.05);
+  position: relative;
 }
-.curr-card .loc{
-  font-weight: 700;
-  color: rgba(31,42,46,.62);
-  margin-left: 6px;
+/* 한 끗: 인셋 하이라이트 */
+.curr-card::after{
+  content:"";
+  position:absolute;
+  inset: 1px;
+  border-radius: 19px;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
+  pointer-events:none;
 }
 
-/* ============== Instructor ============== */
+/* 숫자칩 */
+.curr-card .num{
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight: 900;
+  background: linear-gradient(180deg, #fff7dc, var(--yellow));
+  border: 1px solid rgba(173,133,46,.22);
+  box-shadow:
+    0 10px 18px rgba(0,0,0,.06),
+    inset 0 1px 0 rgba(255,255,255,.9);
+  flex: 0 0 auto;
+}
+.team--camp .curr-card .num{
+  background: linear-gradient(180deg, var(--mint2), var(--mint));
+  border-color: rgba(31,42,46,.14);
+}
+
+.curr-card .txt{ font-weight: 850; color: rgba(31,42,46,.88); }
+.curr-card .place{
+  margin-left: auto;
+  font-weight: 700;
+  color: rgba(31,42,46,.60);
+  white-space: nowrap;
+}
+
+/* Instructor / Class info */
 .teacher{
   margin-top: 12px;
   padding: 18px 18px 16px;
@@ -568,14 +558,12 @@ main{
   box-shadow: var(--shadow);
 }
 .teacher-logo{
-  width: 96px;
+  width: 92px;
   margin: 4px auto 10px;
   border-radius: 16px;
   background: rgba(255,255,255,.55);
   box-shadow: 0 12px 20px rgba(0,0,0,.08);
 }
-
-/* ============== Class info ============== */
 .info-list{
   list-style:none;
   padding:0;
@@ -594,16 +582,10 @@ main{
   color: rgba(31,42,46,.78);
 }
 .info-list b{ font-weight: 850; color: rgba(31,42,46,.92); }
-.tiny-note{
-  margin-top: 12px;
-  color: rgba(31,42,46,.68);
-  font-weight: 650;
-}
+.tiny-note{ margin-top: 12px; color: rgba(31,42,46,.68); font-weight: 650; }
 
-/* ============== Galleries (모달/확대 기능 제거) ============== */
-.gallery{
-  margin-top: 12px;
-}
+/* Galleries (클릭/확대 없음) */
+.gallery{ margin-top: 12px; }
 .gallery--grid{
   display:flex;
   flex-direction: column;
@@ -611,19 +593,18 @@ main{
 }
 .thumb{
   width: 100%;
+  border: 0;
+  padding: 0;
+  background: transparent;
   border-radius: var(--radius2);
   overflow: hidden;
   box-shadow: var(--shadow);
   border: 1px solid rgba(31,42,46,.10);
-  background: rgba(255,255,255,.65);
 }
-.thumb img{
-  width:100%;
-  height: auto;
-  display:block;
-}
+.thumb--static{ cursor: default; }
+.thumb img{ width:100%; height:auto; display:block; }
 
-/* ============== Contact ============== */
+/* Contact */
 .form{
   margin-top: 10px;
   padding: 18px 18px 16px;
@@ -633,16 +614,8 @@ main{
   box-shadow: var(--shadow);
 }
 .field{ display:block; margin: 0 0 12px; }
-.label{
-  display:block;
-  margin: 0 0 6px;
-  font-weight: 800;
-}
-.contact-actions{
-  display:flex;
-  gap: 10px;
-  margin-top: 6px;
-}
+.label{ display:block; margin: 0 0 6px; font-weight: 800; }
+.contact-actions{ display:flex; gap: 10px; margin-top: 6px; }
 .contact-actions .btn{
   flex: 1 1 0;
   min-width: 0;
@@ -650,40 +623,37 @@ main{
   font-size: 15px;
 }
 
-/* ============== Footer ============== */
-.footer{
-  padding: 26px 0 34px;
-}
-.footer-inner{
-  text-align:center;
-  color: rgba(31,42,46,.78);
-}
+/* Footer */
+.footer{ padding: 26px 0 34px; }
+.footer-inner{ text-align:center; color: rgba(31,42,46,.78); }
 .footer-title{ font-weight: 900; font-size: 18px; }
 .footer-sub{ margin-top: 4px; font-weight: 650; color: rgba(31,42,46,.66); }
 .footer-copy{ margin-top: 10px; font-weight: 650; color: rgba(31,42,46,.58); }
 
-/* ============== Fade animation ============== */
-.reveal{
+/* ============== Fade in/out ============== */
+[data-animate]{
   opacity: 0;
-  transform: translateY(14px);
-  transition: opacity .65s ease, transform .65s ease;
+  transform: translateY(10px);
+  transition: opacity .55s ease, transform .55s ease;
   will-change: opacity, transform;
 }
-.reveal.is-in{
+[data-animate].is-in{
   opacity: 1;
   transform: translateY(0);
 }
-.reveal.is-out{
-  opacity: .18;
-  transform: translateY(-6px);
+[data-animate].is-out{
+  opacity: .10;
+  transform: translateY(-4px);
 }
 
-/* ============== Responsive ============== */
+/* ============== Responsive tweaks ============== */
 @media (max-width: 420px){
   .hero-title{ font-size: 40px; }
   .sec-title{ font-size: 26px; }
   .btn{ font-size: 14.5px; }
   .btn-row{ gap: 8px; }
   .brand-title{ font-size: 19px; }
-  .brand-logo{ width: 52px; height: 52px; }
+  .brand-logo{ width: 50px; height: 50px; }
+  .meta-row{ grid-template-columns: 86px 1fr; }
+  .curr-card .place{ white-space: normal; margin-left: 0; }
 }
