@@ -151,12 +151,18 @@ main{
 .section{
   padding: 26px 0 8px;
 }
-.hero{ padding-top: 12px; }
+
+/* =========================
+   HERO: 첫 화면 더 많이 보이게 (밀도 업)
+   ========================= */
+.hero{
+  padding-top: 8px;
+}
 
 /* 상단 메시지 */
 .pill{
   display:inline-flex; align-items:center; gap: 8px;
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-radius: 999px;
   border: 2px dashed rgba(31,42,46,.16);
   background: rgba(255,255,255,.55);
@@ -168,8 +174,8 @@ main{
 .pill-dot{ filter: saturate(1.1); }
 
 .hero-title{
-  margin: 16px 0 6px;
-  font-size: 44px;
+  margin: 12px 0 4px;
+  font-size: 40px;
   line-height: 1.1;
   font-weight: 800;
   letter-spacing: -0.8px;
@@ -180,8 +186,8 @@ main{
   color: rgba(31,42,46,.82);
 }
 .hero-copy{
-  margin: 12px 0 18px;
-  font-size: 18px;
+  margin: 10px 0 12px;
+  font-size: 16.5px;
   color: rgba(31,42,46,.78);
   font-weight: 520;
 }
@@ -193,7 +199,7 @@ main{
   gap: 10px;
   align-items:center;
   justify-content:flex-start;
-  margin: 8px 0 14px;
+  margin: 6px 0 10px;
 }
 .btn{
   appearance: none;
@@ -244,30 +250,37 @@ main{
   flex: 0 0 auto;
 }
 
-/* 통계 카드: 무조건 1열 */
-.stat-list{
+/* 히어로 통계: 3개가 한 화면에 들어오게 "컴팩트 3열" */
+.hero .stat-list{
   list-style:none;
-  padding:0; margin: 12px 0 0;
-  display:flex;
-  flex-direction: column;
-  gap: 12px;
+  padding:0;
+  margin: 10px 0 0;
+  display:grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
 }
-.stat{
-  border-radius: var(--radius);
-  padding: 16px 18px;
+
+.hero .stat{
+  border-radius: 20px;
+  padding: 12px 12px;
   background: rgba(255,255,255,.78);
   border: 1px solid rgba(31,42,46,.10);
   box-shadow: var(--shadow);
 }
-.stat-top{
-  font-size: 28px;
+
+.hero .stat-top{
+  font-size: 20px;
   font-weight: 800;
-  letter-spacing: -0.6px;
+  letter-spacing: -0.4px;
+  line-height: 1.1;
 }
-.stat-bottom{
-  margin-top: 4px;
+
+.hero .stat-bottom{
+  margin-top: 3px;
   color: rgba(31,42,46,.66);
   font-weight: 600;
+  font-size: 12.5px;
+  line-height: 1.2;
 }
 
 /* 카드 */
@@ -446,15 +459,29 @@ main{
 }
 
 /* =========================
-   Curriculum (팀 카드)
+   Curriculum (팀 카드) - 고급스럽게 업그레이드
    ========================= */
 .team-card{
   margin-top: 16px;
   padding: 18px 18px 16px;
   border-radius: var(--radius2);
-  background: rgba(255,255,255,.82);
   border: 1px solid rgba(31,42,46,.10);
   box-shadow: var(--shadow);
+
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(900px 420px at 12% 0%, rgba(206,235,255,.24), transparent 58%),
+    radial-gradient(760px 460px at 88% 0%, rgba(255,239,203,.28), transparent 62%),
+    rgba(255,255,255,.82);
+}
+
+.team-card::before{
+  content:"";
+  position:absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.55), transparent 38%);
+  pointer-events:none;
 }
 
 .team-top{ display:flex; flex-direction: column; gap: 10px; }
@@ -482,13 +509,23 @@ main{
 
 .team-title{
   margin: 0;
-  font-size: 18px;
+  font-size: 19px;
+  line-height: 1.4;
   font-weight: 650;
   color: rgba(31,42,46,.82);
+  letter-spacing: -0.3px;
 }
 .team-title b{
   font-weight: 900;
   color: rgba(31,42,46,.95);
+}
+
+/* 정규팀/방학특강팀: 왼쪽 리본 라인 */
+.team-card--regular{
+  border-left: 4px solid rgba(173,133,46,.35);
+}
+.team-card--camp{
+  border-left: 4px solid rgba(90,170,155,.35);
 }
 
 /* 운영/시간/비고 */
@@ -505,17 +542,20 @@ main{
   gap: 12px;
   padding: 14px 16px;
   border-radius: 20px;
-  background: rgba(255,255,255,.72);
-  border: 1px solid rgba(31,42,46,.10);
+  background: rgba(255,255,255,.78);
+  border: 1px solid rgba(31,42,46,.09);
+  box-shadow: 0 10px 18px rgba(0,0,0,.04);
 }
 .meta-k{
   font-weight: 900;
   flex: 0 0 auto;
+  letter-spacing: -0.2px;
 }
 .meta-v{
   text-align: right;
   font-weight: 650;
   color: rgba(31,42,46,.78);
+  letter-spacing: -0.2px;
 }
 .meta-sub{
   display:inline-block;
@@ -529,13 +569,15 @@ main{
   margin-top: 14px;
   padding: 16px 16px;
   border-radius: 22px;
-  background: rgba(255,255,255,.78);
-  border: 1px solid rgba(31,42,46,.10);
+  background: rgba(255,255,255,.82);
+  border: 1px solid rgba(31,42,46,.09);
+  box-shadow: 0 12px 22px rgba(0,0,0,.05);
 }
 .curr-headline{
   font-weight: 900;
-  letter-spacing: -0.2px;
+  letter-spacing: -0.25px;
   margin-bottom: 6px;
+  font-size: 16px;
 }
 .curr-subline{
   font-weight: 650;
@@ -571,8 +613,11 @@ main{
   gap: 10px;
   padding: 14px 14px;
   border-radius: 18px;
-  background: rgba(255,255,255,.82);
-  border: 1px solid rgba(31,42,46,.10);
+  background: rgba(255,255,255,.86);
+  border: 1px solid rgba(31,42,46,.09);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.85),
+    0 10px 16px rgba(0,0,0,.035);
 }
 
 .num{
@@ -583,13 +628,14 @@ main{
   align-items:center;
   justify-content:center;
   font-weight: 900;
-  background: rgba(255,255,255,.95);
+  background: linear-gradient(180deg, rgba(255,255,255,.98), rgba(255,255,255,.86));
   border: 1px solid rgba(31,42,46,.12);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
   flex: 0 0 auto;
 }
 
 .num.mint{
-  background: rgba(207,236,230,.9);
+  background: linear-gradient(180deg, rgba(230,246,243,.95), rgba(207,236,230,.92));
   border-color: rgba(31,42,46,.12);
 }
 
@@ -605,7 +651,7 @@ main{
   margin-left: auto;
   text-align: right;
   font-weight: 700;
-  color: rgba(31,42,46,.60);
+  color: rgba(31,42,46,.64);
   white-space: nowrap;
 }
 
@@ -713,11 +759,16 @@ main{
 /* ============== Responsive tweaks ============== */
 @media (max-width: 420px){
   :root{ --btnH: 48px; --header-offset: 86px; }
-  .hero-title{ font-size: 40px; }
+  .hero-title{ font-size: 38px; }
   .sec-title{ font-size: 26px; }
   .btn{ font-size: 14.5px; }
   .btn-row{ gap: 8px; }
   .brand-title{ font-size: 19px; }
   .brand-logo{ width: 50px; height: 50px; }
   .place{ white-space: normal; }
+
+  /* 작은 화면에서 히어로 스탯은 2열로 */
+  .hero .stat-list{
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
