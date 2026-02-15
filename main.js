@@ -1,16 +1,10 @@
 (() => {
   "use strict";
 
-  // =========================
-  // iOS/인앱: 새로고침 시 스크롤 위치 복원 방지
-  // =========================
   try {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
   } catch (_) {}
 
-  // =========================
-  // Helpers
-  // =========================
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
@@ -27,9 +21,7 @@
     return Math.max(60, base);
   }
 
-  function clamp(n, min, max) {
-    return Math.max(min, Math.min(max, n));
-  }
+  const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 
   function smoothScrollToY(targetY) {
     const startY = window.pageYOffset || document.documentElement.scrollTop || 0;
@@ -47,8 +39,7 @@
 
     function tick(now) {
       const t = clamp((now - startT) / duration, 0, 1);
-      const eased = easeOutCubic(t);
-      const y = startY + (endY - startY) * eased;
+      const y = startY + (endY - startY) * easeOutCubic(t);
       window.scrollTo(0, y);
       if (t < 1) requestAnimationFrame(tick);
     }
@@ -56,7 +47,7 @@
     requestAnimationFrame(tick);
   }
 
-  function scrollToEl(el) {
+  function scrollToElOnce(el) {
     const rect = el.getBoundingClientRect();
     const y =
       (window.pageYOffset || document.documentElement.scrollTop || 0) +
@@ -65,17 +56,74 @@
     smoothScrollToY(y);
   }
 
+  let primed = false;
+  function primeLazyImages() {
+    if (primed) return;
+    primed = true;
+
+    $$('img[loading="lazy"]').forEach((img) => {
+      try {
+        img.loading = "eager";
+        img.decoding = "async";
+      } catch (_) {}
+      try {
+        img.setAttribute("fetchpriority", "high");
+      } catch (_) {}
+    });
+  }
+
+  let ensureTimer = 0;
+  let ensureRAF = 0;
+
+  function isElInView(el) {
+    const r = el.getBoundingClientRect();
+    const topLimit = getHeaderOffset() + 6;
+    const bottomLimit = window.innerHeight - 10;
+    return r.top >= topLimit && r.top <= bottomLimit;
+  }
+
+  function scrollToElEnsure(el) {
+    if (!el) return;
+
+    if (ensureTimer) clearTimeout(ensureTimer);
+    ensureTimer = 0;
+    if (ensureRAF) cancelAnimationFrame(ensureRAF);
+    ensureRAF = 0;
+
+    scrollToElOnce(el);
+
+    const start = performance.now();
+    const maxMs = 3200;
+
+    const tick = () => {
+      if (isElInView(el)) return;
+
+      if (performance.now() - start > maxMs) {
+        scrollToElOnce(el);
+        return;
+      }
+
+      scrollToElOnce(el);
+
+      ensureTimer = setTimeout(() => {
+        ensureRAF = requestAnimationFrame(tick);
+      }, 120);
+    };
+
+    ensureTimer = setTimeout(() => {
+      ensureRAF = requestAnimationFrame(tick);
+    }, 180);
+  }
+
   function getNavType() {
     try {
       const nav = performance.getEntriesByType && performance.getEntriesByType("navigation");
-      if (nav && nav[0] && nav[0].type) return nav[0].type;
-    } catch (_) {}
-    return null;
+      return nav && nav[0] && nav[0].type ? nav[0].type : null;
+    } catch (_) {
+      return null;
+    }
   }
 
-  // =========================
-  // 1) Anchor smooth scroll with header offset
-  // =========================
   function bindSmoothAnchors() {
     $$("[data-scroll]").forEach((a) => {
       a.addEventListener(
@@ -89,14 +137,9 @@
 
           e.preventDefault();
 
-          scrollToEl(target);
+          if (href === "#contact") primeLazyImages();
+          scrollToElEnsure(target);
 
-          // ✅ lazy 이미지 로딩으로 scrollHeight가 늦게 늘어나는 케이스 보정
-          // (첫 클릭에서 photos 근처에 멈추는 현상 해결)
-          setTimeout(() => scrollToEl(target), 250);
-          setTimeout(() => scrollToEl(target), 900);
-
-          // 해시를 URL에 남기지 않음 (새로고침 시 특정 섹션 점프 방지)
           try {
             history.replaceState(null, "", location.pathname + location.search);
           } catch (_) {}
@@ -106,9 +149,6 @@
     });
   }
 
-  // =========================
-  // 2) Reveal animations (fade-in/out)
-  // =========================
   function markRevealTargets() {
     const selectors = [
       ".section .sec-head",
@@ -133,7 +173,6 @@
 
     const set = new Set();
     selectors.forEach((sel) => $$(sel).forEach((el) => set.add(el)));
-
     set.forEach((el) => el.classList.add("reveal"));
     return Array.from(set);
   }
@@ -147,13 +186,17 @@
       el.classList.add("is-in");
       el.classList.remove("is-out");
       el.dataset.seen = "1";
-    } else if (next === "out") {
+      return;
+    }
+
+    if (next === "out") {
       el.classList.remove("is-in");
       el.classList.add("is-out");
-    } else {
-      el.classList.remove("is-in");
-      el.classList.remove("is-out");
+      return;
     }
+
+    el.classList.remove("is-in");
+    el.classList.remove("is-out");
   }
 
   function bindRevealObserver(targets) {
@@ -161,7 +204,6 @@
       targets.forEach((el) => applyState(el, "in"));
       return;
     }
-
     if (!("IntersectionObserver" in window)) {
       targets.forEach((el) => applyState(el, "in"));
       return;
@@ -201,9 +243,7 @@
           continue;
         }
 
-        if (top > viewBottom + 140) {
-          applyState(el, "init");
-        }
+        if (top > viewBottom + 140) applyState(el, "init");
       }
     };
 
@@ -229,13 +269,11 @@
         targets.forEach((el) => io.observe(el));
       });
     };
+
     window.addEventListener("resize", refresh, { passive: true });
     window.addEventListener("orientationchange", refresh, { passive: true });
   }
 
-  // =========================
-  // 3) Mailto (문의 폼)
-  // =========================
   function bindMail() {
     const mailBtn = $("#mailBtn");
     const form = $("#contactForm");
@@ -250,23 +288,22 @@
       const message = (fd.get("message") || "").toString().trim();
 
       const subject = encodeURIComponent("야옹 역사 수업 문의");
-      const bodyLines = [
-        `보호자 이름: ${parent}`,
-        `휴대폰 번호: ${phone}`,
-        `인원: ${people}`,
-        `희망 장소/일정: ${schedule}`,
-        ``,
-        `문의 내용:`,
-        `${message}`
-      ];
-      const body = encodeURIComponent(bodyLines.join("\n"));
+      const body = encodeURIComponent(
+        [
+          `보호자 이름: ${parent}`,
+          `휴대폰 번호: ${phone}`,
+          `인원: ${people}`,
+          `희망 장소/일정: ${schedule}`,
+          ``,
+          `문의 내용:`,
+          `${message}`
+        ].join("\n")
+      );
+
       location.href = `mailto:yaonghistory@gmail.com?subject=${subject}&body=${body}`;
     });
   }
 
-  // =========================
-  // Init
-  // =========================
   function init() {
     const navType = getNavType();
     if (navType === "reload" || navType === "back_forward") {
@@ -285,7 +322,7 @@
 
     if (location.hash && navType !== "reload" && navType !== "back_forward") {
       const el = $(location.hash);
-      if (el) setTimeout(() => scrollToEl(el), 0);
+      if (el) setTimeout(() => scrollToElEnsure(el), 0);
     }
   }
 
