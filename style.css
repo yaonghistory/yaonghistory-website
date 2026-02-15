@@ -114,7 +114,7 @@ textarea{resize:vertical;}
 
 main{
   padding-top:var(--header-offset);
-  padding-bottom:calc(var(--header-offset) + 240px);
+  padding-bottom:40px;
 }
 
 section[id]{scroll-margin-top:calc(var(--header-offset) + 10px);}
