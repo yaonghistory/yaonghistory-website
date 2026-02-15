@@ -225,3 +225,589 @@ main{
 .btn--accent{
   background: linear-gradient(180deg, #fff7dc, var(--yellow));
   border-color: rgba(173,133,46,.22);
+}
+.btn--mint{
+  background: linear-gradient(180deg, var(--mint2), var(--mint));
+  border-color: rgba(31,42,46,.14);
+  color: #111;
+}
+.btn--ig{
+  background: linear-gradient(180deg, #fff, rgba(255,255,255,.78));
+}
+
+/* 인스타 아이콘 */
+.ig-icon{
+  width: 18px;
+  height: 18px;
+  margin-right: 8px;
+  border-radius: 6px;
+  flex: 0 0 auto;
+}
+
+/* 통계 카드: 무조건 1열 */
+.stat-list{
+  list-style:none;
+  padding:0; margin: 12px 0 0;
+  display:flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.stat{
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  background: rgba(255,255,255,.78);
+  border: 1px solid rgba(31,42,46,.10);
+  box-shadow: var(--shadow);
+}
+.stat-top{
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.6px;
+}
+.stat-bottom{
+  margin-top: 4px;
+  color: rgba(31,42,46,.66);
+  font-weight: 600;
+}
+
+/* 카드 */
+.card{
+  margin-top: 14px;
+  padding: 18px 18px 16px;
+  border-radius: var(--radius2);
+  background: rgba(255,255,255,.82);
+  border: 1px solid rgba(31,42,46,.10);
+  box-shadow: var(--shadow);
+}
+.card--soft{
+  background:
+    radial-gradient(900px 400px at 20% 0%, rgba(206,235,255,.25), transparent 55%),
+    radial-gradient(700px 420px at 80% 0%, rgba(255,239,203,.32), transparent 60%),
+    rgba(255,255,255,.78);
+}
+.card-title{
+  margin:0 0 6px;
+  font-size: 22px;
+  font-weight: 820;
+  letter-spacing: -0.4px;
+}
+.card-lead{
+  margin:0 0 10px;
+  color: rgba(31,42,46,.72);
+  font-weight: 560;
+}
+
+.bullets{
+  margin: 0;
+  padding-left: 18px;
+}
+.bullets li{
+  margin: 8px 0;
+  font-weight: 600;
+}
+.note{
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  border: 2px dashed rgba(173,133,46,.25);
+  background: rgba(255,255,255,.65);
+  color: rgba(31,42,46,.72);
+  font-weight: 650;
+}
+
+/* 섹션 헤더 */
+.sec-head{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  margin: 8px 0 8px;
+}
+.sec-icon{
+  width: 34px; height: 34px;
+  border-radius: 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(255,255,255,.7);
+  border: 1px solid rgba(31,42,46,.12);
+  box-shadow: 0 10px 18px rgba(0,0,0,.06);
+}
+.sec-title{
+  margin:0;
+  font-size: 28px;
+  font-weight: 820;
+  letter-spacing: -0.6px;
+}
+.sec-sub{
+  margin: 0 0 14px;
+  font-size: 16px;
+  font-weight: 560;
+  color: rgba(31,42,46,.74);
+}
+
+/* 패널 */
+.panel{
+  margin: 14px 0;
+  padding: 18px 18px 16px;
+  border-radius: var(--radius2);
+  background: rgba(255,255,255,.82);
+  border: 1px solid rgba(31,42,46,.10);
+  box-shadow: var(--shadow);
+}
+.panel-title{
+  margin: 0 0 12px;
+  font-size: 20px;
+  font-weight: 800;
+}
+.tag-row{
+  display:flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.tag{
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.85);
+  border: 1px solid rgba(31,42,46,.12);
+  font-weight: 700;
+  color: rgba(31,42,46,.72);
+}
+.quote{
+  margin-top: 14px;
+  padding: 16px 16px;
+  border-radius: 20px;
+  border: 2px dashed rgba(79,135,200,.25);
+  background: rgba(214,233,255,.35);
+  font-weight: 800;
+  font-size: 18px;
+}
+
+/* Steps */
+.steps{
+  list-style:none;
+  padding:0;
+  margin: 14px 0 0;
+  display:flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.step{
+  display:flex;
+  gap: 12px;
+  padding: 16px 16px;
+  border-radius: var(--radius2);
+  background: rgba(255,255,255,.82);
+  border: 1px solid rgba(31,42,46,.10);
+  box-shadow: var(--shadow);
+}
+.step-num{
+  width: 34px; height: 34px;
+  border-radius: 12px;
+  display:flex; align-items:center; justify-content:center;
+  background: rgba(255,255,255,.9);
+  border: 1px solid rgba(31,42,46,.12);
+  font-weight: 900;
+}
+.step-title{
+  font-weight: 820;
+  font-size: 17px;
+}
+.step-desc{
+  margin-top: 4px;
+  font-weight: 560;
+  color: rgba(31,42,46,.70);
+}
+
+/* Locations: 무조건 1열 */
+.place-list{
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.place-list li{
+  padding: 14px 16px;
+  border-radius: var(--radius2);
+  background: rgba(255,255,255,.82);
+  border: 1px solid rgba(31,42,46,.10);
+  box-shadow: var(--shadow);
+  font-weight: 700;
+}
+.place-note{
+  margin-top: 12px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  background: rgba(255,255,255,.65);
+  border: 2px dashed rgba(173,133,46,.22);
+  font-weight: 700;
+  color: rgba(31,42,46,.74);
+}
+
+/* =========================
+   Curriculum (팀 카드)
+   ========================= */
+.team-card{
+  margin-top: 16px;
+  padding: 18px 18px 16px;
+  border-radius: var(--radius2);
+  background: rgba(255,255,255,.82);
+  border: 1px solid rgba(31,42,46,.10);
+  box-shadow: var(--shadow);
+}
+
+.team-top{ display:flex; flex-direction: column; gap: 10px; }
+
+.team-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  height: 34px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-weight: 850;
+  letter-spacing: -0.2px;
+  border: 1px solid rgba(31,42,46,.10);
+  width: fit-content;
+}
+.team-badge--yellow{
+  background: linear-gradient(180deg, #fff5d6, var(--yellow));
+  border-color: rgba(173,133,46,.22);
+}
+.team-badge--mint{
+  background: linear-gradient(180deg, var(--mint2), var(--mint));
+  border-color: rgba(31,42,46,.14);
+}
+
+.team-title{
+  margin: 0;
+  font-size: 18px;
+  font-weight: 650;
+  color: rgba(31,42,46,.82);
+}
+.team-title b{
+  font-weight: 900;
+  color: rgba(31,42,46,.95);
+}
+
+/* 운영/시간/비고 */
+.team-meta{
+  margin-top: 14px;
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.meta-row{
+  display:flex;
+  align-items:flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  background: rgba(255,255,255,.72);
+  border: 1px solid rgba(31,42,46,.10);
+}
+.meta-k{
+  font-weight: 900;
+  flex: 0 0 auto;
+}
+.meta-v{
+  text-align: right;
+  font-weight: 650;
+  color: rgba(31,42,46,.78);
+}
+.meta-sub{
+  display:inline-block;
+  margin-top: 4px;
+  font-weight: 650;
+  color: rgba(31,42,46,.64);
+}
+
+/* 커리큘럼 블록 */
+.curr-block{
+  margin-top: 14px;
+  padding: 16px 16px;
+  border-radius: 22px;
+  background: rgba(255,255,255,.78);
+  border: 1px solid rgba(31,42,46,.10);
+}
+.curr-headline{
+  font-weight: 900;
+  letter-spacing: -0.2px;
+  margin-bottom: 6px;
+}
+.curr-subline{
+  font-weight: 650;
+  color: rgba(31,42,46,.62);
+  margin-bottom: 10px;
+}
+
+/* ✅ (조선) 오른쪽 신전 이모티콘 자동 추가 제거: 아래 규칙 삭제/미사용 처리 */
+/* (기존에 ::after로 🏛️ 붙이던 코드를 아예 제거했습니다) */
+
+/* 방학특강팀: 민트 라인 제거 요청 → 적용 안 함(라인 없음) */
+
+.curr-items{
+  list-style:none;
+  padding:0;
+  margin:0;
+  display:flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.curr-item{
+  display:flex;
+  align-items:flex-start;
+  gap: 10px;
+  padding: 14px 14px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.82);
+  border: 1px solid rgba(31,42,46,.10);
+}
+
+.num{
+  width: 28px;
+  height: 28px;
+  border-radius: 10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight: 900;
+  background: rgba(255,255,255,.95);
+  border: 1px solid rgba(31,42,46,.12);
+  flex: 0 0 auto;
+}
+
+.num.mint{
+  background: rgba(207,236,230,.9);
+  border-color: rgba(31,42,46,.12);
+}
+
+.txt{
+  flex: 1 1 auto;
+  font-weight: 800;
+  color: rgba(31,42,46,.88);
+  min-width: 0;
+}
+
+.place{
+  flex: 0 0 auto;
+  margin-left: auto;
+  text-align: right;
+  font-weight: 700;
+  color: rgba(31,42,46,.60);
+  white-space: nowrap;
+}
+
+/* Instructor */
+.teacher{
+  margin-top: 12px;
+  padding: 18px 18px 16px;
+  border-radius: var(--radius2);
+  background: rgba(255,255,255,.82);
+  border: 1px solid rgba(31,42,46,.10);
+  box-shadow: var(--shadow);
+}
+.teacher-logo{
+  width: 92px;
+  margin: 4px auto 10px;
+  border-radius: 16px;
+  background: rgba(255,255,255,.55);
+  box-shadow: 0 12px 20px rgba(0,0,0,.08);
+}
+
+/* Galleries (확대 기능 없음) */
+.gallery{ margin-top: 12px; }
+.gallery--grid{
+  display:flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.gallery--stack{
+  display:flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.thumb{
+  width: 100%;
+  margin:0;
+  border-radius: var(--radius2);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(31,42,46,.10);
+  background: transparent;
+}
+.thumb img{
+  width:100%;
+  height:auto;
+  display:block;
+}
+
+/* Contact */
+.form{
+  margin-top: 10px;
+  padding: 18px 18px 16px;
+  border-radius: var(--radius2);
+  background: rgba(255,255,255,.82);
+  border: 1px solid rgba(31,42,46,.10);
+  box-shadow: var(--shadow);
+}
+.field{ display:block; margin: 0 0 12px; }
+.label{
+  display:block;
+  margin: 0 0 6px;
+  font-weight: 900;
+}
+.contact-actions{
+  display:flex;
+  gap: 10px;
+  margin-top: 6px;
+}
+.contact-actions .btn{
+  flex: 1 1 0;
+  min-width: 0;
+  height: 50px;
+  font-size: 15px;
+}
+
+/* Footer */
+.footer{
+  padding: 26px 0 34px;
+}
+.footer-inner{
+  text-align:center;
+  color: rgba(31,42,46,.78);
+}
+.footer-title{ font-weight: 900; font-size: 18px; }
+.footer-sub{ margin-top: 4px; font-weight: 650; color: rgba(31,42,46,.66); }
+.footer-copy{ margin-top: 10px; font-weight: 650; color: rgba(31,42,46,.58); }
+
+/* =========================
+   Fade in/out (JS hooks)
+   ========================= */
+.reveal{
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .55s ease, transform .55s ease;
+  will-change: opacity, transform;
+}
+.reveal.is-in{
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal.is-out{
+  opacity: .18;
+  transform: translateY(-6px);
+}
+
+/* ============== Responsive tweaks ============== */
+@media (max-width: 420px){
+  :root{ --btnH: 48px; --header-offset: 86px; }
+  .hero-title{ font-size: 40px; }
+  .sec-title{ font-size: 26px; }
+  .btn{ font-size: 14.5px; }
+  .btn-row{ gap: 8px; }
+  .brand-title{ font-size: 19px; }
+  .brand-logo{ width: 50px; height: 50px; }
+  .place{ white-space: normal; }
+}
+
+/* =========================================================
+   누적 업데이트 PATCH (기존 구조 유지, 덮어쓰기만)
+   ========================================================= */
+
+/* 1) 커리큘럼 글자 색감 진하게 + 지나간 상태에서도 너무 흐리지 않게 */
+#curriculum,
+#curriculum .team-card,
+#curriculum .team-title,
+#curriculum .meta-k,
+#curriculum .meta-v,
+#curriculum .meta-sub,
+#curriculum .curr-headline,
+#curriculum .curr-subline,
+#curriculum .curr-item .txt,
+#curriculum .curr-item .place{
+  color: rgba(31,42,46,.92) !important;
+}
+#curriculum .meta-sub,
+#curriculum .curr-subline,
+#curriculum .curr-item .place{
+  color: rgba(31,42,46,.72) !important;
+}
+#curriculum .team-title b,
+#curriculum .curr-item .txt{
+  color: rgba(31,42,46,.96) !important;
+}
+#curriculum .team-card.reveal.is-out{
+  opacity: .92 !important;
+}
+
+/* 2) 정규팀 숫자칩 노랑 적용 (방학특강 민트는 그대로) */
+.team-card--regular .num{
+  background: linear-gradient(180deg, #fff6dc, var(--yellow));
+  border: 1px solid rgba(173,133,46,.25);
+  color: #5c470f;
+  font-weight: 900;
+  box-shadow:
+    0 6px 12px rgba(0,0,0,.06),
+    inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+/* ✅ 2-1) 방학특강팀 숫자칩도 "입체감" 추가 (정규팀과 동일한 깊이감) */
+.team-card--camp .num.mint{
+  background: linear-gradient(180deg, var(--mint2), var(--mint));
+  border: 1px solid rgba(31,42,46,.14);
+  color: #0b3a33;
+  font-weight: 900;
+  box-shadow:
+    0 6px 12px rgba(0,0,0,.06),
+    inset 0 1px 0 rgba(255,255,255,.9);
+}
+
+/* 3) 첫 화면(히어로) 밀도 최적화: 현장+이론 카드까지 딱 보이게 */
+.hero{
+  padding-top: 6px !important;
+}
+.pill{
+  padding: 8px 14px !important;
+  font-size: 14px !important;
+}
+.hero-title{
+  font-size: 40px !important;
+  margin: 12px 0 4px !important;
+}
+.hero-sub{
+  font-size: 17px !important;
+}
+.hero-copy{
+  font-size: 16.5px !important;
+  margin: 8px 0 14px !important;
+}
+.btn-row{
+  margin: 6px 0 10px !important;
+}
+.stat-list{
+  gap: 10px !important;
+}
+.stat{
+  padding: 14px 16px !important;
+}
+.stat-top{
+  font-size: 26px !important;
+}
+.section{
+  padding: 22px 0 6px !important;
+}
+
+/* 4) 페이드가 버벅이지 않게 조금 더 부드럽게 + 지나간 요소가 너무 흐리지 않게 */
+.reveal{
+  transition: opacity .62s cubic-bezier(.22,.61,.36,1),
+              transform .62s cubic-bezier(.22,.61,.36,1) !important;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+}
+.reveal.is-out{
+  opacity: .62 !important;
+  transform: translateY(-2px) !important;
+}
