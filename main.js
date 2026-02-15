@@ -24,7 +24,7 @@
     const cssVal = getComputedStyle(root).getPropertyValue("--header-offset").trim();
     const cssNum = cssVal ? parseInt(cssVal, 10) : NaN;
     const h = header ? Math.ceil(header.getBoundingClientRect().height) : 0;
-    const base = Number.isFinite(cssNum) ? cssNum : h + 10;
+    const base = Number.isFinite(cssNum) ? cssNum : (h + 10);
     return Math.max(60, base);
   }
 
@@ -60,10 +60,7 @@
 
   function scrollToEl(el) {
     const rect = el.getBoundingClientRect();
-    const y =
-      (window.pageYOffset || document.documentElement.scrollTop || 0) +
-      rect.top -
-      getHeaderOffset();
+    const y = (window.pageYOffset || document.documentElement.scrollTop || 0) + rect.top - getHeaderOffset();
     smoothScrollToY(y);
   }
 
@@ -93,8 +90,7 @@
           e.preventDefault();
           scrollToEl(target);
 
-          // ✅ 해시를 URL에 "남기지 않음"
-          // 새로고침할 때 특정 섹션으로 튀는 현상을 막기 위함
+          // ✅ 해시를 URL에 남기지 않음(새로고침 시 특정 섹션 점프 방지)
           try {
             history.replaceState(null, "", location.pathname + location.search);
           } catch (_) {}
@@ -105,9 +101,10 @@
   }
 
   // =========================
-  // 2) Reveal animations (fade-in/out)
+  // 2) Reveal animations (fade-in/out) - 성능 최적화 버전
   // =========================
   function markRevealTargets() {
+    // "덩어리" 단위 유지 (너가 원래 쓰던 셀렉터 그대로)
     const selectors = [
       ".section .sec-head",
       ".hero .pill",
@@ -135,42 +132,103 @@
     return Array.from(set);
   }
 
+  // 상태 변경을 "바뀔 때만" 적용해서 리플로우/리페인트 최소화
+  function applyState(el, next) {
+    const cur = el.dataset.rv || "";
+    if (cur === next) return;
+    el.dataset.rv = next;
+
+    if (next === "in") {
+      el.classList.add("is-in");
+      el.classList.remove("is-out");
+      el.dataset.seen = "1";
+    } else if (next === "out") {
+      el.classList.remove("is-in");
+      el.classList.add("is-out");
+    } else {
+      // init(아직 안 봄): 숨김 상태 유지 (reveal 기본 opacity 0)
+      el.classList.remove("is-in");
+      el.classList.remove("is-out");
+    }
+  }
+
   function bindRevealObserver(targets) {
-    if (!("IntersectionObserver" in window)) {
-      targets.forEach((el) => el.classList.add("is-in"));
+    // prefers-reduced-motion이면 전부 표시(애니메이션 없음)
+    if (prefersReducedMotion) {
+      targets.forEach((el) => applyState(el, "in"));
       return;
     }
 
+    if (!("IntersectionObserver" in window)) {
+      targets.forEach((el) => applyState(el, "in"));
+      return;
+    }
+
+    // 초기 상태: 아직 안 본 요소는 숨김(0)
+    targets.forEach((el) => applyState(el, "init"));
+
+    // ✅ IO 콜백을 rAF로 배치 처리(버벅임 큰 폭 개선)
+    let raf = 0;
+    let queue = [];
+
+    const process = () => {
+      raf = 0;
+
+      const entries = queue;
+      queue = [];
+
+      const offset = getHeaderOffset() + 10;
+      const viewBottom = window.innerHeight;
+
+      for (const entry of entries) {
+        const el = entry.target;
+
+        if (entry.isIntersecting) {
+          // 보이면 무조건 in
+          applyState(el, "in");
+          continue;
+        }
+
+        // 아직 한 번도 안 본 요소는 그냥 숨김 유지
+        if (el.dataset.seen !== "1") continue;
+
+        // 지나간(위로 넘어간) 요소만 out 처리
+        const top = entry.boundingClientRect ? entry.boundingClientRect.top : el.getBoundingClientRect().top;
+
+        if (top < offset) {
+          applyState(el, "out");
+          continue;
+        }
+
+        // 아래로 벗어난 경우(스크롤을 다시 내려서 아래에 있는 경우)
+        // 너무 공격적으로 init으로 되돌리면 깜빡임이 생길 수 있어서
+        // 충분히 아래로 내려간 경우에만 init으로 복귀(다시 내려올 때 재페이드인)
+        if (top > viewBottom + 140) {
+          applyState(el, "init");
+        }
+      }
+    };
+
     const io = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          const el = entry.target;
-
-          if (entry.isIntersecting) {
-            el.classList.add("is-in");
-            el.classList.remove("is-out");
-          } else {
-            const rect = el.getBoundingClientRect();
-            if (rect.top < getHeaderOffset() + 10) {
-              el.classList.remove("is-in");
-              el.classList.add("is-out");
-            }
-          }
-        });
+        queue.push(...entries);
+        if (!raf) raf = requestAnimationFrame(process);
       },
       {
         root: null,
-        threshold: [0, 0.08, 0.18, 0.35],
-        rootMargin: `-${getHeaderOffset()}px 0px -15% 0px`
+        // threshold가 많으면 콜백이 자주 와서 버벅일 수 있음 → 적당히 단순화
+        threshold: [0, 0.14, 0.28],
+        rootMargin: `-${getHeaderOffset()}px 0px -12% 0px`
       }
     );
 
     targets.forEach((el) => io.observe(el));
 
-    let raf = 0;
+    // 오프셋이 바뀌는 상황(회전/리사이즈) 대응: 관찰 재설정
+    let raf2 = 0;
     const refresh = () => {
-      if (raf) cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
+      if (raf2) cancelAnimationFrame(raf2);
+      raf2 = requestAnimationFrame(() => {
         io.disconnect();
         targets.forEach((el) => io.observe(el));
       });
