@@ -2,13 +2,21 @@
   "use strict";
 
   // =========================
+  // iOS/인앱: 새로고침 시 스크롤 위치 복원 방지
+  // =========================
+  try {
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+  } catch (_) {}
+
+  // =========================
   // Helpers
   // =========================
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
   const header = $(".site-header");
-  const prefersReducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const prefersReducedMotion =
+    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   function getHeaderOffset() {
     // CSS 변수(--header-offset) 우선, 없으면 실제 헤더 높이로 계산
@@ -16,7 +24,7 @@
     const cssVal = getComputedStyle(root).getPropertyValue("--header-offset").trim();
     const cssNum = cssVal ? parseInt(cssVal, 10) : NaN;
     const h = header ? Math.ceil(header.getBoundingClientRect().height) : 0;
-    const base = Number.isFinite(cssNum) ? cssNum : (h + 10);
+    const base = Number.isFinite(cssNum) ? cssNum : h + 10;
     return Math.max(60, base);
   }
 
@@ -37,7 +45,6 @@
 
     const duration = 520; // ms
     const startT = performance.now();
-
     const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
 
     function tick(now) {
@@ -53,8 +60,20 @@
 
   function scrollToEl(el) {
     const rect = el.getBoundingClientRect();
-    const y = (window.pageYOffset || document.documentElement.scrollTop || 0) + rect.top - getHeaderOffset();
+    const y =
+      (window.pageYOffset || document.documentElement.scrollTop || 0) +
+      rect.top -
+      getHeaderOffset();
     smoothScrollToY(y);
+  }
+
+  // 현재 navigation type (지원 안 되면 null)
+  function getNavType() {
+    try {
+      const nav = performance.getEntriesByType && performance.getEntriesByType("navigation");
+      if (nav && nav[0] && nav[0].type) return nav[0].type; // "navigate" | "reload" | "back_forward"
+    } catch (_) {}
+    return null;
   }
 
   // =========================
@@ -74,9 +93,11 @@
           e.preventDefault();
           scrollToEl(target);
 
-          // URL hash는 유지(뒤로가기/공유에 도움)
-          // 스크롤이 끝난 후에 넣는 게 이상적이지만, 인앱에서 튀는 경우가 있어 바로 처리
-          history.replaceState(null, "", href);
+          // ✅ 해시를 URL에 "남기지 않음"
+          // 새로고침할 때 특정 섹션으로 튀는 현상을 막기 위함
+          try {
+            history.replaceState(null, "", location.pathname + location.search);
+          } catch (_) {}
         },
         { passive: false }
       );
@@ -87,7 +108,6 @@
   // 2) Reveal animations (fade-in/out)
   // =========================
   function markRevealTargets() {
-    // 너무 과하지 않게 "덩어리" 단위로
     const selectors = [
       ".section .sec-head",
       ".hero .pill",
@@ -117,7 +137,6 @@
 
   function bindRevealObserver(targets) {
     if (!("IntersectionObserver" in window)) {
-      // 폴백: 전부 보이게
       targets.forEach((el) => el.classList.add("is-in"));
       return;
     }
@@ -127,15 +146,12 @@
         entries.forEach((entry) => {
           const el = entry.target;
 
-          // 화면 안으로 들어오면 선명
           if (entry.isIntersecting) {
             el.classList.add("is-in");
             el.classList.remove("is-out");
           } else {
-            // 지나간(위로 올라가서 사라진) 요소는 희미하게
-            // 아래로 아직 안 온 요소는 그대로(0) 유지
             const rect = el.getBoundingClientRect();
-            if (rect.top < (getHeaderOffset() + 10)) {
+            if (rect.top < getHeaderOffset() + 10) {
               el.classList.remove("is-in");
               el.classList.add("is-out");
             }
@@ -151,7 +167,6 @@
 
     targets.forEach((el) => io.observe(el));
 
-    // 스크롤/리사이즈 때 오프셋이 바뀌면 rootMargin이 달라져야 해서 간단 재설정
     let raf = 0;
     const refresh = () => {
       if (raf) cancelAnimationFrame(raf);
@@ -199,6 +214,15 @@
   // Init
   // =========================
   function init() {
+    // ✅ 새로고침(reload) 또는 뒤로가기(back_forward)라면 무조건 맨 위로
+    const navType = getNavType();
+    if (navType === "reload" || navType === "back_forward") {
+      try {
+        history.replaceState(null, "", location.pathname + location.search);
+      } catch (_) {}
+      window.scrollTo(0, 0);
+    }
+
     bindSmoothAnchors();
 
     const targets = markRevealTargets();
@@ -206,13 +230,10 @@
 
     bindMail();
 
-    // 처음 로드 시 해시가 있으면 헤더 오프셋 반영해서 위치 보정
-    // (인앱에서 기본 점프 후 위치가 어긋나는 케이스 대응)
-    if (location.hash) {
+    // ✅ 외부에서 #해시 링크로 들어온 경우만(첫 방문 navigate) 해당 섹션으로 이동
+    if (location.hash && navType !== "reload" && navType !== "back_forward") {
       const el = $(location.hash);
-      if (el) {
-        setTimeout(() => scrollToEl(el), 0);
-      }
+      if (el) setTimeout(() => scrollToEl(el), 0);
     }
   }
 
