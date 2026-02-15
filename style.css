@@ -879,3 +879,39 @@ main{
   .hero-title{ font-size: 36px !important; }
   .hero-copy{ font-size: 15.5px !important; }
 }
+/* =========================
+   PATCH: 커리큘럼 글자 색감 진하게 (구성 유지)
+   ========================= */
+
+/* 커리큘럼 영역 텍스트 전체 톤을 더 진하게 */
+#curriculum,
+#curriculum .team-card,
+#curriculum .team-title,
+#curriculum .meta-k,
+#curriculum .meta-v,
+#curriculum .meta-sub,
+#curriculum .curr-headline,
+#curriculum .curr-subline,
+#curriculum .curr-item .txt,
+#curriculum .curr-item .place{
+  color: rgba(31,42,46,.92) !important;
+}
+
+/* 보조 텍스트(설명/서브라인/장소)는 너무 연해지지 않게만 살짝 낮춤 */
+#curriculum .meta-sub,
+#curriculum .curr-subline,
+#curriculum .curr-item .place{
+  color: rgba(31,42,46,.72) !important;
+}
+
+/* 핵심 텍스트는 더 선명하게 */
+#curriculum .team-title b,
+#curriculum .curr-item .txt{
+  color: rgba(31,42,46,.96) !important;
+}
+
+/* ✅ 가장 중요:
+   커리큘럼 카드가 is-out 상태가 되어도 "너무 흐려지지 않게" opacity를 높여줌 */
+#curriculum .team-card.reveal.is-out{
+  opacity: .92 !important;
+}
