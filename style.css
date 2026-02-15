@@ -830,3 +830,52 @@ main{
   .hero .stat{ padding: 11px 13px !important; }
   .hero .stat-top{ font-size: 21px !important; }
 }
+/* =========================
+   PATCH: 페이드 부드럽게 + 커리큘럼 흐림 해결 + 히어로 첫 화면 최적
+   (기존 스타일 유지, 덮어쓰기만)
+   ========================= */
+
+/* 1) Reveal 애니메이션 더 부드럽게 */
+.reveal{
+  transition: opacity .62s cubic-bezier(.22,.61,.36,1),
+              transform .62s cubic-bezier(.22,.61,.36,1) !important;
+  will-change: opacity, transform;
+  backface-visibility: hidden;
+  transform: translateY(10px);
+}
+.reveal.is-in{
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+/* 지나간 요소: 너무 흐려지지 않게 (기존 .18 → 개선) */
+.reveal.is-out{
+  opacity: .62 !important;
+  transform: translateY(-2px) !important;
+}
+
+/* 2) 커리큘럼(team-card)은 지나가도 글자 너무 흐려지지 않게 */
+.team-card.reveal.is-out{
+  opacity: .90 !important;
+}
+
+/* 커리큘럼 텍스트 대비 선명하게 */
+.team-title{ color: rgba(31,42,46,.92) !important; }
+.meta-v{ color: rgba(31,42,46,.88) !important; }
+.meta-sub{ color: rgba(31,42,46,.72) !important; }
+.curr-subline{ color: rgba(31,42,46,.72) !important; }
+.place{ color: rgba(31,42,46,.72) !important; }
+.txt{ color: rgba(31,42,46,.92) !important; }
+
+/* 3) 히어로: 첫 화면에 '현장+이론 유물·전시 병행'까지 보이게 살짝 컴팩트 */
+.hero{ padding-top: 8px !important; }
+.pill{ padding: 7px 12px !important; }
+.hero-title{ margin: 10px 0 4px !important; font-size: 38px !important; }
+.hero-copy{ margin: 8px 0 10px !important; font-size: 16px !important; }
+.btn-row{ margin: 6px 0 8px !important; }
+:root{ --btnH: 46px; }
+
+@media (max-width: 420px){
+  :root{ --btnH: 44px !important; }
+  .hero-title{ font-size: 36px !important; }
+  .hero-copy{ font-size: 15.5px !important; }
+}
