@@ -23,10 +23,22 @@
 
   const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
 
+  function maxScrollY() {
+    return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+  }
+
+  function getTargetY(el) {
+    const rect = el.getBoundingClientRect();
+    const y =
+      (window.pageYOffset || document.documentElement.scrollTop || 0) +
+      rect.top -
+      getHeaderOffset();
+    return clamp(y, 0, maxScrollY());
+  }
+
   function smoothScrollToY(targetY) {
     const startY = window.pageYOffset || document.documentElement.scrollTop || 0;
-    const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-    const endY = clamp(targetY, 0, maxY);
+    const endY = clamp(targetY, 0, maxScrollY());
 
     if (prefersReducedMotion) {
       window.scrollTo(0, endY);
@@ -47,21 +59,17 @@
     requestAnimationFrame(tick);
   }
 
-  function getTargetY(el) {
-    const rect = el.getBoundingClientRect();
-    const y =
-      (window.pageYOffset || document.documentElement.scrollTop || 0) +
-      rect.top -
-      getHeaderOffset();
-    return y;
-  }
-
-  function scrollToElOnce(el) {
+  function smoothToEl(el) {
     if (!el) return;
     smoothScrollToY(getTargetY(el));
   }
 
-  // ---------- Stabilizers ----------
+  function snapToEl(el) {
+    if (!el) return;
+    window.scrollTo(0, getTargetY(el));
+  }
+
+  // ---------- Contact image prime (레이아웃 흔들림 줄이기) ----------
   let primed = false;
   function primeLazyImagesForContact() {
     if (primed) return;
@@ -77,145 +85,135 @@
     });
   }
 
-  function isElInGoodView(el) {
+  // ---------- "떨림" 방지용: 보정 스로틀 + 조건 ----------
+  function needsFix(el) {
     const r = el.getBoundingClientRect();
     const topLimit = getHeaderOffset() + 6;
-    const bottomLimit = window.innerHeight - 10;
-    return r.top >= topLimit && r.top <= bottomLimit;
+    // 10~12px 이내 오차는 무시(미세 진동 방지)
+    return Math.abs(r.top - topLimit) > 12;
   }
 
-  // 핵심: 레이아웃 변동(이미지/폰트/주소창/뷰포트) 상황에 자동 재보정
+  // ---------- Guaranteed scroll (B: 도달 우선) ----------
+  // 전략:
+  // 1) smooth는 1번만 실행
+  // 2) 이후 보정은 "스냅"으로만 (진동 최소)
+  // 3) 이벤트(폰트/이미지/resize/vv.resize) 때는 스로틀 걸어 조건부 스냅
   function scrollToElGuaranteed(el, opts = {}) {
     if (!el) return;
 
-    const maxMs = typeof opts.maxMs === "number" ? opts.maxMs : 4500;
+    const maxMs = typeof opts.maxMs === "number" ? opts.maxMs : 5200;
     const snapAtEnd = opts.snapAtEnd !== false;
 
-    // 이전 보정 루프 정리
-    if (scrollToElGuaranteed._t) clearTimeout(scrollToElGuaranteed._t);
-    if (scrollToElGuaranteed._raf) cancelAnimationFrame(scrollToElGuaranteed._raf);
-    scrollToElGuaranteed._t = 0;
-    scrollToElGuaranteed._raf = 0;
+    if (scrollToElGuaranteed._kill) scrollToElGuaranteed._kill();
+    scrollToElGuaranteed._kill = null;
 
-    // 이벤트 리스너(임시)
     let done = false;
-    const cleanups = [];
+    const start = performance.now();
 
+    let lastFixAt = 0;
+    const FIX_COOLDOWN = 160; // ms (너무 자주 보정하면 떨림)
+
+    const maybeFix = (force = false) => {
+      if (done) return;
+      const now = performance.now();
+      if (!force && now - lastFixAt < FIX_COOLDOWN) return;
+      if (force || needsFix(el)) {
+        lastFixAt = now;
+        snapToEl(el);
+      }
+    };
+
+    const finalize = () => {
+      if (done) return;
+      done = true;
+      if (snapAtEnd) snapToEl(el);
+      cleanupAll();
+    };
+
+    const cleanupFns = [];
     const cleanupAll = () => {
-      cleanups.splice(0).forEach((fn) => {
+      cleanupFns.splice(0).forEach((fn) => {
         try { fn(); } catch (_) {}
       });
     };
 
-    const settleSnap = () => {
-      if (!snapAtEnd) return;
-      // 마지막에 한번 "정확 위치"로 스냅 (iOS 주소창 변화로 1~2px 흔들리는 케이스 방지)
-      try {
-        window.scrollTo(0, clamp(getTargetY(el), 0, document.documentElement.scrollHeight - window.innerHeight));
-      } catch (_) {}
-    };
+    // 1) 첫 이동: smooth 1회
+    smoothToEl(el);
 
-    const start = performance.now();
-    const tick = () => {
-      if (done) return;
+    // 2) 다음 프레임, 다음 틱에 스냅 1~2회로 정착
+    requestAnimationFrame(() => maybeFix(true));
+    setTimeout(() => maybeFix(true), 120);
+    setTimeout(() => maybeFix(true), 260);
 
-      if (isElInGoodView(el)) {
-        done = true;
-        settleSnap();
-        cleanupAll();
-        return;
-      }
-
-      const elapsed = performance.now() - start;
-      if (elapsed > maxMs) {
-        // 타임아웃 시에도 마지막으로 한 번 더
-        scrollToElOnce(el);
-        done = true;
-        settleSnap();
-        cleanupAll();
-        return;
-      }
-
-      // 계속 현재 레이아웃 기준으로 목표값 재계산해서 이동
-      scrollToElOnce(el);
-
-      scrollToElGuaranteed._t = setTimeout(() => {
-        scrollToElGuaranteed._raf = requestAnimationFrame(tick);
-      }, 120);
-    };
-
-    // 1) 즉시 1회
-    scrollToElOnce(el);
-
-    // 2) 다음 프레임에서 1회(레이아웃 계산 안정)
-    requestAnimationFrame(() => scrollToElOnce(el));
-
-    // 3) 폰트 로딩 완료 시 1회(문단/줄바꿈 변화 대응)
+    // 3) 폰트 로딩 완료 시 보정(스로틀)
     if (document.fonts && document.fonts.ready) {
-      const onFonts = () => {
-        if (done) return;
-        scrollToElOnce(el);
-      };
-      document.fonts.ready.then(onFonts).catch(() => {});
+      document.fonts.ready.then(() => maybeFix(false)).catch(() => {});
     }
 
-    // 4) contact 안 이미지 로딩/디코드 완료 시 1회(높이 변화 대응)
+    // 4) 섹션 내부 이미지 로딩/디코드 시 보정(스로틀)
     const imgs = $$("img", el);
     if (imgs.length) {
       imgs.forEach((img) => {
         if (img.complete) return;
 
-        const handler = () => {
-          if (done) return;
-          scrollToElOnce(el);
-        };
-
+        const handler = () => maybeFix(false);
         img.addEventListener("load", handler, { passive: true, once: true });
         img.addEventListener("error", handler, { passive: true, once: true });
-
-        cleanups.push(() => {
+        cleanupFns.push(() => {
           try { img.removeEventListener("load", handler); } catch (_) {}
           try { img.removeEventListener("error", handler); } catch (_) {}
         });
 
-        // decode 지원 브라우저: 디코드 후에도 한번 더
-        if (img.decode) {
-          img.decode().then(handler).catch(() => {});
-        }
+        if (img.decode) img.decode().then(handler).catch(() => {});
       });
     }
 
-    // 5) iOS 주소창/뷰포트 변화(visualViewport) 때 보정
+    // 5) iOS 주소창/뷰포트 변화: visualViewport "resize"만 사용(스크롤 이벤트는 떨림 원인이라 금지)
     const vv = window.visualViewport;
     if (vv && vv.addEventListener) {
-      const vvHandler = () => {
-        if (done) return;
-        scrollToElOnce(el);
-      };
+      const vvHandler = () => maybeFix(false);
       vv.addEventListener("resize", vvHandler, { passive: true });
-      vv.addEventListener("scroll", vvHandler, { passive: true });
-      cleanups.push(() => {
+      cleanupFns.push(() => {
         try { vv.removeEventListener("resize", vvHandler); } catch (_) {}
-        try { vv.removeEventListener("scroll", vvHandler); } catch (_) {}
       });
     }
 
-    // 6) 일반 resize/orientationchange 때도 보정
-    const winHandler = () => {
-      if (done) return;
-      scrollToElOnce(el);
-    };
+    // 6) resize/orientationchange 때 보정(스로틀)
+    const winHandler = () => maybeFix(false);
     window.addEventListener("resize", winHandler, { passive: true });
     window.addEventListener("orientationchange", winHandler, { passive: true });
-    cleanups.push(() => {
+    cleanupFns.push(() => {
       try { window.removeEventListener("resize", winHandler); } catch (_) {}
       try { window.removeEventListener("orientationchange", winHandler); } catch (_) {}
     });
 
-    // 7) 루프 시작
-    scrollToElGuaranteed._t = setTimeout(() => {
-      scrollToElGuaranteed._raf = requestAnimationFrame(tick);
-    }, 180);
+    // 7) 타임박스 루프: 도달할 때까지(또는 maxMs) 일정 간격으로 체크/보정
+    let t = 0;
+    const loop = () => {
+      if (done) return;
+
+      if (!needsFix(el)) {
+        finalize();
+        return;
+      }
+
+      const elapsed = performance.now() - start;
+      if (elapsed > maxMs) {
+        maybeFix(true);
+        finalize();
+        return;
+      }
+
+      maybeFix(false);
+      t = setTimeout(loop, 220);
+    };
+    t = setTimeout(loop, 220);
+
+    scrollToElGuaranteed._kill = () => {
+      done = true;
+      try { clearTimeout(t); } catch (_) {}
+      cleanupAll();
+    };
   }
 
   function getNavType() {
