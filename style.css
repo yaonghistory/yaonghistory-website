@@ -915,3 +915,60 @@ main{
 #curriculum .team-card.reveal.is-out{
   opacity: .92 !important;
 }
+/* =========================
+   PATCH: 첫 화면 밀도 최적화
+   ========================= */
+
+/* 히어로 전체 위아래 여백 줄이기 */
+.hero{
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+/* 상단 점선 pill 살짝 컴팩트 */
+.pill{
+  padding: 8px 14px;
+  font-size: 14px;
+}
+
+/* 메인 타이틀 살짝 축소 */
+.hero-title{
+  font-size: 40px;      /* 기존 44 */
+  margin: 12px 0 4px;
+}
+
+/* 서브 타이틀 */
+.hero-sub{
+  font-size: 17px;
+}
+
+/* 설명 문단 */
+.hero-copy{
+  font-size: 16.5px;
+  margin: 8px 0 14px;
+}
+
+/* 버튼 간격 축소 */
+.btn-row{
+  margin: 6px 0 10px;
+}
+
+/* 통계 카드 간격 줄이기 */
+.stat-list{
+  gap: 10px;
+}
+
+/* 통계 카드 자체 패딩 약간 줄이기 */
+.stat{
+  padding: 14px 16px;
+}
+
+/* 숫자 크기 살짝만 줄이기 */
+.stat-top{
+  font-size: 26px;
+}
+
+/* 카드 아래 여백 살짝 줄이기 */
+.section{
+  padding: 22px 0 6px;
+}
