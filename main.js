@@ -1,10 +1,16 @@
 (() => {
   "use strict";
 
+  // =========================
+  // iOS/인앱: 새로고침 시 스크롤 위치 복원 방지
+  // =========================
   try {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
   } catch (_) {}
 
+  // =========================
+  // Helpers
+  // =========================
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
@@ -17,7 +23,7 @@
     const cssVal = getComputedStyle(root).getPropertyValue("--header-offset").trim();
     const cssNum = cssVal ? parseInt(cssVal, 10) : NaN;
     const h = header ? Math.ceil(header.getBoundingClientRect().height) : 0;
-    const base = Number.isFinite(cssNum) ? cssNum : (h + 10);
+    const base = Number.isFinite(cssNum) ? cssNum : h + 10;
     return Math.max(60, base);
   }
 
@@ -41,7 +47,8 @@
 
     function tick(now) {
       const t = clamp((now - startT) / duration, 0, 1);
-      const y = startY + (endY - startY) * easeOutCubic(t);
+      const eased = easeOutCubic(t);
+      const y = startY + (endY - startY) * eased;
       window.scrollTo(0, y);
       if (t < 1) requestAnimationFrame(tick);
     }
@@ -66,6 +73,9 @@
     return null;
   }
 
+  // =========================
+  // 1) Anchor smooth scroll with header offset
+  // =========================
   function bindSmoothAnchors() {
     $$("[data-scroll]").forEach((a) => {
       a.addEventListener(
@@ -78,8 +88,15 @@
           if (!target) return;
 
           e.preventDefault();
+
           scrollToEl(target);
 
+          // ✅ lazy 이미지 로딩으로 scrollHeight가 늦게 늘어나는 케이스 보정
+          // (첫 클릭에서 photos 근처에 멈추는 현상 해결)
+          setTimeout(() => scrollToEl(target), 250);
+          setTimeout(() => scrollToEl(target), 900);
+
+          // 해시를 URL에 남기지 않음 (새로고침 시 특정 섹션 점프 방지)
           try {
             history.replaceState(null, "", location.pathname + location.search);
           } catch (_) {}
@@ -89,6 +106,9 @@
     });
   }
 
+  // =========================
+  // 2) Reveal animations (fade-in/out)
+  // =========================
   function markRevealTargets() {
     const selectors = [
       ".section .sec-head",
@@ -113,6 +133,7 @@
 
     const set = new Set();
     selectors.forEach((sel) => $$(sel).forEach((el) => set.add(el)));
+
     set.forEach((el) => el.classList.add("reveal"));
     return Array.from(set);
   }
@@ -126,21 +147,22 @@
       el.classList.add("is-in");
       el.classList.remove("is-out");
       el.dataset.seen = "1";
-      return;
-    }
-
-    if (next === "out") {
+    } else if (next === "out") {
       el.classList.remove("is-in");
       el.classList.add("is-out");
-      return;
+    } else {
+      el.classList.remove("is-in");
+      el.classList.remove("is-out");
     }
-
-    el.classList.remove("is-in");
-    el.classList.remove("is-out");
   }
 
   function bindRevealObserver(targets) {
-    if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+    if (prefersReducedMotion) {
+      targets.forEach((el) => applyState(el, "in"));
+      return;
+    }
+
+    if (!("IntersectionObserver" in window)) {
       targets.forEach((el) => applyState(el, "in"));
       return;
     }
@@ -207,11 +229,13 @@
         targets.forEach((el) => io.observe(el));
       });
     };
-
     window.addEventListener("resize", refresh, { passive: true });
     window.addEventListener("orientationchange", refresh, { passive: true });
   }
 
+  // =========================
+  // 3) Mailto (문의 폼)
+  // =========================
   function bindMail() {
     const mailBtn = $("#mailBtn");
     const form = $("#contactForm");
@@ -231,19 +255,20 @@
         `휴대폰 번호: ${phone}`,
         `인원: ${people}`,
         `희망 장소/일정: ${schedule}`,
-        "",
-        "문의 내용:",
+        ``,
+        `문의 내용:`,
         `${message}`
       ];
       const body = encodeURIComponent(bodyLines.join("\n"));
-
       location.href = `mailto:yaonghistory@gmail.com?subject=${subject}&body=${body}`;
     });
   }
 
+  // =========================
+  // Init
+  // =========================
   function init() {
     const navType = getNavType();
-
     if (navType === "reload" || navType === "back_forward") {
       try {
         history.replaceState(null, "", location.pathname + location.search);
