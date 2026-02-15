@@ -111,7 +111,11 @@ textarea{resize:vertical;}
   font-weight:650;
 }
 
-main{padding-top:var(--header-offset);}
+/* ✅ 헤더 고정 보정 + 맨 아래 앵커(#contact) 여유 공간 확보 */
+main{
+  padding-top:var(--header-offset);
+  padding-bottom:calc(var(--header-offset) + 40px);
+}
 
 .section{padding:26px 0 8px;}
 .hero{padding-top:12px;}
