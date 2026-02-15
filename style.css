@@ -772,3 +772,61 @@ main{
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+/* =========================
+   HERO: 스탯 1열로 통일 + 첫 화면에 3개가 들어오게 최적화
+   ========================= */
+
+/* 1) 히어로 스탯: 1열(세로)로 복귀 */
+.hero .stat-list{
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  margin-top: 10px !important;
+}
+
+.hero .stat{
+  padding: 12px 14px !important;
+  border-radius: 20px !important;
+}
+
+.hero .stat-top{
+  font-size: 22px !important;
+  line-height: 1.1 !important;
+}
+
+.hero .stat-bottom{
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+}
+
+/* 2) 첫 화면에 3개가 딱 들어오도록 히어로 상단을 조금 더 컴팩트하게 */
+.hero .pill{
+  padding: 7px 12px !important;
+}
+
+.hero-title{
+  margin: 10px 0 4px !important;
+  font-size: 38px !important;
+}
+
+.hero-copy{
+  margin: 8px 0 10px !important;
+  font-size: 16px !important;
+}
+
+/* 버튼 높이 살짝 줄여서 공간 확보 */
+:root{
+  --btnH: 46px;
+}
+.btn-row{
+  margin: 6px 0 8px !important;
+}
+
+/* 3) 작은 화면에서는 더 확실하게 맞춤 */
+@media (max-width: 420px){
+  :root{ --btnH: 44px; }
+  .hero-title{ font-size: 36px !important; }
+  .hero-copy{ font-size: 15.5px !important; }
+  .hero .stat{ padding: 11px 13px !important; }
+  .hero .stat-top{ font-size: 21px !important; }
+}
