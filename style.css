@@ -1,3 +1,18 @@
+@font-face{
+  font-family:"NanumSquareRound";
+  src:url("NanumSquareRoundR.woff2") format("woff2");
+  font-weight:400;
+  font-style:normal;
+  font-display:swap;
+}
+@font-face{
+  font-family:"NanumSquareRound";
+  src:url("NanumSquareRoundB.woff2") format("woff2");
+  font-weight:700;
+  font-style:normal;
+  font-display:swap;
+}
+
 :root{
   --bg:#f6f3ea;
   --paper:rgba(255,255,255,.78);
@@ -33,7 +48,7 @@ body{
     radial-gradient(900px 520px at 85% 10%, rgba(255,239,203,.55), transparent 60%),
     radial-gradient(950px 520px at 50% 110%, rgba(207,236,230,.26), transparent 55%),
     linear-gradient(180deg,#faf8f2 0%,var(--bg) 55%,#f4f1e7 100%);
-  font-family:"NanumSquareRound","NanumSquare","Apple SD Gothic Neo","Noto Sans KR",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  font-family:"NanumSquareRound","Apple SD Gothic Neo","Noto Sans KR",system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
   font-weight:400;
   letter-spacing:-0.2px;
   line-height:1.45;
@@ -396,7 +411,6 @@ main{padding-top:var(--header-offset);}
   .place{white-space:normal;}
 }
 
-/* Overrides (기존 결과 유지용) */
 #curriculum,
 #curriculum .team-card,
 #curriculum .team-title,
