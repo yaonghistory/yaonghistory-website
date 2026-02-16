@@ -604,8 +604,6 @@ main{
   border:1px solid rgba(31,42,46,.10);
   background:rgba(255,255,255,.55);
 }
-
-/* 후기/활동 사진: 원본 비율 그대로(잘림 없음) */
 .thumb img{
   width:100%;
   height:auto;
