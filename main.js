@@ -116,7 +116,14 @@
     });
   }
 
+  function isThumb(el) {
+    return el && el.classList && el.classList.contains("thumb");
+  }
+
   function applyState(el, next) {
+    // ✅ 사진(thumb)은 한 번 보였으면(out/init로) 절대 흐려지지 않게 고정
+    if (isThumb(el) && el.dataset.seen === "1" && next !== "in") next = "in";
+
     const cur = el.dataset.rv || "";
     if (cur === next) return;
     el.dataset.rv = next;
@@ -214,6 +221,7 @@
           continue;
         }
 
+        // ✅ thumb는 seen 이후 out/init로 보내지 않음 (applyState에서 in으로 강제됨)
         if (el.dataset.seen !== "1") continue;
 
         const top =
@@ -341,7 +349,7 @@
     const baseTargets = markBaseRevealTargets();
 
     const reveal = createRevealObserver((el) => {
-      if (!el.classList.contains("thumb")) return;
+      if (!isThumb(el)) return;
       const parent = el.closest(".gallery");
       if (!parent) return;
       staggerIn($$(".thumb", parent), 80);
