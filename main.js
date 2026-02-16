@@ -33,61 +33,7 @@
   }
 
   // =========================
-  // Single-run smooth scroll (CANCELABLE)
-  // =========================
-  let activeAnim = { id: 0, raf: 0, running: false };
-
-  function cancelScrollAnim() {
-    activeAnim.id += 1;
-    activeAnim.running = false;
-    if (activeAnim.raf) cancelAnimationFrame(activeAnim.raf);
-    activeAnim.raf = 0;
-  }
-
-  // 부드러운 이징(더 자연스럽게)
-  const easeInOutQuint = (t) =>
-    t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
-
-  function smoothScrollToY(targetY, duration = 720) {
-    const startY = nowY();
-    const endY = clamp(targetY, 0, maxScrollY());
-
-    if (prefersReducedMotion) {
-      cancelScrollAnim();
-      window.scrollTo(0, endY);
-      return;
-    }
-
-    cancelScrollAnim();
-    activeAnim.running = true;
-    const myId = activeAnim.id;
-    const startT = performance.now();
-
-    function tick(tNow) {
-      if (myId !== activeAnim.id) return; // canceled
-      const t = clamp((tNow - startT) / duration, 0, 1);
-      const y = startY + (endY - startY) * easeInOutQuint(t);
-      window.scrollTo(0, y);
-
-      if (t < 1) {
-        activeAnim.raf = requestAnimationFrame(tick);
-      } else {
-        activeAnim.running = false;
-        activeAnim.raf = 0;
-      }
-    }
-
-    activeAnim.raf = requestAnimationFrame(tick);
-  }
-
-  function snapToEl(el) {
-    if (!el) return;
-    cancelScrollAnim(); // 스냅은 즉시 확정
-    window.scrollTo(0, getTargetY(el));
-  }
-
-  // =========================
-  // Contact image prime (layout shift 줄이기)
+  // Contact image prime
   // =========================
   let primed = false;
   function primeLazyImagesForContact() {
@@ -105,14 +51,92 @@
   }
 
   // =========================
-  // Guaranteed scroll (NO multi-smooth; fixes are snap-only)
+  // Single "tracking" scroll animation (no flicker, no multi-animations)
   // =========================
-  function needsFix(el) {
-    const r = el.getBoundingClientRect();
-    const topLimit = getHeaderOffset() + 6;
-    return Math.abs(r.top - topLimit) > 10; // 너무 민감하면 떨림
-  }
+  const scrollRunner = (() => {
+    let raf = 0;
+    let id = 0;
+    let running = false;
 
+    function cancel() {
+      id += 1;
+      running = false;
+      if (raf) cancelAnimationFrame(raf);
+      raf = 0;
+    }
+
+    // 스프링(임계감쇠에 가깝게)로 목표를 따라감
+    // 목표가 스크롤 도중 변해도 계속 추적해서 100% 도달
+    function runToEl(el, opts = {}) {
+      if (!el) return;
+      cancel();
+
+      if (prefersReducedMotion) {
+        window.scrollTo(0, getTargetY(el));
+        return;
+      }
+
+      const myId = id;
+      running = true;
+
+      const maxMs = typeof opts.maxMs === "number" ? opts.maxMs : 5200;
+      const startT = performance.now();
+
+      // 튜닝값: 부드러움/도달 속도
+      const stiffness = 0.018; // 작을수록 부드럽고 느림
+      const damping = 0.78;    // 0~1, 클수록 덜 튐
+
+      let v = 0; // velocity
+      let stableFrames = 0;
+
+      const step = () => {
+        if (myId !== id) return; // canceled
+
+        const y = nowY();
+        const target = getTargetY(el);
+        const err = target - y;
+
+        // 목표가 거의 맞으면 안정 카운트
+        if (Math.abs(err) < 1.2 && Math.abs(v) < 0.25) {
+          stableFrames += 1;
+        } else {
+          stableFrames = 0;
+        }
+
+        // 스프링 업데이트(간단한 수치적분)
+        v = v * damping + err * stiffness * 100; // 100은 체감 속도 스케일
+        const nextY = y + v;
+
+        window.scrollTo(0, clamp(nextY, 0, maxScrollY()));
+
+        const elapsed = performance.now() - startT;
+
+        // 1) 충분히 안정되면 종료 + 마지막 스냅(정확도 확보)
+        if (stableFrames >= 8) {
+          running = false;
+          raf = 0;
+          window.scrollTo(0, target);
+          return;
+        }
+
+        // 2) 타임아웃이면 종료 + 스냅
+        if (elapsed > maxMs) {
+          running = false;
+          raf = 0;
+          window.scrollTo(0, target);
+          return;
+        }
+
+        raf = requestAnimationFrame(step);
+      };
+
+      raf = requestAnimationFrame(step);
+    }
+
+    return { runToEl, cancel, get running() { return running; } };
+  })();
+
+  // 도달 판정(헤더 가림 방지)
   function isGood(el) {
     const r = el.getBoundingClientRect();
     const topLimit = getHeaderOffset() + 6;
@@ -120,138 +144,35 @@
     return r.top >= topLimit && r.top <= bottomLimit;
   }
 
-  function scrollToElGuaranteed(el, opts = {}) {
+  // =========================
+  // Guaranteed scroll wrapper
+  // =========================
+  function scrollToElGuaranteed(el) {
     if (!el) return;
 
-    const maxMs = typeof opts.maxMs === "number" ? opts.maxMs : 5200;
+    scrollRunner.runToEl(el, { maxMs: 5600 });
 
-    // 이전 실행 종료
-    if (scrollToElGuaranteed._kill) scrollToElGuaranteed._kill();
-    scrollToElGuaranteed._kill = null;
+    // 이벤트가 많아도 "새 애니메이션 시작"은 절대 안 하고
+    // 현재 애니메이션이 목표를 계속 추적하므로, 아래는 안전망(아주 가끔만)
+    let t = 0;
+    const start = performance.now();
 
-    let done = false;
-    const startT = performance.now();
+    const safety = () => {
+      const elapsed = performance.now() - start;
+      if (elapsed > 5600) return;
 
-    // 보정 스로틀
-    let lastFixAt = 0;
-    const FIX_COOLDOWN = 220;
+      if (isGood(el)) return;
 
-    // 핵심: 스크롤 중(애니메이션 running)에는 보정 예약만 하고,
-    // 애니메이션이 끝난 뒤에만 snap 보정을 수행한다.
-    let pendingFix = false;
-    const scheduleFix = () => {
-      if (done) return;
-      pendingFix = true;
+      // 목표가 크게 바뀐 케이스: 한번 더 추적 재시작(기존 애니메이션 취소 후 1개만 유지)
+      scrollRunner.runToEl(el, { maxMs: 4200 });
+      t = setTimeout(safety, 520);
     };
 
-    const applyFixIfPossible = (force = false) => {
-      if (done) return;
-      const t = performance.now();
-      if (!force && t - lastFixAt < FIX_COOLDOWN) return;
+    t = setTimeout(safety, 520);
 
-      if (!pendingFix && !force) return;
-      if (activeAnim.running && !force) return; // 달리는 중에는 건드리지 않음
-
-      pendingFix = false;
-
-      if (force || needsFix(el)) {
-        lastFixAt = t;
-        // 마지막 보정은 snap (중첩 smooth 금지)
-        window.scrollTo(0, getTargetY(el));
-      }
-    };
-
-    const cleanupFns = [];
-    const cleanupAll = () => {
-      cleanupFns.splice(0).forEach((fn) => {
-        try { fn(); } catch (_) {}
-      });
-    };
-
-    const finalize = () => {
-      if (done) return;
-      done = true;
-      // 끝에서 한 번 확정 스냅
-      snapToEl(el);
-      cleanupAll();
-    };
-
-    // 1) 최초 이동: smooth는 딱 1번만
-    smoothScrollToY(getTargetY(el), 760);
-
-    // 2) 애니메이션 종료 직후에 스냅 보정 1~2회
-    setTimeout(() => scheduleFix(), 140);
-    setTimeout(() => scheduleFix(), 320);
-    setTimeout(() => scheduleFix(), 520);
-
-    // 3) 폰트/이미지/뷰포트 변화는 "보정 예약"만
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(scheduleFix).catch(() => {});
-    }
-
-    const imgs = $$("img", el);
-    if (imgs.length) {
-      imgs.forEach((img) => {
-        if (img.complete) return;
-        const handler = () => scheduleFix();
-        img.addEventListener("load", handler, { passive: true, once: true });
-        img.addEventListener("error", handler, { passive: true, once: true });
-        cleanupFns.push(() => {
-          try { img.removeEventListener("load", handler); } catch (_) {}
-          try { img.removeEventListener("error", handler); } catch (_) {}
-        });
-        if (img.decode) img.decode().then(handler).catch(() => {});
-      });
-    }
-
-    const vv = window.visualViewport;
-    if (vv && vv.addEventListener) {
-      const vvHandler = () => scheduleFix();
-      vv.addEventListener("resize", vvHandler, { passive: true });
-      cleanupFns.push(() => {
-        try { vv.removeEventListener("resize", vvHandler); } catch (_) {}
-      });
-    }
-
-    const winHandler = () => scheduleFix();
-    window.addEventListener("resize", winHandler, { passive: true });
-    window.addEventListener("orientationchange", winHandler, { passive: true });
-    cleanupFns.push(() => {
-      try { window.removeEventListener("resize", winHandler); } catch (_) {}
-      try { window.removeEventListener("orientationchange", winHandler); } catch (_) {}
-    });
-
-    // 4) 체크 루프: pendingFix를 애니메이션 끝난 타이밍에만 적용
-    let tmr = 0;
-    const loop = () => {
-      if (done) return;
-
-      // 보정 적용(가능할 때만)
-      applyFixIfPossible(false);
-
-      // 충분히 도달했으면 종료
-      if (isGood(el) || !needsFix(el)) {
-        finalize();
-        return;
-      }
-
-      // 타임아웃이면 강제로 1회 보정 후 종료
-      const elapsed = performance.now() - startT;
-      if (elapsed > maxMs) {
-        applyFixIfPossible(true);
-        finalize();
-        return;
-      }
-
-      tmr = setTimeout(loop, 180);
-    };
-    tmr = setTimeout(loop, 180);
-
-    scrollToElGuaranteed._kill = () => {
-      done = true;
-      try { clearTimeout(tmr); } catch (_) {}
-      cleanupAll();
-    };
+    // 정리용 핸들(다음 클릭 때 이전 안전망 제거)
+    if (scrollToElGuaranteed._t) clearTimeout(scrollToElGuaranteed._t);
+    scrollToElGuaranteed._t = t;
   }
 
   // =========================
@@ -283,8 +204,12 @@
           e.preventDefault();
 
           if (href === "#contact") primeLazyImagesForContact();
+
+          // 기존 스크롤 취소 후 단일 추적 스크롤
+          scrollRunner.cancel();
           scrollToElGuaranteed(target);
 
+          // 해시 남기지 않기
           try {
             history.replaceState(null, "", location.pathname + location.search);
           } catch (_) {}
