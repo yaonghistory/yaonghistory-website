@@ -1,11 +1,9 @@
 (() => {
   "use strict";
 
-  // double-init guard (in case main.js is loaded twice)
   if (window.__YAONG_MAIN_INIT__) return;
   window.__YAONG_MAIN_INIT__ = true;
 
-  // prevent iOS/in-app from restoring scroll position on reload
   try {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
   } catch (_) {}
@@ -71,11 +69,9 @@
   let animToken = 0;
   let rafId = 0;
   let settleTimer = 0;
-  let isAnimating = false;
 
   function cancelScroll() {
     animToken += 1;
-    isAnimating = false;
     if (rafId) cancelAnimationFrame(rafId);
     rafId = 0;
     if (settleTimer) clearTimeout(settleTimer);
@@ -98,7 +94,6 @@
     const myToken = animToken;
     const startY = nowY();
     const startT = performance.now();
-    isAnimating = true;
 
     function tick(tNow) {
       if (myToken !== animToken) return;
@@ -107,26 +102,21 @@
       const y = startY + (endY - startY) * easeInOutCubic(t);
       window.scrollTo(0, y);
 
-      if (t < 1) {
-        rafId = requestAnimationFrame(tick);
-      } else {
-        rafId = 0;
-        isAnimating = false;
-      }
+      if (t < 1) rafId = requestAnimationFrame(tick);
+      else rafId = 0;
     }
 
     rafId = requestAnimationFrame(tick);
   }
 
+  function hardSnapToEl(el) {
+    if (!el) return;
+    window.scrollTo(0, getTargetY(el));
+  }
+
   function scrollToEl(el) {
     if (!el) return;
-
     smoothToY(getTargetY(el), 760);
-
-    // one-time settle after potential layout changes
-    settleTimer = setTimeout(() => {
-      window.scrollTo(0, getTargetY(el));
-    }, 900);
   }
 
   function bindUserCancel() {
@@ -138,7 +128,7 @@
       if (keys.includes(e.key)) cancel();
     });
 
-    // iOS status-bar tap "scroll-to-top" should not fight our animation
+    // iOS status-bar tap scroll-to-top should not fight our animation
     window.addEventListener(
       "scroll",
       () => {
@@ -146,6 +136,28 @@
       },
       { passive: true }
     );
+  }
+
+  async function goContactGuaranteed(el) {
+    // 0) cancel any previous animation
+    cancelScroll();
+
+    // 1) warmup (only review/photos)
+    await warmupImagesBeforeContact(900);
+
+    // 2) first smooth scroll
+    scrollToEl(el);
+
+    // 3) after layout settles (toolbar/viewport/images), do ONE final snap
+    settleTimer = setTimeout(() => {
+      hardSnapToEl(el);
+    }, 260);
+
+    // 4) and ONE more very late snap (iOS address bar / late reflow)
+    //    -> still only snaps, no smooth, so no ping-pong
+    settleTimer = setTimeout(() => {
+      hardSnapToEl(el);
+    }, 820);
   }
 
   function bindAnchors() {
@@ -162,11 +174,12 @@
           e.preventDefault();
           clearHash();
 
-          // only for contact: warm up review/photos images to prevent layout-shift stop
           if (target.id === "contact") {
-            await warmupImagesBeforeContact(700);
+            await goContactGuaranteed(target);
+            return;
           }
 
+          cancelScroll();
           scrollToEl(target);
         },
         { passive: false }
@@ -209,8 +222,8 @@
 
     if (navType === "reload" || navType === "back_forward") {
       clearHash();
-      window.scrollTo(0, 0);
       cancelScroll();
+      window.scrollTo(0, 0);
     }
 
     window.addEventListener(
@@ -218,8 +231,8 @@
       (e) => {
         if (e.persisted) {
           clearHash();
-          window.scrollTo(0, 0);
           cancelScroll();
+          window.scrollTo(0, 0);
         }
       },
       { passive: true }
