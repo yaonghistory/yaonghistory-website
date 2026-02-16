@@ -12,23 +12,10 @@
   const prefersReducedMotion =
     window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  // ---------- Inject CSS: nav 이동 중 reveal 강제 표시(빈 화면/깜빡임 방지) ----------
-  function injectNavRevealCSS() {
-    if (document.getElementById("navRevealFixStyle")) return;
-    const s = document.createElement("style");
-    s.id = "navRevealFixStyle";
-    s.textContent = `
-      body.nav-scrolling .reveal{
-        opacity: 1 !important;
-        transform: none !important;
-      }
-      body.nav-scrolling .reveal.is-out{
-        opacity: 1 !important;
-        transform: none !important;
-      }
-    `;
-    document.head.appendChild(s);
-  }
+  const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
+  const nowY = () => window.pageYOffset || document.documentElement.scrollTop || 0;
+  const maxScrollY = () =>
+    Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
 
   function getHeaderOffset() {
     const root = document.documentElement;
@@ -39,73 +26,64 @@
     return Math.max(60, base);
   }
 
-  const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
-  const nowY = () => window.pageYOffset || document.documentElement.scrollTop || 0;
-  const maxScrollY = () => Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-
   function getTargetY(el) {
     const rect = el.getBoundingClientRect();
     const y = nowY() + rect.top - getHeaderOffset();
     return clamp(y, 0, maxScrollY());
   }
 
-  // =========================
-  // Cancelable smooth scroll (중첩 애니메이션 제거)
-  // =========================
-  let anim = { id: 0, raf: 0, running: false };
+  // -------------------------
+  // Cancelable smooth scroll (1회만 실행)
+  // -------------------------
+  let animId = 0;
+  let rafId = 0;
 
-  function cancelScrollAnim() {
-    anim.id += 1;
-    anim.running = false;
-    if (anim.raf) cancelAnimationFrame(anim.raf);
-    anim.raf = 0;
+  function cancelSmooth() {
+    animId += 1;
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = 0;
   }
 
   const easeInOutQuint = (t) =>
     t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
 
-  function smoothScrollToY(targetY, duration = 760) {
+  function smoothScrollToY(targetY, duration = 780) {
     const startY = nowY();
     const endY = clamp(targetY, 0, maxScrollY());
 
     if (prefersReducedMotion) {
-      cancelScrollAnim();
+      cancelSmooth();
       window.scrollTo(0, endY);
       return;
     }
 
-    cancelScrollAnim();
-    anim.running = true;
-    const myId = anim.id;
+    cancelSmooth();
+    const myId = animId;
     const startT = performance.now();
 
     function tick(tNow) {
-      if (myId !== anim.id) return;
+      if (myId !== animId) return;
 
       const t = clamp((tNow - startT) / duration, 0, 1);
       const y = startY + (endY - startY) * easeInOutQuint(t);
       window.scrollTo(0, y);
 
-      if (t < 1) {
-        anim.raf = requestAnimationFrame(tick);
-      } else {
-        anim.running = false;
-        anim.raf = 0;
-      }
+      if (t < 1) rafId = requestAnimationFrame(tick);
+      else rafId = 0;
     }
 
-    anim.raf = requestAnimationFrame(tick);
+    rafId = requestAnimationFrame(tick);
   }
 
   function snapToEl(el) {
     if (!el) return;
-    cancelScrollAnim();
+    cancelSmooth();
     window.scrollTo(0, getTargetY(el));
   }
 
-  // =========================
-  // Contact image prime (레이아웃 변동 완화)
-  // =========================
+  // -------------------------
+  // Contact image prime
+  // -------------------------
   let primed = false;
   function primeLazyImagesForContact() {
     if (primed) return;
@@ -121,157 +99,62 @@
     });
   }
 
-  // =========================
-  // Reveal freeze during nav scroll
-  // =========================
-  let revealFrozen = false;
-  let navFreezeTimer = 0;
+  // -------------------------
+  // NAV: 단발 스무스 + 최대 2회 보정 (핑퐁 방지)
+  // -------------------------
+  let navLock = false;
+  let navTimers = [];
 
-  function freezeRevealForNav(ms = 1400) {
-    injectNavRevealCSS();
-    revealFrozen = true;
-    document.body.classList.add("nav-scrolling");
-    clearTimeout(navFreezeTimer);
-    navFreezeTimer = setTimeout(() => {
-      revealFrozen = false;
-      document.body.classList.remove("nav-scrolling");
-    }, ms);
+  function clearNavTimers() {
+    navTimers.forEach((t) => clearTimeout(t));
+    navTimers = [];
   }
 
-  // =========================
-  // Guaranteed scroll: 1 smooth + (필요 시) 스냅 보정
-  // =========================
-  function needsFix(el) {
-    const r = el.getBoundingClientRect();
-    const topLimit = getHeaderOffset() + 6;
-    return Math.abs(r.top - topLimit) > 10;
+  function maybeCorrect(el) {
+    if (!el) return;
+    const yTarget = getTargetY(el);
+    const diff = Math.abs(yTarget - nowY());
+
+    // 아주 작은 오차는 무시(부드러움 유지)
+    if (diff <= 6) return;
+
+    // iOS 바닥 러버밴드 방지: 바닥 근처면 바닥으로 고정
+    const m = maxScrollY();
+    const top = yTarget >= m - 2 ? m : yTarget;
+
+    // 여기서 "스무스" 금지 (추가 스무스가 핑퐁을 만듦)
+    window.scrollTo(0, top);
   }
 
-  function scrollToElGuaranteed(el) {
+  function scrollToElOneShot(el) {
     if (!el) return;
 
-    // 이동 중 reveal로 빈 화면 보이는 문제 방지
-    freezeRevealForNav(1600);
+    if (navLock) return;
+    navLock = true;
 
-    // 첫 이동: smooth 1회
+    clearNavTimers();
+    cancelSmooth();
+
+    // 1) 부드러운 이동 1회
     smoothScrollToY(getTargetY(el), 820);
 
-    // 이벤트가 와도 smooth를 추가로 걸지 않고, "예약 후 스냅"만 한다
-    let done = false;
-    let pending = false;
-    let lastSnapAt = 0;
-    const SNAP_COOLDOWN = 220;
+    // 2) 레이아웃 변화(주소창/이미지/폰트) 이후를 대비해
+    //    "필요할 때만" 보정 2회
+    navTimers.push(setTimeout(() => maybeCorrect(el), 320));
+    navTimers.push(setTimeout(() => maybeCorrect(el), 900));
 
-    const schedule = () => { pending = true; };
-
-    const maybeSnap = (force = false) => {
-      if (done) return;
-      const t = performance.now();
-      if (!force && t - lastSnapAt < SNAP_COOLDOWN) return;
-      if (!force && (!pending || anim.running)) return;
-
-      pending = false;
-      if (force || needsFix(el)) {
-        lastSnapAt = t;
-        // 작은 오차는 스냅 생략(부드러움 유지)
-        const r = el.getBoundingClientRect();
-        const topLimit = getHeaderOffset() + 6;
-        if (Math.abs(r.top - topLimit) > 6) {
-          window.scrollTo(0, getTargetY(el));
-        }
-      }
-    };
-
-    // 폰트/이미지/뷰포트 변화는 "예약"만
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(schedule).catch(() => {});
-    }
-
-    const imgs = $$("img", el);
-    imgs.forEach((img) => {
-      if (img.complete) return;
-      const h = () => schedule();
-      img.addEventListener("load", h, { passive: true, once: true });
-      img.addEventListener("error", h, { passive: true, once: true });
-      if (img.decode) img.decode().then(h).catch(() => {});
-    });
-
-    const vv = window.visualViewport;
-    if (vv && vv.addEventListener) {
-      const h = () => schedule();
-      vv.addEventListener("resize", h, { passive: true });
+    // 3) 최종 확정(한 번)
+    navTimers.push(
       setTimeout(() => {
-        try { vv.removeEventListener("resize", h); } catch (_) {}
-      }, 2200);
-    }
-
-    const wh = () => schedule();
-    window.addEventListener("resize", wh, { passive: true });
-    window.addEventListener("orientationchange", wh, { passive: true });
-    setTimeout(() => {
-      try { window.removeEventListener("resize", wh); } catch (_) {}
-      try { window.removeEventListener("orientationchange", wh); } catch (_) {}
-    }, 2400);
-
-    // 타임박스 루프: 애니 끝난 뒤 예약된 보정만 스냅
-    const start = performance.now();
-    let timer = 0;
-
-    const loop = () => {
-      if (done) return;
-
-      maybeSnap(false);
-
-      // 충분히 맞으면 종료 + 마지막 확정 스냅
-      if (!anim.running && !needsFix(el)) {
-        done = true;
         snapToEl(el);
-        // freeze는 남은 시간 후 풀림
-        return;
-      }
-
-      // 최대 시간 지나면 강제 스냅하고 종료
-      if (performance.now() - start > 5200) {
-        done = true;
-        maybeSnap(true);
-        snapToEl(el);
-        return;
-      }
-
-      timer = setTimeout(loop, 160);
-    };
-
-    // 초기: 몇 번 예약 걸어두기(주소창 접힘/레이아웃 변화 대비)
-    setTimeout(schedule, 120);
-    setTimeout(schedule, 320);
-    setTimeout(schedule, 640);
-    setTimeout(schedule, 980);
-
-    timer = setTimeout(loop, 160);
-
-    // 다음 클릭 시 이전 루프 정리
-    if (scrollToElGuaranteed._kill) scrollToElGuaranteed._kill();
-    scrollToElGuaranteed._kill = () => {
-      done = true;
-      clearTimeout(timer);
-    };
+        navLock = false;
+      }, 1250)
+    );
   }
 
-  // =========================
-  // Navigation type
-  // =========================
-  function getNavType() {
-    try {
-      const nav = performance.getEntriesByType && performance.getEntriesByType("navigation");
-      return nav && nav[0] && nav[0].type ? nav[0].type : null;
-    } catch (_) {
-      return null;
-    }
-  }
-
-  // =========================
-  // Anchors
-  // =========================
+  // -------------------------
+  // Anchor bind
+  // -------------------------
   function bindSmoothAnchors() {
     $$("[data-scroll]").forEach((a) => {
       a.addEventListener(
@@ -286,9 +169,7 @@
           e.preventDefault();
 
           if (href === "#contact") primeLazyImagesForContact();
-
-          cancelScrollAnim();
-          scrollToElGuaranteed(target);
+          scrollToElOneShot(target);
 
           try {
             history.replaceState(null, "", location.pathname + location.search);
@@ -299,9 +180,9 @@
     });
   }
 
-  // =========================
-  // Reveal
-  // =========================
+  // -------------------------
+  // Reveal (원래대로 유지)
+  // -------------------------
   function markRevealTargets() {
     const selectors = [
       ".section .sec-head",
@@ -341,13 +222,11 @@
       el.dataset.seen = "1";
       return;
     }
-
     if (next === "out") {
       el.classList.remove("is-in");
       el.classList.add("is-out");
       return;
     }
-
     el.classList.remove("is-in");
     el.classList.remove("is-out");
   }
@@ -369,7 +248,6 @@
 
     const process = () => {
       raf = 0;
-      if (revealFrozen) return; // 이동 중엔 reveal 상태 바꾸지 않음(깜빡 방지)
 
       const entries = queue;
       queue = [];
@@ -428,9 +306,9 @@
     window.addEventListener("orientationchange", refresh, { passive: true });
   }
 
-  // =========================
+  // -------------------------
   // Mail
-  // =========================
+  // -------------------------
   function bindMail() {
     const mailBtn = $("#mailBtn");
     const form = $("#contactForm");
@@ -461,12 +339,19 @@
     });
   }
 
-  // =========================
+  // -------------------------
   // Init
-  // =========================
-  function init() {
-    injectNavRevealCSS();
+  // -------------------------
+  function getNavType() {
+    try {
+      const nav = performance.getEntriesByType && performance.getEntriesByType("navigation");
+      return nav && nav[0] && nav[0].type ? nav[0].type : null;
+    } catch (_) {
+      return null;
+    }
+  }
 
+  function init() {
     const navType = getNavType();
     if (navType === "reload" || navType === "back_forward") {
       try {
@@ -484,7 +369,7 @@
 
     if (location.hash && navType !== "reload" && navType !== "back_forward") {
       const el = $(location.hash);
-      if (el) setTimeout(() => scrollToElGuaranteed(el), 0);
+      if (el) setTimeout(() => scrollToElOneShot(el), 0);
     }
   }
 
