@@ -53,9 +53,11 @@
   let animToken = 0;
   let rafId = 0;
   let settleTimer = 0;
+  let isAnimating = false;
 
   function cancelScroll() {
     animToken += 1;
+    isAnimating = false;
     if (rafId) cancelAnimationFrame(rafId);
     rafId = 0;
     if (settleTimer) clearTimeout(settleTimer);
@@ -78,6 +80,7 @@
     const myToken = animToken;
     const startY = nowY();
     const startT = performance.now();
+    isAnimating = true;
 
     function tick(tNow) {
       if (myToken !== animToken) return;
@@ -86,8 +89,12 @@
       const y = startY + (endY - startY) * easeInOutCubic(t);
       window.scrollTo(0, y);
 
-      if (t < 1) rafId = requestAnimationFrame(tick);
-      else rafId = 0;
+      if (t < 1) {
+        rafId = requestAnimationFrame(tick);
+      } else {
+        rafId = 0;
+        isAnimating = false;
+      }
     }
 
     rafId = requestAnimationFrame(tick);
@@ -98,6 +105,7 @@
 
     smoothToY(getTargetY(el), 760);
 
+    // one-time settle (no ping-pong)
     settleTimer = setTimeout(() => {
       window.scrollTo(0, getTargetY(el));
     }, 900);
@@ -111,6 +119,16 @@
       const keys = ["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "];
       if (keys.includes(e.key)) cancel();
     });
+
+    // ✅ iOS 상태바 탭(맨 위로) 대응:
+    // 스크롤이 0으로 가면 진행중 애니메이션/보정 타이머 즉시 종료해서 1번에 위로 가게 함
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (nowY() <= 0) cancelScroll();
+      },
+      { passive: true }
+    );
   }
 
   function bindAnchors() {
@@ -169,6 +187,7 @@
     if (navType === "reload" || navType === "back_forward") {
       clearHash();
       window.scrollTo(0, 0);
+      cancelScroll();
     }
 
     window.addEventListener(
@@ -177,6 +196,7 @@
         if (e.persisted) {
           clearHash();
           window.scrollTo(0, 0);
+          cancelScroll();
         }
       },
       { passive: true }
