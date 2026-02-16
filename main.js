@@ -1,6 +1,9 @@
 (() => {
   "use strict";
 
+  if (window.__YAONG_MAIN_INIT__) return;
+  window.__YAONG_MAIN_INIT__ = true;
+
   try {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
   } catch (_) {}
@@ -32,37 +35,55 @@
     return clamp(y, 0, maxScrollY());
   }
 
-  let animId = 0;
-  let rafId = 0;
-
-  function cancelSmooth() {
-    animId += 1;
-    if (rafId) cancelAnimationFrame(rafId);
-    rafId = 0;
+  function getNavType() {
+    try {
+      const nav = performance.getEntriesByType && performance.getEntriesByType("navigation");
+      return nav && nav[0] && nav[0].type ? nav[0].type : null;
+    } catch (_) {
+      return null;
+    }
   }
 
-  const easeInOutQuint = (t) =>
-    t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
+  function clearHash() {
+    try {
+      history.replaceState(null, "", location.pathname + location.search);
+    } catch (_) {}
+  }
 
-  function smoothScrollToY(targetY, duration = 820) {
-    const startY = nowY();
+  let animToken = 0;
+  let rafId = 0;
+  let settleTimer = 0;
+
+  function cancelScroll() {
+    animToken += 1;
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = 0;
+    if (settleTimer) clearTimeout(settleTimer);
+    settleTimer = 0;
+  }
+
+  const easeInOutCubic = (t) =>
+    t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+  function smoothToY(targetY, duration = 720) {
     const endY = clamp(targetY, 0, maxScrollY());
 
     if (prefersReducedMotion) {
-      cancelSmooth();
+      cancelScroll();
       window.scrollTo(0, endY);
       return;
     }
 
-    cancelSmooth();
-    const myId = animId;
+    cancelScroll();
+    const myToken = animToken;
+    const startY = nowY();
     const startT = performance.now();
 
     function tick(tNow) {
-      if (myId !== animId) return;
+      if (myToken !== animToken) return;
 
       const t = clamp((tNow - startT) / duration, 0, 1);
-      const y = startY + (endY - startY) * easeInOutQuint(t);
+      const y = startY + (endY - startY) * easeInOutCubic(t);
       window.scrollTo(0, y);
 
       if (t < 1) rafId = requestAnimationFrame(tick);
@@ -72,55 +93,27 @@
     rafId = requestAnimationFrame(tick);
   }
 
-  function snapToEl(el) {
-    if (!el) return;
-    cancelSmooth();
-    window.scrollTo(0, getTargetY(el));
-  }
-
-  function maybeCorrect(el) {
+  function scrollToEl(el) {
     if (!el) return;
 
-    const yTarget = getTargetY(el);
-    const diff = Math.abs(yTarget - nowY());
+    smoothToY(getTargetY(el), 760);
 
-    if (diff <= 6) return;
-
-    const m = maxScrollY();
-    const top = yTarget >= m - 2 ? m : yTarget;
-    window.scrollTo(0, top);
+    settleTimer = setTimeout(() => {
+      window.scrollTo(0, getTargetY(el));
+    }, 900);
   }
 
-  let navLock = false;
-  let navTimers = [];
-
-  function clearNavTimers() {
-    navTimers.forEach((t) => clearTimeout(t));
-    navTimers = [];
+  function bindUserCancel() {
+    const cancel = () => cancelScroll();
+    window.addEventListener("wheel", cancel, { passive: true });
+    window.addEventListener("touchstart", cancel, { passive: true });
+    window.addEventListener("keydown", (e) => {
+      const keys = ["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "];
+      if (keys.includes(e.key)) cancel();
+    });
   }
 
-  function scrollToElOneShot(el) {
-    if (!el) return;
-    if (navLock) return;
-
-    navLock = true;
-    clearNavTimers();
-    cancelSmooth();
-
-    smoothScrollToY(getTargetY(el), 840);
-
-    navTimers.push(setTimeout(() => maybeCorrect(el), 320));
-    navTimers.push(setTimeout(() => maybeCorrect(el), 900));
-
-    navTimers.push(
-      setTimeout(() => {
-        snapToEl(el);
-        navLock = false;
-      }, 1250)
-    );
-  }
-
-  function bindSmoothAnchors() {
+  function bindAnchors() {
     $$("[data-scroll]").forEach((a) => {
       a.addEventListener(
         "click",
@@ -132,139 +125,12 @@
           if (!target) return;
 
           e.preventDefault();
-          scrollToElOneShot(target);
-
-          try {
-            history.replaceState(null, "", location.pathname + location.search);
-          } catch (_) {}
+          clearHash();
+          scrollToEl(target);
         },
         { passive: false }
       );
     });
-  }
-
-  function markRevealTargets() {
-    const selectors = [
-      ".section .sec-head",
-      ".hero .pill",
-      ".hero-title",
-      ".hero-sub",
-      ".hero-copy",
-      ".btn-row",
-      ".stat",
-      ".card",
-      ".panel",
-      ".step",
-      ".place-list li",
-      ".place-note",
-      ".team-card",
-      ".curr-item",
-      ".teacher",
-      ".gallery .thumb",
-      ".form",
-      ".footer-inner"
-    ];
-
-    const set = new Set();
-    selectors.forEach((sel) => $$(sel).forEach((el) => set.add(el)));
-    set.forEach((el) => el.classList.add("reveal"));
-    return Array.from(set);
-  }
-
-  function applyState(el, next) {
-    const cur = el.dataset.rv || "";
-    if (cur === next) return;
-    el.dataset.rv = next;
-
-    if (next === "in") {
-      el.classList.add("is-in");
-      el.classList.remove("is-out");
-      el.dataset.seen = "1";
-      return;
-    }
-    if (next === "out") {
-      el.classList.remove("is-in");
-      el.classList.add("is-out");
-      return;
-    }
-    el.classList.remove("is-in");
-    el.classList.remove("is-out");
-  }
-
-  function bindRevealObserver(targets) {
-    if (prefersReducedMotion) {
-      targets.forEach((el) => applyState(el, "in"));
-      return;
-    }
-
-    if (!("IntersectionObserver" in window)) {
-      targets.forEach((el) => applyState(el, "in"));
-      return;
-    }
-
-    targets.forEach((el) => applyState(el, "init"));
-
-    let raf = 0;
-    let queue = [];
-
-    const process = () => {
-      raf = 0;
-
-      const entries = queue;
-      queue = [];
-
-      const offset = getHeaderOffset() + 10;
-      const viewBottom = window.innerHeight;
-
-      for (const entry of entries) {
-        const el = entry.target;
-
-        if (entry.isIntersecting) {
-          applyState(el, "in");
-          continue;
-        }
-
-        if (el.dataset.seen !== "1") continue;
-
-        const top =
-          entry.boundingClientRect && typeof entry.boundingClientRect.top === "number"
-            ? entry.boundingClientRect.top
-            : el.getBoundingClientRect().top;
-
-        if (top < offset) {
-          applyState(el, "out");
-          continue;
-        }
-
-        if (top > viewBottom + 140) applyState(el, "init");
-      }
-    };
-
-    const io = new IntersectionObserver(
-      (entries) => {
-        queue.push(...entries);
-        if (!raf) raf = requestAnimationFrame(process);
-      },
-      {
-        root: null,
-        threshold: [0, 0.14, 0.28],
-        rootMargin: `-${getHeaderOffset()}px 0px -12% 0px`
-      }
-    );
-
-    targets.forEach((el) => io.observe(el));
-
-    let raf2 = 0;
-    const refresh = () => {
-      if (raf2) cancelAnimationFrame(raf2);
-      raf2 = requestAnimationFrame(() => {
-        io.disconnect();
-        targets.forEach((el) => io.observe(el));
-      });
-    };
-
-    window.addEventListener("resize", refresh, { passive: true });
-    window.addEventListener("orientationchange", refresh, { passive: true });
   }
 
   function bindMail() {
@@ -297,34 +163,39 @@
     });
   }
 
-  function getNavType() {
-    try {
-      const nav = performance.getEntriesByType && performance.getEntriesByType("navigation");
-      return nav && nav[0] && nav[0].type ? nav[0].type : null;
-    } catch (_) {
-      return null;
-    }
-  }
-
-  function init() {
+  function forceTopOnReloadOrBFCache() {
     const navType = getNavType();
+
     if (navType === "reload" || navType === "back_forward") {
-      try {
-        history.replaceState(null, "", location.pathname + location.search);
-      } catch (_) {}
+      clearHash();
       window.scrollTo(0, 0);
     }
 
-    bindSmoothAnchors();
+    window.addEventListener(
+      "pageshow",
+      (e) => {
+        if (e.persisted) {
+          clearHash();
+          window.scrollTo(0, 0);
+        }
+      },
+      { passive: true }
+    );
+  }
 
-    const targets = markRevealTargets();
-    bindRevealObserver(targets);
-
+  function init() {
+    forceTopOnReloadOrBFCache();
+    bindUserCancel();
+    bindAnchors();
     bindMail();
 
+    const navType = getNavType();
     if (location.hash && navType !== "reload" && navType !== "back_forward") {
       const el = $(location.hash);
-      if (el) setTimeout(() => scrollToElOneShot(el), 0);
+      clearHash();
+      if (el) setTimeout(() => scrollToEl(el), 0);
+    } else {
+      if (location.hash) clearHash();
     }
   }
 
