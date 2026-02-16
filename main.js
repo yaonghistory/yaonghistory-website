@@ -12,6 +12,24 @@
   const prefersReducedMotion =
     window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  // ---------- Inject CSS: nav 이동 중 reveal 강제 표시(빈 화면/깜빡임 방지) ----------
+  function injectNavRevealCSS() {
+    if (document.getElementById("navRevealFixStyle")) return;
+    const s = document.createElement("style");
+    s.id = "navRevealFixStyle";
+    s.textContent = `
+      body.nav-scrolling .reveal{
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      body.nav-scrolling .reveal.is-out{
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    `;
+    document.head.appendChild(s);
+  }
+
   function getHeaderOffset() {
     const root = document.documentElement;
     const cssVal = getComputedStyle(root).getPropertyValue("--header-offset").trim();
@@ -23,8 +41,7 @@
 
   const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
   const nowY = () => window.pageYOffset || document.documentElement.scrollTop || 0;
-  const maxScrollY = () =>
-    Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+  const maxScrollY = () => Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
 
   function getTargetY(el) {
     const rect = el.getBoundingClientRect();
@@ -33,7 +50,61 @@
   }
 
   // =========================
-  // Contact image prime
+  // Cancelable smooth scroll (중첩 애니메이션 제거)
+  // =========================
+  let anim = { id: 0, raf: 0, running: false };
+
+  function cancelScrollAnim() {
+    anim.id += 1;
+    anim.running = false;
+    if (anim.raf) cancelAnimationFrame(anim.raf);
+    anim.raf = 0;
+  }
+
+  const easeInOutQuint = (t) =>
+    t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
+
+  function smoothScrollToY(targetY, duration = 760) {
+    const startY = nowY();
+    const endY = clamp(targetY, 0, maxScrollY());
+
+    if (prefersReducedMotion) {
+      cancelScrollAnim();
+      window.scrollTo(0, endY);
+      return;
+    }
+
+    cancelScrollAnim();
+    anim.running = true;
+    const myId = anim.id;
+    const startT = performance.now();
+
+    function tick(tNow) {
+      if (myId !== anim.id) return;
+
+      const t = clamp((tNow - startT) / duration, 0, 1);
+      const y = startY + (endY - startY) * easeInOutQuint(t);
+      window.scrollTo(0, y);
+
+      if (t < 1) {
+        anim.raf = requestAnimationFrame(tick);
+      } else {
+        anim.running = false;
+        anim.raf = 0;
+      }
+    }
+
+    anim.raf = requestAnimationFrame(tick);
+  }
+
+  function snapToEl(el) {
+    if (!el) return;
+    cancelScrollAnim();
+    window.scrollTo(0, getTargetY(el));
+  }
+
+  // =========================
+  // Contact image prime (레이아웃 변동 완화)
   // =========================
   let primed = false;
   function primeLazyImagesForContact() {
@@ -51,128 +122,139 @@
   }
 
   // =========================
-  // Single "tracking" scroll animation (no flicker, no multi-animations)
+  // Reveal freeze during nav scroll
   // =========================
-  const scrollRunner = (() => {
-    let raf = 0;
-    let id = 0;
-    let running = false;
+  let revealFrozen = false;
+  let navFreezeTimer = 0;
 
-    function cancel() {
-      id += 1;
-      running = false;
-      if (raf) cancelAnimationFrame(raf);
-      raf = 0;
-    }
-
-    // 스프링(임계감쇠에 가깝게)로 목표를 따라감
-    // 목표가 스크롤 도중 변해도 계속 추적해서 100% 도달
-    function runToEl(el, opts = {}) {
-      if (!el) return;
-      cancel();
-
-      if (prefersReducedMotion) {
-        window.scrollTo(0, getTargetY(el));
-        return;
-      }
-
-      const myId = id;
-      running = true;
-
-      const maxMs = typeof opts.maxMs === "number" ? opts.maxMs : 5200;
-      const startT = performance.now();
-
-      // 튜닝값: 부드러움/도달 속도
-      const stiffness = 0.018; // 작을수록 부드럽고 느림
-      const damping = 0.78;    // 0~1, 클수록 덜 튐
-
-      let v = 0; // velocity
-      let stableFrames = 0;
-
-      const step = () => {
-        if (myId !== id) return; // canceled
-
-        const y = nowY();
-        const target = getTargetY(el);
-        const err = target - y;
-
-        // 목표가 거의 맞으면 안정 카운트
-        if (Math.abs(err) < 1.2 && Math.abs(v) < 0.25) {
-          stableFrames += 1;
-        } else {
-          stableFrames = 0;
-        }
-
-        // 스프링 업데이트(간단한 수치적분)
-        v = v * damping + err * stiffness * 100; // 100은 체감 속도 스케일
-        const nextY = y + v;
-
-        window.scrollTo(0, clamp(nextY, 0, maxScrollY()));
-
-        const elapsed = performance.now() - startT;
-
-        // 1) 충분히 안정되면 종료 + 마지막 스냅(정확도 확보)
-        if (stableFrames >= 8) {
-          running = false;
-          raf = 0;
-          window.scrollTo(0, target);
-          return;
-        }
-
-        // 2) 타임아웃이면 종료 + 스냅
-        if (elapsed > maxMs) {
-          running = false;
-          raf = 0;
-          window.scrollTo(0, target);
-          return;
-        }
-
-        raf = requestAnimationFrame(step);
-      };
-
-      raf = requestAnimationFrame(step);
-    }
-
-    return { runToEl, cancel, get running() { return running; } };
-  })();
-
-  // 도달 판정(헤더 가림 방지)
-  function isGood(el) {
-    const r = el.getBoundingClientRect();
-    const topLimit = getHeaderOffset() + 6;
-    const bottomLimit = window.innerHeight - 12;
-    return r.top >= topLimit && r.top <= bottomLimit;
+  function freezeRevealForNav(ms = 1400) {
+    injectNavRevealCSS();
+    revealFrozen = true;
+    document.body.classList.add("nav-scrolling");
+    clearTimeout(navFreezeTimer);
+    navFreezeTimer = setTimeout(() => {
+      revealFrozen = false;
+      document.body.classList.remove("nav-scrolling");
+    }, ms);
   }
 
   // =========================
-  // Guaranteed scroll wrapper
+  // Guaranteed scroll: 1 smooth + (필요 시) 스냅 보정
   // =========================
+  function needsFix(el) {
+    const r = el.getBoundingClientRect();
+    const topLimit = getHeaderOffset() + 6;
+    return Math.abs(r.top - topLimit) > 10;
+  }
+
   function scrollToElGuaranteed(el) {
     if (!el) return;
 
-    scrollRunner.runToEl(el, { maxMs: 5600 });
+    // 이동 중 reveal로 빈 화면 보이는 문제 방지
+    freezeRevealForNav(1600);
 
-    // 이벤트가 많아도 "새 애니메이션 시작"은 절대 안 하고
-    // 현재 애니메이션이 목표를 계속 추적하므로, 아래는 안전망(아주 가끔만)
-    let t = 0;
-    const start = performance.now();
+    // 첫 이동: smooth 1회
+    smoothScrollToY(getTargetY(el), 820);
 
-    const safety = () => {
-      const elapsed = performance.now() - start;
-      if (elapsed > 5600) return;
+    // 이벤트가 와도 smooth를 추가로 걸지 않고, "예약 후 스냅"만 한다
+    let done = false;
+    let pending = false;
+    let lastSnapAt = 0;
+    const SNAP_COOLDOWN = 220;
 
-      if (isGood(el)) return;
+    const schedule = () => { pending = true; };
 
-      // 목표가 크게 바뀐 케이스: 한번 더 추적 재시작(기존 애니메이션 취소 후 1개만 유지)
-      scrollRunner.runToEl(el, { maxMs: 4200 });
-      t = setTimeout(safety, 520);
+    const maybeSnap = (force = false) => {
+      if (done) return;
+      const t = performance.now();
+      if (!force && t - lastSnapAt < SNAP_COOLDOWN) return;
+      if (!force && (!pending || anim.running)) return;
+
+      pending = false;
+      if (force || needsFix(el)) {
+        lastSnapAt = t;
+        // 작은 오차는 스냅 생략(부드러움 유지)
+        const r = el.getBoundingClientRect();
+        const topLimit = getHeaderOffset() + 6;
+        if (Math.abs(r.top - topLimit) > 6) {
+          window.scrollTo(0, getTargetY(el));
+        }
+      }
     };
 
-    t = setTimeout(safety, 520);
+    // 폰트/이미지/뷰포트 변화는 "예약"만
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(schedule).catch(() => {});
+    }
 
-    // 정리용 핸들(다음 클릭 때 이전 안전망 제거)
-    if (scrollToElGuaranteed._t) clearTimeout(scrollToElGuaranteed._t);
-    scrollToElGuaranteed._t = t;
+    const imgs = $$("img", el);
+    imgs.forEach((img) => {
+      if (img.complete) return;
+      const h = () => schedule();
+      img.addEventListener("load", h, { passive: true, once: true });
+      img.addEventListener("error", h, { passive: true, once: true });
+      if (img.decode) img.decode().then(h).catch(() => {});
+    });
+
+    const vv = window.visualViewport;
+    if (vv && vv.addEventListener) {
+      const h = () => schedule();
+      vv.addEventListener("resize", h, { passive: true });
+      setTimeout(() => {
+        try { vv.removeEventListener("resize", h); } catch (_) {}
+      }, 2200);
+    }
+
+    const wh = () => schedule();
+    window.addEventListener("resize", wh, { passive: true });
+    window.addEventListener("orientationchange", wh, { passive: true });
+    setTimeout(() => {
+      try { window.removeEventListener("resize", wh); } catch (_) {}
+      try { window.removeEventListener("orientationchange", wh); } catch (_) {}
+    }, 2400);
+
+    // 타임박스 루프: 애니 끝난 뒤 예약된 보정만 스냅
+    const start = performance.now();
+    let timer = 0;
+
+    const loop = () => {
+      if (done) return;
+
+      maybeSnap(false);
+
+      // 충분히 맞으면 종료 + 마지막 확정 스냅
+      if (!anim.running && !needsFix(el)) {
+        done = true;
+        snapToEl(el);
+        // freeze는 남은 시간 후 풀림
+        return;
+      }
+
+      // 최대 시간 지나면 강제 스냅하고 종료
+      if (performance.now() - start > 5200) {
+        done = true;
+        maybeSnap(true);
+        snapToEl(el);
+        return;
+      }
+
+      timer = setTimeout(loop, 160);
+    };
+
+    // 초기: 몇 번 예약 걸어두기(주소창 접힘/레이아웃 변화 대비)
+    setTimeout(schedule, 120);
+    setTimeout(schedule, 320);
+    setTimeout(schedule, 640);
+    setTimeout(schedule, 980);
+
+    timer = setTimeout(loop, 160);
+
+    // 다음 클릭 시 이전 루프 정리
+    if (scrollToElGuaranteed._kill) scrollToElGuaranteed._kill();
+    scrollToElGuaranteed._kill = () => {
+      done = true;
+      clearTimeout(timer);
+    };
   }
 
   // =========================
@@ -205,11 +287,9 @@
 
           if (href === "#contact") primeLazyImagesForContact();
 
-          // 기존 스크롤 취소 후 단일 추적 스크롤
-          scrollRunner.cancel();
+          cancelScrollAnim();
           scrollToElGuaranteed(target);
 
-          // 해시 남기지 않기
           try {
             history.replaceState(null, "", location.pathname + location.search);
           } catch (_) {}
@@ -289,6 +369,7 @@
 
     const process = () => {
       raf = 0;
+      if (revealFrozen) return; // 이동 중엔 reveal 상태 바꾸지 않음(깜빡 방지)
 
       const entries = queue;
       queue = [];
@@ -384,6 +465,8 @@
   // Init
   // =========================
   function init() {
+    injectNavRevealCSS();
+
     const navType = getNavType();
     if (navType === "reload" || navType === "back_forward") {
       try {
