@@ -62,7 +62,7 @@
   const easeInOutCubic = (t) =>
     t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
-  function smoothToY(targetY, duration = 720) {
+  function smoothToY(targetY, duration = 740) {
     const endY = clamp(targetY, 0, maxScrollY());
 
     if (prefersReducedMotion) {
@@ -92,7 +92,7 @@
 
   function scrollToEl(el) {
     if (!el) return;
-    smoothToY(getTargetY(el), 760);
+    smoothToY(getTargetY(el), 780);
     setTimeout(() => window.scrollTo(0, getTargetY(el)), 260);
   }
 
@@ -113,6 +113,171 @@
         },
         { passive: false }
       );
+    });
+  }
+
+  function applyState(el, next) {
+    const cur = el.dataset.rv || "";
+    if (cur === next) return;
+    el.dataset.rv = next;
+
+    if (next === "in") {
+      el.classList.add("is-in");
+      el.classList.remove("is-out");
+      el.dataset.seen = "1";
+      return;
+    }
+    if (next === "out") {
+      el.classList.remove("is-in");
+      el.classList.add("is-out");
+      return;
+    }
+    el.classList.remove("is-in");
+    el.classList.remove("is-out");
+  }
+
+  function staggerIn(list, stepMs = 80) {
+    if (prefersReducedMotion) return;
+
+    let idx = 0;
+    for (const el of list) {
+      if (el.dataset.stg === "1") continue;
+      el.dataset.stg = "1";
+      el.style.transitionDelay = `${idx * stepMs}ms`;
+      idx += 1;
+    }
+
+    setTimeout(() => {
+      list.forEach((el) => {
+        el.style.transitionDelay = "";
+        el.dataset.stg = "0";
+      });
+    }, Math.min(900, list.length * stepMs + 220));
+  }
+
+  function markBaseRevealTargets() {
+    const selectors = [
+      ".section .sec-head",
+      ".hero .pill",
+      ".hero-title",
+      ".hero-sub",
+      ".hero-copy",
+      ".btn-row",
+      ".stat",
+      ".card",
+      ".panel",
+      ".step",
+      ".place-list li",
+      ".place-note",
+      ".team-card",
+      ".curr-item",
+      ".teacher",
+      ".fold-btn",
+      ".form",
+      ".footer-inner"
+    ];
+
+    const set = new Set();
+    selectors.forEach((sel) => $$(sel).forEach((el) => set.add(el)));
+
+    const targets = Array.from(set);
+    targets.forEach((el) => el.classList.add("reveal"));
+    return targets;
+  }
+
+  function createRevealObserver(onEnter) {
+    if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+      return {
+        observe: (els) => els.forEach((el) => applyState(el, "in")),
+        refresh: () => {}
+      };
+    }
+
+    let raf = 0;
+    let queue = [];
+
+    const process = () => {
+      raf = 0;
+
+      const entries = queue;
+      queue = [];
+
+      const offsetTop = getHeaderOffset() + 10;
+      const viewBottom = window.innerHeight;
+
+      for (const entry of entries) {
+        const el = entry.target;
+
+        if (entry.isIntersecting) {
+          applyState(el, "in");
+          if (typeof onEnter === "function") onEnter(el);
+          continue;
+        }
+
+        if (el.dataset.seen !== "1") continue;
+
+        const top =
+          entry.boundingClientRect && typeof entry.boundingClientRect.top === "number"
+            ? entry.boundingClientRect.top
+            : el.getBoundingClientRect().top;
+
+        if (top < offsetTop) {
+          applyState(el, "out");
+          continue;
+        }
+
+        if (top > viewBottom + 140) {
+          applyState(el, "init");
+        }
+      }
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        queue.push(...entries);
+        if (!raf) raf = requestAnimationFrame(process);
+      },
+      {
+        root: null,
+        threshold: [0, 0.14, 0.28],
+        rootMargin: `-${getHeaderOffset()}px 0px -12% 0px`
+      }
+    );
+
+    const observe = (els) => {
+      els.forEach((el) => {
+        if (!el.classList.contains("reveal")) el.classList.add("reveal");
+        applyState(el, "init");
+        io.observe(el);
+      });
+    };
+
+    const refresh = (allObservedEls) => {
+      io.disconnect();
+      allObservedEls.forEach((el) => io.observe(el));
+    };
+
+    return { observe, refresh };
+  }
+
+  function bindFoldGalleryReveal(reveal) {
+    const detailsList = $$(".fold");
+    if (!detailsList.length) return;
+
+    detailsList.forEach((d) => {
+      const thumbs = $$(".gallery .thumb", d);
+
+      const enableThumbs = () => {
+        thumbs.forEach((t) => t.classList.add("reveal"));
+        staggerIn(thumbs, 80);
+        reveal.observe(thumbs);
+      };
+
+      if (d.open) enableThumbs();
+
+      d.addEventListener("toggle", () => {
+        if (d.open) enableThumbs();
+      });
     });
   }
 
@@ -172,6 +337,28 @@
     forceTopOnReloadOrBFCache();
     bindAnchors();
     bindMail();
+
+    const baseTargets = markBaseRevealTargets();
+
+    const reveal = createRevealObserver((el) => {
+      if (!el.classList.contains("thumb")) return;
+      const parent = el.closest(".gallery");
+      if (!parent) return;
+      staggerIn($$(".thumb", parent), 80);
+    });
+
+    reveal.observe(baseTargets);
+    bindFoldGalleryReveal(reveal);
+
+    if (!prefersReducedMotion && "IntersectionObserver" in window) {
+      let raf = 0;
+      const onResize = () => {
+        if (raf) cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => reveal.refresh(baseTargets));
+      };
+      window.addEventListener("resize", onResize, { passive: true });
+      window.addEventListener("orientationchange", onResize, { passive: true });
+    }
 
     const navType = getNavType();
     if (location.hash && navType !== "reload" && navType !== "back_forward") {
