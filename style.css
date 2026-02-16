@@ -621,6 +621,12 @@ main{padding-top:var(--header-offset);}
 .reveal.is-in{opacity:1; transform:translateY(0);}
 .reveal.is-out{opacity:.58; transform:translateY(-3px);}
 
+/* ✅ 갤러리 사진은 지나간 상태(is-out)에서도 흐리지 않게 */
+.thumb.reveal.is-out{
+  opacity:1 !important;
+  transform:translateY(0) !important;
+}
+
 .fold{margin-top:12px;}
 .fold-btn{
   list-style:none;
