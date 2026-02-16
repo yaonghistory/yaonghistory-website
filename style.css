@@ -602,16 +602,14 @@ main{
   overflow:hidden;
   box-shadow:var(--shadow);
   border:1px solid rgba(31,42,46,.10);
-  background:transparent;
+  background:rgba(255,255,255,.55);
 }
 
-/* CLS 방지: 이미지 로딩 전에도 자리 확보 */
+/* 후기/활동 사진: 원본 비율 그대로(잘림 없음) */
 .thumb img{
   width:100%;
   height:auto;
   display:block;
-  aspect-ratio:4 / 3;
-  object-fit:cover;
 }
 
 /* Contact */
