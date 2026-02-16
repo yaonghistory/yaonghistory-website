@@ -62,7 +62,7 @@
   const easeInOutCubic = (t) =>
     t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 
-  function smoothToY(targetY, duration = 740) {
+  function smoothToY(targetY, duration = 760) {
     const endY = clamp(targetY, 0, maxScrollY());
 
     if (prefersReducedMotion) {
@@ -92,7 +92,7 @@
 
   function scrollToEl(el) {
     if (!el) return;
-    smoothToY(getTargetY(el), 780);
+    smoothToY(getTargetY(el), 820);
     setTimeout(() => window.scrollTo(0, getTargetY(el)), 260);
   }
 
@@ -116,14 +116,7 @@
     });
   }
 
-  function isThumb(el) {
-    return el && el.classList && el.classList.contains("thumb");
-  }
-
   function applyState(el, next) {
-    // ✅ 사진(thumb)은 한 번 보였으면(out/init로) 절대 흐려지지 않게 고정
-    if (isThumb(el) && el.dataset.seen === "1" && next !== "in") next = "in";
-
     const cur = el.dataset.rv || "";
     if (cur === next) return;
     el.dataset.rv = next;
@@ -143,26 +136,7 @@
     el.classList.remove("is-out");
   }
 
-  function staggerIn(list, stepMs = 80) {
-    if (prefersReducedMotion) return;
-
-    let idx = 0;
-    for (const el of list) {
-      if (el.dataset.stg === "1") continue;
-      el.dataset.stg = "1";
-      el.style.transitionDelay = `${idx * stepMs}ms`;
-      idx += 1;
-    }
-
-    setTimeout(() => {
-      list.forEach((el) => {
-        el.style.transitionDelay = "";
-        el.dataset.stg = "0";
-      });
-    }, Math.min(900, list.length * stepMs + 220));
-  }
-
-  function markBaseRevealTargets() {
+  function markRevealTargets() {
     const selectors = [
       ".section .sec-head",
       ".hero .pill",
@@ -192,13 +166,18 @@
     return targets;
   }
 
-  function createRevealObserver(onEnter) {
-    if (prefersReducedMotion || !("IntersectionObserver" in window)) {
-      return {
-        observe: (els) => els.forEach((el) => applyState(el, "in")),
-        refresh: () => {}
-      };
+  function bindRevealObserver(targets) {
+    if (prefersReducedMotion) {
+      targets.forEach((el) => applyState(el, "in"));
+      return;
     }
+
+    if (!("IntersectionObserver" in window)) {
+      targets.forEach((el) => applyState(el, "in"));
+      return;
+    }
+
+    targets.forEach((el) => applyState(el, "init"));
 
     let raf = 0;
     let queue = [];
@@ -217,11 +196,9 @@
 
         if (entry.isIntersecting) {
           applyState(el, "in");
-          if (typeof onEnter === "function") onEnter(el);
           continue;
         }
 
-        // ✅ thumb는 seen 이후 out/init로 보내지 않음 (applyState에서 in으로 강제됨)
         if (el.dataset.seen !== "1") continue;
 
         const top =
@@ -252,39 +229,45 @@
       }
     );
 
-    const observe = (els) => {
-      els.forEach((el) => {
-        if (!el.classList.contains("reveal")) el.classList.add("reveal");
-        applyState(el, "init");
-        io.observe(el);
+    targets.forEach((el) => io.observe(el));
+
+    let raf2 = 0;
+    const refresh = () => {
+      if (raf2) cancelAnimationFrame(raf2);
+      raf2 = requestAnimationFrame(() => {
+        io.disconnect();
+        targets.forEach((el) => io.observe(el));
       });
     };
 
-    const refresh = (allObservedEls) => {
-      io.disconnect();
-      allObservedEls.forEach((el) => io.observe(el));
-    };
-
-    return { observe, refresh };
+    window.addEventListener("resize", refresh, { passive: true });
+    window.addEventListener("orientationchange", refresh, { passive: true });
   }
 
-  function bindFoldGalleryReveal(reveal) {
-    const detailsList = $$(".fold");
-    if (!detailsList.length) return;
+  function staggerThumbs(thumbs, stepMs = 80) {
+    if (prefersReducedMotion) return;
 
-    detailsList.forEach((d) => {
+    thumbs.forEach((el, i) => {
+      el.style.transitionDelay = `${i * stepMs}ms`;
+    });
+
+    setTimeout(() => {
+      thumbs.forEach((el) => (el.style.transitionDelay = ""));
+    }, Math.min(900, thumbs.length * stepMs + 240));
+  }
+
+  function bindFoldStagger() {
+    const folds = $$(".fold");
+    if (!folds.length) return;
+
+    folds.forEach((d) => {
       const thumbs = $$(".gallery .thumb", d);
+      const run = () => staggerThumbs(thumbs, 80);
 
-      const enableThumbs = () => {
-        thumbs.forEach((t) => t.classList.add("reveal"));
-        staggerIn(thumbs, 80);
-        reveal.observe(thumbs);
-      };
-
-      if (d.open) enableThumbs();
+      if (d.open) run();
 
       d.addEventListener("toggle", () => {
-        if (d.open) enableThumbs();
+        if (d.open) run();
       });
     });
   }
@@ -346,27 +329,10 @@
     bindAnchors();
     bindMail();
 
-    const baseTargets = markBaseRevealTargets();
+    const targets = markRevealTargets();
+    bindRevealObserver(targets);
 
-    const reveal = createRevealObserver((el) => {
-      if (!isThumb(el)) return;
-      const parent = el.closest(".gallery");
-      if (!parent) return;
-      staggerIn($$(".thumb", parent), 80);
-    });
-
-    reveal.observe(baseTargets);
-    bindFoldGalleryReveal(reveal);
-
-    if (!prefersReducedMotion && "IntersectionObserver" in window) {
-      let raf = 0;
-      const onResize = () => {
-        if (raf) cancelAnimationFrame(raf);
-        raf = requestAnimationFrame(() => reveal.refresh(baseTargets));
-      };
-      window.addEventListener("resize", onResize, { passive: true });
-      window.addEventListener("orientationchange", onResize, { passive: true });
-    }
+    bindFoldStagger();
 
     const navType = getNavType();
     if (location.hash && navType !== "reload" && navType !== "back_forward") {
