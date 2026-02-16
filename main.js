@@ -50,32 +50,13 @@
     } catch (_) {}
   }
 
-  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-  async function warmupImagesBeforeContact(timeoutMs = 700) {
-    const imgs = Array.from(document.querySelectorAll("#review img, #photos img"));
-    const pending = imgs.filter((img) => !img.complete);
-
-    if (!pending.length) return;
-
-    const decodeOrLoad = (img) => {
-      if (img.decode) return img.decode().catch(() => {});
-      return new Promise((res) => img.addEventListener("load", () => res(), { once: true }));
-    };
-
-    await Promise.race([Promise.allSettled(pending.map(decodeOrLoad)), sleep(timeoutMs)]);
-  }
-
   let animToken = 0;
   let rafId = 0;
-  let settleTimer = 0;
 
   function cancelScroll() {
     animToken += 1;
     if (rafId) cancelAnimationFrame(rafId);
     rafId = 0;
-    if (settleTimer) clearTimeout(settleTimer);
-    settleTimer = 0;
   }
 
   const easeInOutCubic = (t) =>
@@ -109,62 +90,17 @@
     rafId = requestAnimationFrame(tick);
   }
 
-  function hardSnapToEl(el) {
-    if (!el) return;
-    window.scrollTo(0, getTargetY(el));
-  }
-
   function scrollToEl(el) {
     if (!el) return;
     smoothToY(getTargetY(el), 760);
-  }
-
-  function bindUserCancel() {
-    const cancel = () => cancelScroll();
-    window.addEventListener("wheel", cancel, { passive: true });
-    window.addEventListener("touchstart", cancel, { passive: true });
-    window.addEventListener("keydown", (e) => {
-      const keys = ["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End", " "];
-      if (keys.includes(e.key)) cancel();
-    });
-
-    // iOS status-bar tap scroll-to-top should not fight our animation
-    window.addEventListener(
-      "scroll",
-      () => {
-        if (nowY() <= 0) cancelScroll();
-      },
-      { passive: true }
-    );
-  }
-
-  async function goContactGuaranteed(el) {
-    // 0) cancel any previous animation
-    cancelScroll();
-
-    // 1) warmup (only review/photos)
-    await warmupImagesBeforeContact(900);
-
-    // 2) first smooth scroll
-    scrollToEl(el);
-
-    // 3) after layout settles (toolbar/viewport/images), do ONE final snap
-    settleTimer = setTimeout(() => {
-      hardSnapToEl(el);
-    }, 260);
-
-    // 4) and ONE more very late snap (iOS address bar / late reflow)
-    //    -> still only snaps, no smooth, so no ping-pong
-    settleTimer = setTimeout(() => {
-      hardSnapToEl(el);
-    }, 820);
+    setTimeout(() => window.scrollTo(0, getTargetY(el)), 260);
   }
 
   function bindAnchors() {
     $$("[data-scroll]").forEach((a) => {
       a.addEventListener(
         "click",
-        async (e) => {
+        (e) => {
           const href = a.getAttribute("href") || "";
           if (!href.startsWith("#")) return;
 
@@ -173,13 +109,6 @@
 
           e.preventDefault();
           clearHash();
-
-          if (target.id === "contact") {
-            await goContactGuaranteed(target);
-            return;
-          }
-
-          cancelScroll();
           scrollToEl(target);
         },
         { passive: false }
@@ -241,7 +170,6 @@
 
   function init() {
     forceTopOnReloadOrBFCache();
-    bindUserCancel();
     bindAnchors();
     bindMail();
 
