@@ -32,9 +32,6 @@
     return clamp(y, 0, maxScrollY());
   }
 
-  // -------------------------
-  // Cancelable smooth scroll (1회만 실행)
-  // -------------------------
   let animId = 0;
   let rafId = 0;
 
@@ -47,7 +44,7 @@
   const easeInOutQuint = (t) =>
     t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
 
-  function smoothScrollToY(targetY, duration = 780) {
+  function smoothScrollToY(targetY, duration = 820) {
     const startY = nowY();
     const endY = clamp(targetY, 0, maxScrollY());
 
@@ -81,27 +78,19 @@
     window.scrollTo(0, getTargetY(el));
   }
 
-  // -------------------------
-  // Contact image prime
-  // -------------------------
-  let primed = false;
-  function primeLazyImagesForContact() {
-    if (primed) return;
-    primed = true;
-    $$('img[loading="lazy"]').forEach((img) => {
-      try {
-        img.loading = "eager";
-        img.decoding = "async";
-      } catch (_) {}
-      try {
-        img.setAttribute("fetchpriority", "high");
-      } catch (_) {}
-    });
+  function maybeCorrect(el) {
+    if (!el) return;
+
+    const yTarget = getTargetY(el);
+    const diff = Math.abs(yTarget - nowY());
+
+    if (diff <= 6) return;
+
+    const m = maxScrollY();
+    const top = yTarget >= m - 2 ? m : yTarget;
+    window.scrollTo(0, top);
   }
 
-  // -------------------------
-  // NAV: 단발 스무스 + 최대 2회 보정 (핑퐁 방지)
-  // -------------------------
   let navLock = false;
   let navTimers = [];
 
@@ -110,40 +99,19 @@
     navTimers = [];
   }
 
-  function maybeCorrect(el) {
-    if (!el) return;
-    const yTarget = getTargetY(el);
-    const diff = Math.abs(yTarget - nowY());
-
-    // 아주 작은 오차는 무시(부드러움 유지)
-    if (diff <= 6) return;
-
-    // iOS 바닥 러버밴드 방지: 바닥 근처면 바닥으로 고정
-    const m = maxScrollY();
-    const top = yTarget >= m - 2 ? m : yTarget;
-
-    // 여기서 "스무스" 금지 (추가 스무스가 핑퐁을 만듦)
-    window.scrollTo(0, top);
-  }
-
   function scrollToElOneShot(el) {
     if (!el) return;
-
     if (navLock) return;
-    navLock = true;
 
+    navLock = true;
     clearNavTimers();
     cancelSmooth();
 
-    // 1) 부드러운 이동 1회
-    smoothScrollToY(getTargetY(el), 820);
+    smoothScrollToY(getTargetY(el), 840);
 
-    // 2) 레이아웃 변화(주소창/이미지/폰트) 이후를 대비해
-    //    "필요할 때만" 보정 2회
     navTimers.push(setTimeout(() => maybeCorrect(el), 320));
     navTimers.push(setTimeout(() => maybeCorrect(el), 900));
 
-    // 3) 최종 확정(한 번)
     navTimers.push(
       setTimeout(() => {
         snapToEl(el);
@@ -152,9 +120,6 @@
     );
   }
 
-  // -------------------------
-  // Anchor bind
-  // -------------------------
   function bindSmoothAnchors() {
     $$("[data-scroll]").forEach((a) => {
       a.addEventListener(
@@ -167,8 +132,6 @@
           if (!target) return;
 
           e.preventDefault();
-
-          if (href === "#contact") primeLazyImagesForContact();
           scrollToElOneShot(target);
 
           try {
@@ -180,9 +143,6 @@
     });
   }
 
-  // -------------------------
-  // Reveal (원래대로 유지)
-  // -------------------------
   function markRevealTargets() {
     const selectors = [
       ".section .sec-head",
@@ -236,6 +196,7 @@
       targets.forEach((el) => applyState(el, "in"));
       return;
     }
+
     if (!("IntersectionObserver" in window)) {
       targets.forEach((el) => applyState(el, "in"));
       return;
@@ -306,9 +267,6 @@
     window.addEventListener("orientationchange", refresh, { passive: true });
   }
 
-  // -------------------------
-  // Mail
-  // -------------------------
   function bindMail() {
     const mailBtn = $("#mailBtn");
     const form = $("#contactForm");
@@ -339,9 +297,6 @@
     });
   }
 
-  // -------------------------
-  // Init
-  // -------------------------
   function getNavType() {
     try {
       const nav = performance.getEntriesByType && performance.getEntriesByType("navigation");
