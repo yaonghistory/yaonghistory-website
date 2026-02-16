@@ -1,9 +1,11 @@
 (() => {
   "use strict";
 
+  // double-init guard (in case main.js is loaded twice)
   if (window.__YAONG_MAIN_INIT__) return;
   window.__YAONG_MAIN_INIT__ = true;
 
+  // prevent iOS/in-app from restoring scroll position on reload
   try {
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
   } catch (_) {}
@@ -48,6 +50,22 @@
     try {
       history.replaceState(null, "", location.pathname + location.search);
     } catch (_) {}
+  }
+
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+  async function warmupImagesBeforeContact(timeoutMs = 700) {
+    const imgs = Array.from(document.querySelectorAll("#review img, #photos img"));
+    const pending = imgs.filter((img) => !img.complete);
+
+    if (!pending.length) return;
+
+    const decodeOrLoad = (img) => {
+      if (img.decode) return img.decode().catch(() => {});
+      return new Promise((res) => img.addEventListener("load", () => res(), { once: true }));
+    };
+
+    await Promise.race([Promise.allSettled(pending.map(decodeOrLoad)), sleep(timeoutMs)]);
   }
 
   let animToken = 0;
@@ -105,7 +123,7 @@
 
     smoothToY(getTargetY(el), 760);
 
-    // one-time settle (no ping-pong)
+    // one-time settle after potential layout changes
     settleTimer = setTimeout(() => {
       window.scrollTo(0, getTargetY(el));
     }, 900);
@@ -120,8 +138,7 @@
       if (keys.includes(e.key)) cancel();
     });
 
-    // ✅ iOS 상태바 탭(맨 위로) 대응:
-    // 스크롤이 0으로 가면 진행중 애니메이션/보정 타이머 즉시 종료해서 1번에 위로 가게 함
+    // iOS status-bar tap "scroll-to-top" should not fight our animation
     window.addEventListener(
       "scroll",
       () => {
@@ -135,7 +152,7 @@
     $$("[data-scroll]").forEach((a) => {
       a.addEventListener(
         "click",
-        (e) => {
+        async (e) => {
           const href = a.getAttribute("href") || "";
           if (!href.startsWith("#")) return;
 
@@ -144,6 +161,12 @@
 
           e.preventDefault();
           clearHash();
+
+          // only for contact: warm up review/photos images to prevent layout-shift stop
+          if (target.id === "contact") {
+            await warmupImagesBeforeContact(700);
+          }
+
           scrollToEl(target);
         },
         { passive: false }
