@@ -22,74 +22,73 @@
   }
 
   const clamp = (n, min, max) => Math.max(min, Math.min(max, n));
-
-  function maxScrollY() {
-    return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
-  }
+  const nowY = () => window.pageYOffset || document.documentElement.scrollTop || 0;
+  const maxScrollY = () =>
+    Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
 
   function getTargetY(el) {
     const rect = el.getBoundingClientRect();
-    const y =
-      (window.pageYOffset || document.documentElement.scrollTop || 0) +
-      rect.top -
-      getHeaderOffset();
+    const y = nowY() + rect.top - getHeaderOffset();
     return clamp(y, 0, maxScrollY());
   }
 
-  // 더 부드러운 스크롤(이징 개선 + 기본 duration 약간 증가)
-  function smoothScrollToY(targetY, duration = 680) {
-    const startY = window.pageYOffset || document.documentElement.scrollTop || 0;
+  // =========================
+  // Single-run smooth scroll (CANCELABLE)
+  // =========================
+  let activeAnim = { id: 0, raf: 0, running: false };
+
+  function cancelScrollAnim() {
+    activeAnim.id += 1;
+    activeAnim.running = false;
+    if (activeAnim.raf) cancelAnimationFrame(activeAnim.raf);
+    activeAnim.raf = 0;
+  }
+
+  // 부드러운 이징(더 자연스럽게)
+  const easeInOutQuint = (t) =>
+    t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
+
+  function smoothScrollToY(targetY, duration = 720) {
+    const startY = nowY();
     const endY = clamp(targetY, 0, maxScrollY());
 
     if (prefersReducedMotion) {
+      cancelScrollAnim();
       window.scrollTo(0, endY);
       return;
     }
 
+    cancelScrollAnim();
+    activeAnim.running = true;
+    const myId = activeAnim.id;
     const startT = performance.now();
-    const easeInOutQuint = (t) =>
-      t < 0.5 ? 16 * t * t * t * t * t : 1 - Math.pow(-2 * t + 2, 5) / 2;
 
-    function tick(now) {
-      const t = clamp((now - startT) / duration, 0, 1);
+    function tick(tNow) {
+      if (myId !== activeAnim.id) return; // canceled
+      const t = clamp((tNow - startT) / duration, 0, 1);
       const y = startY + (endY - startY) * easeInOutQuint(t);
       window.scrollTo(0, y);
-      if (t < 1) requestAnimationFrame(tick);
+
+      if (t < 1) {
+        activeAnim.raf = requestAnimationFrame(tick);
+      } else {
+        activeAnim.running = false;
+        activeAnim.raf = 0;
+      }
     }
 
-    requestAnimationFrame(tick);
-  }
-
-  function smoothToEl(el, duration) {
-    if (!el) return;
-    smoothScrollToY(getTargetY(el), duration);
+    activeAnim.raf = requestAnimationFrame(tick);
   }
 
   function snapToEl(el) {
     if (!el) return;
+    cancelScrollAnim(); // 스냅은 즉시 확정
     window.scrollTo(0, getTargetY(el));
   }
 
-  // 작은 오차 보정은 짧은 smooth로(끊김/툭툭 방지), 큰 오차는 snap
-  function softFixToEl(el) {
-    if (!el) return;
-    const yNow = window.pageYOffset || document.documentElement.scrollTop || 0;
-    const yTarget = getTargetY(el);
-    const diff = Math.abs(yTarget - yNow);
-
-    if (prefersReducedMotion) {
-      window.scrollTo(0, yTarget);
-      return;
-    }
-
-    if (diff <= 220) {
-      smoothScrollToY(yTarget, 260);
-    } else {
-      window.scrollTo(0, yTarget);
-    }
-  }
-
-  // ---------- Contact image prime ----------
+  // =========================
+  // Contact image prime (layout shift 줄이기)
+  // =========================
   let primed = false;
   function primeLazyImagesForContact() {
     if (primed) return;
@@ -105,37 +104,60 @@
     });
   }
 
-  // ---------- 떨림 방지용: 보정 조건 ----------
+  // =========================
+  // Guaranteed scroll (NO multi-smooth; fixes are snap-only)
+  // =========================
   function needsFix(el) {
     const r = el.getBoundingClientRect();
     const topLimit = getHeaderOffset() + 6;
-    return Math.abs(r.top - topLimit) > 12;
+    return Math.abs(r.top - topLimit) > 10; // 너무 민감하면 떨림
   }
 
-  // ---------- Guaranteed scroll (B: 도달 우선 + 부드러운 보정) ----------
+  function isGood(el) {
+    const r = el.getBoundingClientRect();
+    const topLimit = getHeaderOffset() + 6;
+    const bottomLimit = window.innerHeight - 12;
+    return r.top >= topLimit && r.top <= bottomLimit;
+  }
+
   function scrollToElGuaranteed(el, opts = {}) {
     if (!el) return;
 
-    const maxMs = typeof opts.maxMs === "number" ? opts.maxMs : 5600;
-    const snapAtEnd = opts.snapAtEnd !== false;
+    const maxMs = typeof opts.maxMs === "number" ? opts.maxMs : 5200;
 
+    // 이전 실행 종료
     if (scrollToElGuaranteed._kill) scrollToElGuaranteed._kill();
     scrollToElGuaranteed._kill = null;
 
     let done = false;
-    const start = performance.now();
+    const startT = performance.now();
 
+    // 보정 스로틀
     let lastFixAt = 0;
-    const FIX_COOLDOWN = 170;
+    const FIX_COOLDOWN = 220;
 
-    const maybeFix = (force = false) => {
+    // 핵심: 스크롤 중(애니메이션 running)에는 보정 예약만 하고,
+    // 애니메이션이 끝난 뒤에만 snap 보정을 수행한다.
+    let pendingFix = false;
+    const scheduleFix = () => {
       if (done) return;
-      const now = performance.now();
-      if (!force && now - lastFixAt < FIX_COOLDOWN) return;
+      pendingFix = true;
+    };
+
+    const applyFixIfPossible = (force = false) => {
+      if (done) return;
+      const t = performance.now();
+      if (!force && t - lastFixAt < FIX_COOLDOWN) return;
+
+      if (!pendingFix && !force) return;
+      if (activeAnim.running && !force) return; // 달리는 중에는 건드리지 않음
+
+      pendingFix = false;
 
       if (force || needsFix(el)) {
-        lastFixAt = now;
-        softFixToEl(el);
+        lastFixAt = t;
+        // 마지막 보정은 snap (중첩 smooth 금지)
+        window.scrollTo(0, getTargetY(el));
       }
     };
 
@@ -149,53 +171,49 @@
     const finalize = () => {
       if (done) return;
       done = true;
-      if (snapAtEnd) snapToEl(el);
+      // 끝에서 한 번 확정 스냅
+      snapToEl(el);
       cleanupAll();
     };
 
-    // 1) 첫 이동: smooth 1회(부드럽게)
-    smoothToEl(el, 720);
+    // 1) 최초 이동: smooth는 딱 1번만
+    smoothScrollToY(getTargetY(el), 760);
 
-    // 2) 초기 정착 보정(짧은 soft fix)
-    requestAnimationFrame(() => maybeFix(true));
-    setTimeout(() => maybeFix(true), 140);
-    setTimeout(() => maybeFix(true), 300);
+    // 2) 애니메이션 종료 직후에 스냅 보정 1~2회
+    setTimeout(() => scheduleFix(), 140);
+    setTimeout(() => scheduleFix(), 320);
+    setTimeout(() => scheduleFix(), 520);
 
-    // 3) 폰트 로딩 완료 시 보정
+    // 3) 폰트/이미지/뷰포트 변화는 "보정 예약"만
     if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(() => maybeFix(false)).catch(() => {});
+      document.fonts.ready.then(scheduleFix).catch(() => {});
     }
 
-    // 4) 섹션 내부 이미지 로딩/디코드 시 보정
     const imgs = $$("img", el);
     if (imgs.length) {
       imgs.forEach((img) => {
         if (img.complete) return;
-
-        const handler = () => maybeFix(false);
+        const handler = () => scheduleFix();
         img.addEventListener("load", handler, { passive: true, once: true });
         img.addEventListener("error", handler, { passive: true, once: true });
         cleanupFns.push(() => {
           try { img.removeEventListener("load", handler); } catch (_) {}
           try { img.removeEventListener("error", handler); } catch (_) {}
         });
-
         if (img.decode) img.decode().then(handler).catch(() => {});
       });
     }
 
-    // 5) iOS 주소창/뷰포트 변화: visualViewport resize만 사용
     const vv = window.visualViewport;
     if (vv && vv.addEventListener) {
-      const vvHandler = () => maybeFix(false);
+      const vvHandler = () => scheduleFix();
       vv.addEventListener("resize", vvHandler, { passive: true });
       cleanupFns.push(() => {
         try { vv.removeEventListener("resize", vvHandler); } catch (_) {}
       });
     }
 
-    // 6) resize/orientationchange 때 보정
-    const winHandler = () => maybeFix(false);
+    const winHandler = () => scheduleFix();
     window.addEventListener("resize", winHandler, { passive: true });
     window.addEventListener("orientationchange", winHandler, { passive: true });
     cleanupFns.push(() => {
@@ -203,35 +221,42 @@
       try { window.removeEventListener("orientationchange", winHandler); } catch (_) {}
     });
 
-    // 7) 타임박스 체크 루프
-    let t = 0;
+    // 4) 체크 루프: pendingFix를 애니메이션 끝난 타이밍에만 적용
+    let tmr = 0;
     const loop = () => {
       if (done) return;
 
-      if (!needsFix(el)) {
+      // 보정 적용(가능할 때만)
+      applyFixIfPossible(false);
+
+      // 충분히 도달했으면 종료
+      if (isGood(el) || !needsFix(el)) {
         finalize();
         return;
       }
 
-      const elapsed = performance.now() - start;
+      // 타임아웃이면 강제로 1회 보정 후 종료
+      const elapsed = performance.now() - startT;
       if (elapsed > maxMs) {
-        maybeFix(true);
+        applyFixIfPossible(true);
         finalize();
         return;
       }
 
-      maybeFix(false);
-      t = setTimeout(loop, 230);
+      tmr = setTimeout(loop, 180);
     };
-    t = setTimeout(loop, 230);
+    tmr = setTimeout(loop, 180);
 
     scrollToElGuaranteed._kill = () => {
       done = true;
-      try { clearTimeout(t); } catch (_) {}
+      try { clearTimeout(tmr); } catch (_) {}
       cleanupAll();
     };
   }
 
+  // =========================
+  // Navigation type
+  // =========================
   function getNavType() {
     try {
       const nav = performance.getEntriesByType && performance.getEntriesByType("navigation");
@@ -241,7 +266,9 @@
     }
   }
 
-  // ---------- Anchors ----------
+  // =========================
+  // Anchors
+  // =========================
   function bindSmoothAnchors() {
     $$("[data-scroll]").forEach((a) => {
       a.addEventListener(
@@ -267,7 +294,9 @@
     });
   }
 
-  // ---------- Reveal ----------
+  // =========================
+  // Reveal
+  // =========================
   function markRevealTargets() {
     const selectors = [
       ".section .sec-head",
@@ -393,7 +422,9 @@
     window.addEventListener("orientationchange", refresh, { passive: true });
   }
 
-  // ---------- Mail ----------
+  // =========================
+  // Mail
+  // =========================
   function bindMail() {
     const mailBtn = $("#mailBtn");
     const form = $("#contactForm");
@@ -424,7 +455,9 @@
     });
   }
 
-  // ---------- Init ----------
+  // =========================
+  // Init
+  // =========================
   function init() {
     const navType = getNavType();
     if (navType === "reload" || navType === "back_forward") {
